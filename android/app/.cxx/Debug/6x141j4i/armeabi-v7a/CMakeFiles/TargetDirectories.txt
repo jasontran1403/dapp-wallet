@@ -1,0 +1,2 @@
+C:/Users/Jason/Desktop/dapp-wallet/android/app/.cxx/Debug/6x141j4i/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/Jason/Desktop/dapp-wallet/android/app/.cxx/Debug/6x141j4i/armeabi-v7a/CMakeFiles/rebuild_cache.dir

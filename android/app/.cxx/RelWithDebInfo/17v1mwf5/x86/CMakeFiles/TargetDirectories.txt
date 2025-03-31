@@ -1,0 +1,2 @@
+C:/Users/Jason/Desktop/dapp-wallet/android/app/.cxx/RelWithDebInfo/17v1mwf5/x86/CMakeFiles/edit_cache.dir
+C:/Users/Jason/Desktop/dapp-wallet/android/app/.cxx/RelWithDebInfo/17v1mwf5/x86/CMakeFiles/rebuild_cache.dir
