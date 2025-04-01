@@ -229,10 +229,6 @@ class _OnBoardingScreen1State extends State<OnBoardingScreen1> {
             print('Page changed to $index');
           },
         ),
-
-
-
-
       ),
     );
   }

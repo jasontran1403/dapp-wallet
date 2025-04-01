@@ -9,6 +9,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:crypto_wallet/providers/wallet_provider.dart';
+import 'package:web3dart/credentials.dart';
 
 import '../../../controllers/appController.dart';
 import '../createAccount/importSecretPhrase.dart';
@@ -135,7 +136,7 @@ class _CreateWalletState extends State<CreateWallet> {
                                     ),
                                     SizedBox(width: 4), // Khoảng cách giữa số và ô
 
-                                    // Ô chứa từ tiếng Anh
+                                    // Ô chứa từ thực tế trong danh sách mnemonicWords
                                     Expanded(
                                       child: Container(
                                         padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
@@ -146,7 +147,7 @@ class _CreateWalletState extends State<CreateWallet> {
                                         ),
                                         child: Center(
                                           child: Text(
-                                            "Word ${index + 1}", // Thay bằng danh sách từ thật nếu có
+                                            mnemonicWords[index], // Hiển thị từ thực tế
                                             overflow: TextOverflow.ellipsis,
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
@@ -161,13 +162,14 @@ class _CreateWalletState extends State<CreateWallet> {
                                   ],
                                 );
                               },
+
                             ),
                             SizedBox(height: 16), // Khoảng cách giữa GridView và Button
 
                             // Nút xác nhận chuyển sang trang VerifyMnemonic
                             ElevatedButton(
                               onPressed: () {
-                                Get.to(VerifyMnemonic());
+                                Get.to(() => VerifyMnemonic(mnemonicWords: mnemonicWords)); // Truyền danh sách mnemonic
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.white, // Màu nền nút

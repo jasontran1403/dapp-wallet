@@ -11,13 +11,25 @@ import 'package:get/get.dart';
 
 import '../codeScanner.dart';
 class SendScreen extends StatefulWidget {
-  const SendScreen({super.key});
+  final String symbol;
+  final String balance;
+  final String price;
+
+  // Nhận walletAddress và amount từ SendScreen
+  const SendScreen({
+    required this.symbol,
+    required this.balance,
+    required this.price,
+    super.key
+  });
 
   @override
   State<SendScreen> createState() => _SendScreenState();
 }
 
 class _SendScreenState extends State<SendScreen> {
+
+
   TextEditingController nameAddreeC=TextEditingController();
   TextEditingController amountC=TextEditingController();
   var isOpen=true.obs;
@@ -53,7 +65,7 @@ class _SendScreenState extends State<SendScreen> {
                             Icons.arrow_back_ios,color: darkBlueColor.value,size: 16,)),
                       SizedBox(width: 8,),
                       Text(
-                        "${getTranslated(context,"Send" )??"Send"}  ETH",
+                        "${getTranslated(context,"Send" )??"Send"}  ${widget.symbol}",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 15,
@@ -121,9 +133,7 @@ class _SendScreenState extends State<SendScreen> {
                             fontWeight: FontWeight.w600,
                             color: primaryBackgroundColor.value,
                             fontFamily: "dmsans",
-
                           ),
-
                         ),
                       ),
                     ),
@@ -138,8 +148,8 @@ class _SendScreenState extends State<SendScreen> {
                   ],
                 ),
                 hasHeader: true,
-                headerText: "Name or Address",
-                hintText: "Enter Name or Address",
+                headerText: "Address",
+                hintText: "Enter address",
                 onChange: (val){
                   setState(() {
 
@@ -147,6 +157,17 @@ class _SendScreenState extends State<SendScreen> {
                 },
 
 
+              ),
+              SizedBox(height: 18,),
+              Text(
+                'Balance available: ${widget.balance} ${widget.symbol}',
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: primaryColor.value,
+                  fontFamily: "dmsans",
+                ),
               ),
               SizedBox(height: 16,),
               InputFields2(
@@ -161,8 +182,6 @@ class _SendScreenState extends State<SendScreen> {
                       height: 21,
                       width: 46,
                       decoration: BoxDecoration(
-
-
                           gradient: LinearGradient(
                             tileMode: TileMode.clamp,
                               begin: Alignment.topCenter,
@@ -181,190 +200,78 @@ class _SendScreenState extends State<SendScreen> {
                             fontWeight: FontWeight.w600,
                             color: primaryBackgroundColor.value,
                             fontFamily: "dmsans",
-
                           ),
-
                         ),
                       ),
                     ),
                     SizedBox(width: 8,),
-                    GestureDetector(
-                        onTap: (){
-                          Get.to(CodeScanner1());
-                        },
-                        child: SvgPicture.asset("assets/svgs/qr.svg")),
-                    SizedBox(width: 10,),
-
                   ],
                 ),
                 inputType: TextInputType.number,
                 hasHeader: true,
                 headerText: "Amount",
-                hintText: "Enter Name or Address",
+                hintText: "Enter amount",
                 onChange: (v){
                   setState(() {
-
                   });
                 },
-
-
               ),
-              SizedBox(height: 32,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "${getTranslated(context,"Recent transfers" )??"Recent transfers"}",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: headingColor.value,
-                      fontFamily: "dmsans",
+              SizedBox(height: 24,),
+              BottomRectangularBtn(
+                  onTapFunc: () {
+                    String walletAddress = nameAddreeC.text; // Get the wallet address input by the user
+                    String amountText = amountC.text; // Get the amount input by the user
 
-                    ),
-
-                  ),
-                  GestureDetector(
-                      onTap: (){
-                        isOpen.value=!isOpen.value;
-                      },
-                      child: Icon(
-                        // isOpen.value==true?Icons.keyboard_arrow_up_sharp:
-
-                        Icons.keyboard_arrow_down_sharp,size: 27,color: headingColor.value,))
-                ],
-              ),
-
-              isOpen==false?SizedBox():  AnimatedSize(
-                duration: Duration(
-                  milliseconds: 5000,
-                ),
-                curve: Curves.decelerate,
-                child: GridView.builder(
-
-
-                    shrinkWrap: true,
-                    padding: EdgeInsets.only(bottom: 20, top: 10),
-                    physics: ClampingScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 300, childAspectRatio: 7 / 7.7, crossAxisSpacing: 12, mainAxisSpacing: 12),
-                    itemCount: 4,
-                    itemBuilder: (BuildContext ctx, index) {
-                      return Container(
-                        // width: 187,
-                        padding: EdgeInsets.all(12),
-                        decoration:
-                        BoxDecoration(border: Border.all(width: 1, color: inputFieldBackgroundColor.value), color: primaryBackgroundColor.value, borderRadius: BorderRadius.circular(16)),
-                        child: Column(
-                          children: [
-                            Container(
-                              width: 48,
-                              height: 48,
-                              clipBehavior: Clip.antiAlias,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100), color: Colors.grey.shade50, border: Border.all(width: 2, color: primaryBackgroundColor.value)),
-                              child: Container(
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: BoxDecoration(
-                                    color: inputFieldBackgroundColor.value,
-                                    borderRadius: BorderRadius.circular(100),
-                                  ),
-                                  child:
-                                      //if user name empty then show image otherwise show name first character
-                                      index!=3?
-                                  Center(
-                                    child: Text(
-                                      "E",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: headingColor.value,
-                                        fontFamily: 'dmsans',
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ):
-                                  Image.asset("assets/images/3d_avatar_21.png")),
-                            ),
-                            SizedBox(
-                              height: 12,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-
-                                Text(
-
-                                  //if user name empty then show star
-                                index==3?"*****":  "Edric Jaye",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: headingColor.value,
-                                    fontFamily: 'dmsans',
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 5,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "40.00",
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: headingColor.value,
-                                    fontFamily: 'dmsans',
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                Text(
-                                  " ETH",
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: lightTextColor.value,
-                                    fontFamily: 'dmsans',
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-
-
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "0x00...001dsax ",
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 10,
-                                    color: lightTextColor.value,
-                                    fontFamily: 'dmsans',
-                                  ),
-                                ),
-                                SvgPicture.asset("assets/svgs/copyIcon.svg",color: headingColor.value,)
-
-                              ],
-                            ),
-                          ],
-                        ),
+                    // Check if wallet address is empty
+                    if (walletAddress.isEmpty) {
+                      // Show error if wallet address is empty
+                      Get.snackbar(
+                        "Error",
+                        "Recipient wallet address cannot be empty.",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
                       );
-                    }),
+                      return;
+                    }
+
+                    // Convert amount to double for comparison
+                    double amount = double.tryParse(amountText) ?? 0;
+
+                    // Check if amount is valid and less than the balance
+                    if (amount <= 0) {
+                      // Show error if amount is not a valid number
+                      Get.snackbar(
+                        "Error",
+                        "Please enter a valid amount.",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                      return;
+                    }
+
+                    double balance = double.tryParse(widget.balance.toString()) ?? 0;
+
+                    if (amount > balance) {
+                      // Show error if amount is greater than the available balance
+                      Get.snackbar(
+                        "Error",
+                        "Insufficient balance to transfer the amount.",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                      return;
+                    }
+
+                    // If all checks pass, navigate to the confirmation screen
+                    Get.to(ConformationScreen(walletAddress: walletAddress, amount: amountText, symbol: widget.symbol, price: widget.price));
+                  },
+                  btnTitle: "Next"
               ),
+
               SizedBox(height: 24,),
-              BottomRectangularBtn(onTapFunc: (){
-
-                Get.to(ConformationScreen());
-              }, btnTitle: "Next"),
-              SizedBox(height: 24,),
-
-
             ],
           ),
         ),

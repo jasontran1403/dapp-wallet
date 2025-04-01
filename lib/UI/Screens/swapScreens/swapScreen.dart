@@ -59,7 +59,7 @@ class _SwapScreenState extends State<SwapScreen> {
       "chain":""
     },
     {
-      "image":"assets/images/bttc.png",
+      "image":"assets/images/btc.png",
       "symbol":"BTC",
       "price1":"\$1,571.45",
       "price2":"\$1,571.45",
@@ -312,7 +312,7 @@ class _SwapScreenState extends State<SwapScreen> {
                                                 shape: BoxShape.circle,
                                                 color: primaryBackgroundColor.value
                                             ),
-                                            child: Image.asset("assets/images/bttc.png"),
+                                            child: Image.asset("assets/images/btc.png"),
                                           ),
                                           SizedBox(width: 10,),
                                           Column(
@@ -326,9 +326,7 @@ class _SwapScreenState extends State<SwapScreen> {
                                                   fontWeight: FontWeight.w600,
                                                   color: headingColor.value,
                                                   fontFamily: "dmsans",
-
                                                 ),
-
                                               ),
                                               Text(
                                                 "${getTranslated(context,"Available" )??"Available"}: 12",
@@ -1423,7 +1421,7 @@ Expanded(
 
           BottomRectangularBtn(onTapFunc: (){
 
-            Get.to(TransactionScreen());
+            // Get.to(TransactionScreen());
           } ,btnTitle: "View History"),
           SizedBox(height: 12,),
 
@@ -1437,10 +1435,6 @@ Expanded(
 
               }, btnTitle: "Cancel"),
           // SizedBox(height: 24,),
-
-
-
-
 
 
 

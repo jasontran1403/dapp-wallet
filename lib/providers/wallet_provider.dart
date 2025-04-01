@@ -9,19 +9,22 @@ abstract class WalletAddressService {
   String generateMnemonic();
   Future<String> getPrivateKey(String mnemonic);
   Future<EthereumAddress> getPublicKey(String privateKey);
+  Future<void> setWalletAddress(String walletAddress);
+  Future<String?> getWalletAddress();
+  Future<void> clearWalletAddress(); // ✅ Thêm hàm clear walletAddress
 }
 
 class WalletProvider extends ChangeNotifier implements WalletAddressService {
-  // Variable to store the private key
   String? privateKey;
+  String? walletAddress;
 
-  // Load the private key from the shared preferences
+  // Load the private key from SharedPreferences
   Future<void> loadPrivateKey() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     privateKey = prefs.getString('privateKey');
   }
 
-  // set the private key in the shared preferences
+  // Set the private key and store it in SharedPreferences
   Future<void> setPrivateKey(String privateKey) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('privateKey', privateKey);
@@ -29,10 +32,11 @@ class WalletProvider extends ChangeNotifier implements WalletAddressService {
     notifyListeners();
   }
 
+  // Clear the private key from memory and storage
   Future<void> clearPrivateKey() async {
     this.privateKey = null;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('privateKey');  // Xóa khỏi bộ nhớ
+    await prefs.remove('privateKey');  // Remove from storage
     notifyListeners();
   }
 
@@ -41,23 +45,48 @@ class WalletProvider extends ChangeNotifier implements WalletAddressService {
     return bip39.generateMnemonic();
   }
 
+  // Generate private key from mnemonic
+  @override
   Future<String> getPrivateKey(String mnemonic) async {
     final seed = bip39.mnemonicToSeed(mnemonic);
-    print(mnemonic);
     final root = bip32.BIP32.fromSeed(seed);
-
-    // Sử dụng derivation path giống MetaMask: m/44'/60'/0'/0/0
     final child = root.derivePath("m/44'/60'/0'/0/0");
 
-    final privateKey = HEX.encode(child.privateKey!); // Lấy private key chuẩn
-    await setPrivateKey(privateKey); // Lưu private key vào SharedPreferences
+    final privateKey = HEX.encode(child.privateKey!); // Generate private key
+    await setPrivateKey(privateKey); // Store private key in SharedPreferences
     return privateKey;
   }
 
+  // Generate wallet address from private key
   @override
   Future<EthereumAddress> getPublicKey(String privateKey) async {
     final private = EthPrivateKey.fromHex(privateKey);
     final address = await private.address;
     return address;
+  }
+
+  // ✅ Set Wallet Address in SharedPreferences
+  @override
+  Future<void> setWalletAddress(String walletAddress) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('walletAddress', walletAddress);
+    this.walletAddress = walletAddress;
+    notifyListeners();
+  }
+
+  // ✅ Get Wallet Address from SharedPreferences
+  @override
+  Future<String?> getWalletAddress() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('walletAddress');
+  }
+
+  // ✅ Clear Wallet Address from SharedPreferences (Logout)
+  @override
+  Future<void> clearWalletAddress() async {
+    this.walletAddress = null;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('walletAddress');  // Xóa khỏi bộ nhớ
+    notifyListeners();
   }
 }

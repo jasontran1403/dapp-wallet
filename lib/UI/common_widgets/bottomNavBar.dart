@@ -28,13 +28,12 @@ class _BottomBarState extends State<BottomBar> {
     NftsScreen(),
     SwapScreen(),
 
-    TransactionScreen(
-
-    ),
+    TransactionScreen(symbol: 'bnb'),
     Profile(
       // fromPage: 'bottomNav',
     ),
   ];
+
   AppController appController = Get.find<AppController>();
   DateTime? lastPressed;
   late DateTime currentBackPressTime;
@@ -48,13 +47,10 @@ class _BottomBarState extends State<BottomBar> {
     appController.selectedBOttomTabIndex.value = 0;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Obx(
       () => WillPopScope(
-
-
         onWillPop: () async {
           final now = DateTime.now();
 
@@ -312,7 +308,6 @@ class _BottomBarState extends State<BottomBar> {
             ),
             body: pages.elementAt(appController.selectedBOttomTabIndex.value),
           ),
-
       ),
     );
   }

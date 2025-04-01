@@ -22,7 +22,6 @@ class _PinScreenState extends State<PinScreen> {
   void initState() {
     _pinController.text = '12';
 
-// Clear text
     _pinController.clear();
     // TODO: implement initState
     super.initState();
@@ -99,32 +98,11 @@ class _PinScreenState extends State<PinScreen> {
                         }
                       },
                       onSubmit: () {
-                        print("8888888888888888888888888888888");
+
                       },
                       controller: _pinController,
                     ),
                     SizedBox(height: 16),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    //     GestureDetector(
-                    //       onTap: () {
-                    //         Get.offAll(SocialLogin());
-                    //       },
-                    //       child: Text(
-                    //         "${getTranslated(context, "Go Back") ?? "Go Back"}",
-                    //         textAlign: TextAlign.start,
-                    //         style: TextStyle(
-                    //           fontSize: 14,
-                    //           fontWeight: FontWeight.w400,
-                    //           color: headingColor.value,
-                    //           fontFamily: "dmsans",
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-                    // SizedBox(height: 66),
                   ],
                 )
               ],

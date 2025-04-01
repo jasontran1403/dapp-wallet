@@ -6,60 +6,23 @@ import 'package:crypto_wallet/localization/language_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
 class SelectTokenScreen extends StatefulWidget {
-  const SelectTokenScreen({super.key});
+  final List coins;  // Danh sách các coin sẽ được truyền vào
+
+  const SelectTokenScreen({super.key, required this.coins});
 
   @override
   State<SelectTokenScreen> createState() => _SelectTokenScreenState();
 }
 
 class _SelectTokenScreenState extends State<SelectTokenScreen> {
-  List coins=[
-    {
-      "image":"assets/images/usd.png",
-      "symbol":"US Doller",
-      "price1":"0 USD",
-      "price2":"\$1,571.45",
-      "percentage":"8.75%",
-      "chain":""
-    },
-    {
-      "image":"assets/images/matic.png",
-      "symbol":"MATIC",
-      "price1":"0 MATIC",
-      "price2":"",
-      "percentage":"8.75%",
-      "chain":""
-    },
-    {
-      "image":"assets/images/ngn.png",
-      "symbol":"NGN",
-      "price1":"0 NGN",
-      "price2":"\$1,571.45",
-      "percentage":"8.75%",
-      "chain":""
-    },
-    {
-      "image":"assets/images/usd.png",
-      "symbol":"US Doller",
-      "price1":"0 USD",
-      "price2":"\$1,571.45",
-      "percentage":"8.75%",
-      "chain":""
-    },
-    {
-      "image":"assets/images/eth.png",
-      "symbol":"Ethereum",
-      "price1":"0 ETH",
-      "price2":"\$1,571.45",
-      "percentage":"8.75%",
-      "chain":""
-    },
+  AppController appController = Get.find<AppController>();
 
-
-  ];
-  AppController appController=Get.find<AppController>();
-
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,8 +30,7 @@ class _SelectTokenScreenState extends State<SelectTokenScreen> {
       backgroundColor: primaryBackgroundColor.value,
       body: SafeArea(
         child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 22,vertical: 20),
-
+          padding: EdgeInsets.symmetric(horizontal: 22, vertical: 20),
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -76,25 +38,21 @@ class _SelectTokenScreenState extends State<SelectTokenScreen> {
                 Row(
                   children: [
                     Text(
-                      "${getTranslated(context,"Select Token" )??"Select Token"}",
+                      "${getTranslated(context, "Select Token") ?? "Select Token"}",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
                         color: headingColor.value,
                         fontFamily: "dmsans",
-
                       ),
-
                     ),
-
                   ],
                 ),
                 Row(
                   children: [
-
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         Get.back();
                       },
                       child: Container(
@@ -103,56 +61,55 @@ class _SelectTokenScreenState extends State<SelectTokenScreen> {
                         padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(
                             color: inputFieldBackgroundColor.value,
-                            borderRadius: BorderRadius.circular(8)
-                        ),
-                        child: Icon(Icons.clear,size: 15,color: headingColor.value,),
+                            borderRadius: BorderRadius.circular(8)),
+                        child: Icon(Icons.clear, size: 15, color: headingColor.value),
                       ),
                     )
                   ],
                 )
               ],
             ),
-            SizedBox(height: 20,),
+            SizedBox(height: 20),
             InputFields(
               hintText: "",
-              icon:Image.asset("assets/images/Search.png"),
-
-
+              icon: Image.asset("assets/images/Search.png"),
             ),
-            SizedBox(height: 32,),
+            SizedBox(height: 32),
             ListView.separated(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
-              itemCount: coins.length,
+              itemCount: widget.coins.length,  // Sử dụng widget.coins thay vì coins
               separatorBuilder: (BuildContext context, int index) {
-                return SizedBox(height: 12,);
+                return SizedBox(height: 12);
               },
               itemBuilder: (BuildContext context, int index) {
-                return  InkWell(
-                  onTap: (){
-                    Get.to(SendScreen());
+                return InkWell(
+                  onTap: () {
+                    Get.to(SendScreen(
+                      symbol: widget.coins[index]['symbol'],
+                      balance: widget.coins[index]['amount'], // Pass the balance here
+                      price: widget.coins[index]['price'],
+                    ));
                   },
+
                   child: Container(
-                    height:72,
+                    height: 72,
                     width: Get.width,
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
                         color: inputFieldBackgroundColor2.value,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
-                    ),
+                        border: Border.all(width: 1, color: inputFieldBackgroundColor.value)),
                     child: Row(
                       children: [
                         Container(
-                            height:40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                              color: primaryBackgroundColor.value
-                            ),
-                            child: Image.asset("${coins[index]['image']}",height: 40,width: 40,fit: BoxFit.fitHeight,)),
-
-                        SizedBox(width: 12,),
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle, color: primaryBackgroundColor.value),
+                          child: Image.asset("${widget.coins[index]['image']}", height: 40, width: 40, fit: BoxFit.fitHeight),
+                        ),
+                        SizedBox(width: 12),
                         Expanded(
                           child: Row(
                             children: [
@@ -160,27 +117,20 @@ class _SelectTokenScreenState extends State<SelectTokenScreen> {
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-
                                     Expanded(
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
-
                                           Text(
-                                            "${coins[index]['symbol']}",
+                                            "${widget.coins[index]['symbol']}",
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                               fontSize: 17,
                                               color: headingColor.value,
                                               fontWeight: FontWeight.w600,
                                               fontFamily: "dmsans",
-
                                             ),
-
                                           ),
-
-
-
                                         ],
                                       ),
                                     ),
@@ -188,39 +138,31 @@ class _SelectTokenScreenState extends State<SelectTokenScreen> {
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.start,
                                         children: [
-
                                           Text(
-                                            "${coins[index]['price1']}",
+                                            "${widget.coins[index]['amount']}",  // Cập nhật giá theo danh sách coins
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.w400,
                                               color: lightTextColor.value,
                                               fontFamily: "dmsans",
-
                                             ),
-
                                           ),
-
-
                                         ],
                                       ),
                                     )
                                   ],
                                 ),
                               )
-
                             ],
                           ),
                         )
-
                       ],
                     ),
                   ),
                 );
               },
             ),
-
           ],
         ),
       ),

@@ -35,16 +35,14 @@ class _ProfileState extends State<Profile> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "${getTranslated(context,"Profile" )??"Profile"}",
+                      "${getTranslated(context, "Profile") ?? "Profile"}",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
                         color: headingColor.value,
                         fontFamily: "dmsans",
-
                       ),
-
                     ),
                   ],
                 ),
@@ -53,7 +51,6 @@ class _ProfileState extends State<Profile> {
                   child: ListView(
                     children: [
                       InkWell(
-
                         onTap:(){
                           Get.to(EditProfile());
                         },
