@@ -33,20 +33,25 @@ class _CreateAccountState extends State<CreateAccount> {
   final appController = Get.find<AppController>();
 
   final TextEditingController referralController = TextEditingController();
+  final TextEditingController accountNameController = TextEditingController();
   final RxBool isReferralValid = false.obs;
   final RxBool isCheckingReferral = false.obs;
 
   void checkReferralCode() async {
-    print(widget.mnemonicWords);
-    print(widget.walletAddress);
-    print(widget.privateKey);
+    // Kiểm tra xem referral code có trống không
+    if (referralController.text.isEmpty) {
+      Get.snackbar("Error", "Referral code cannot be empty",
+          backgroundColor: Colors.red, colorText: Colors.white);
+      return; // Nếu trống thì không gọi API
+    }
+
+    print("Referral code to check: ${referralController.text}");
+    print("Account name: ${accountNameController.text}");
 
     isCheckingReferral.value = true;
 
     try {
       bool isValid = await ApiService.getReferralCodeStatus(referralController.text);
-
-      print("API result: ${isValid}");
 
       if (isValid) {
         isReferralValid.value = true;
@@ -54,7 +59,7 @@ class _CreateAccountState extends State<CreateAccount> {
             backgroundColor: Colors.green, colorText: Colors.white);
       } else {
         isReferralValid.value = false;
-        Get.snackbar("Error", "Referral code is not existed, please try again",
+        Get.snackbar("Error", "Referral code is not valid, please try again",
             backgroundColor: Colors.red, colorText: Colors.white);
       }
     } catch (e) {
@@ -93,32 +98,62 @@ class _CreateAccountState extends State<CreateAccount> {
                     ),
                     SizedBox(height: 24),
 
-                    InputFieldsWithSeparateIcon(
-                      svg: "Wallet2",
-                      headerText: "",
-                      hintText: "Enter account name",
-                      hasHeader: false,
-                      onChange: () {},
+                    TextField(
+                      controller: accountNameController,
+                      style: TextStyle(color: Colors.black), // ✅ Màu chữ đen khi nhập
+                      decoration: InputDecoration(
+                        labelText: "Account Name",
+                        labelStyle: TextStyle(color: Colors.black), // ✅ Màu label luôn đen
+                        hintText: "Enter account name",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.blue, width: 2),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        print("Current account name: $value");
+                      },
+                    ),
+                    SizedBox(height: 24),
+
+                    TextField(
+                      controller: referralController,
+                      style: TextStyle(color: Colors.black), // ✅ Màu chữ đen khi nhập
+                      readOnly: isReferralValid.value, // ✅ Không cho phép chỉnh sửa nếu valid
+                      decoration: InputDecoration(
+                        labelText: "Referral Code",
+                        labelStyle: TextStyle(color: Colors.black), // ✅ Màu label luôn đen
+                        hintText: "Enter referral code",
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.grey),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(color: Colors.blue, width: 2),
+                        ),
+                        suffixIcon: Obx(() => isCheckingReferral.value
+                            ? Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                            : GestureDetector(
+                          onTap: checkReferralCode,
+                          child: Icon(Icons.check_rounded,
+                              color: headingColor.value, size: 16),
+                        )),
+                      ),
+                      onChanged: (value) {
+                        if (!isReferralValid.value) {
+                          print("Current referral code: $value");
+                        }
+                      },
                     ),
 
-                    InputFieldsWithSeparateIcon(
-                      controller: referralController,
-                      suffixIcon: isCheckingReferral.value
-                          ? Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                          : GestureDetector(
-                        onTap: checkReferralCode,
-                        child: Icon(Icons.check_rounded,
-                            color: headingColor.value, size: 16),
-                      ),
-                      svg: "mdi_contact-outline",
-                      headerText: "",
-                      hintText: "Enter referral code",
-                      hasHeader: false,
-                      onChange: () {},
-                    ),
                   ],
                 ),
                 Row(
