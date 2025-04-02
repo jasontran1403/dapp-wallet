@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:crypto_wallet/UI/Screens/TransactionHistoryScreen/TransactionScreen.dart';
-import 'package:crypto_wallet/UI/Screens/buyScreen.dart';
 import 'package:crypto_wallet/UI/Screens/receiveScreen.dart';
 import 'package:crypto_wallet/UI/Screens/sendScreens/selectTokenScreen.dart';
+import 'package:crypto_wallet/UI/Screens/stakingScreen/stakingScreen.dart';
 import 'package:crypto_wallet/UI/Screens/swapScreens/swapScreen.dart';
 import 'package:crypto_wallet/constants/colors.dart';
 import 'package:crypto_wallet/controllers/appController.dart';
@@ -33,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? bnbBalance;
   String? usdtBalance;
   String? bnbPrice;
+  String? accountName;
 
   var isVisible=false.obs;
   bool isLoading = true;
@@ -94,6 +95,8 @@ class _HomeScreenState extends State<HomeScreen> {
         throw Exception("Can't get the wallet address");
       }
 
+      String? savedAccountName = await walletProvider.getAccountName();
+
       String response = await getBalances(savedWalletAddress, 'bnb');
       dynamic data = json.decode(response);
       String newBalance = data['result'] ?? '0';
@@ -152,6 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ];
         walletAddress = savedWalletAddress;
         isLoading = false;
+        accountName = savedAccountName;
       });
     } catch (e) {
       setState(() => isLoading = false);
@@ -239,12 +243,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Row(
                           children: [
                             Text(
-                              "Edric Jaye",
+                              '${accountName!}',
                               textAlign: TextAlign.start,
                               style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: headingColor.value,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w900,
+                                color: Colors.black,
                                 fontFamily: "dmsans",
 
                               ),
@@ -525,7 +529,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SizedBox(height: 12,),
                             Text(
-                              "${getTranslated(context,"Buy" )??"Buy"}",
+                              "${getTranslated(context,"Staking" )??"Staking"}",
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 fontSize: 16,
@@ -861,7 +865,7 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "${getTranslated(context,"Choose Token" )??"Choose Token"}",
+                "${getTranslated(context,"Choose Staking Token" )??"Choose Staking Token"}",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
@@ -933,7 +937,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Expanded(
                       child: InkWell(
-                        onTap: (){Get.to(BuyScreen());},
+                        onTap: (){Get.to(StakingScreen());},
 
                         child: Container(
                           height:72,
@@ -952,7 +956,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle
                                   ),
-                                  child: Image.asset("assets/images/eth.png",height: 40,width: 40,)),
+                                  child: Image.asset("assets/images/bnb.png",height: 40,width: 40,)),
 
                               SizedBox(width: 12,),
                               Expanded(
@@ -969,7 +973,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               children: [
 
                                                 Text(
-                                                  "ETH",
+                                                  "BNB",
                                                   textAlign: TextAlign.start,
                                                   style: TextStyle(
                                                     fontSize: 15,
@@ -987,7 +991,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Text(
-                                                  "Ethereum",
+                                                  "Binance Coin",
                                                   textAlign: TextAlign.start,
                                                   style: TextStyle(
                                                     fontSize: 12,
@@ -1015,7 +1019,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(width: 16,),
                     Expanded(
                       child: InkWell(
-                        onTap: (){Get.to(BuyScreen());},
+                        onTap: (){Get.to(StakingScreen());},
                         child: Container(
                           height:72,
                           width: Get.width,
@@ -1033,7 +1037,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   decoration: BoxDecoration(
                                       shape: BoxShape.circle
                                   ),
-                                  child: Image.asset("assets/images/btc.png",height: 40,width: 40,)),
+                                  child: Image.asset("assets/images/eft.png",height: 40,width: 40,)),
 
                               SizedBox(width: 12,),
                               Expanded(
@@ -1050,7 +1054,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               children: [
 
                                                 Text(
-                                                  "BTC",
+                                                  "EFT",
                                                   textAlign: TextAlign.start,
                                                   style: TextStyle(
                                                     fontSize: 15,
@@ -1074,7 +1078,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               children: [
 
                                                 Text(
-                                                  "Bitcoin",
+                                                  "Ecofusion Token",
                                                   textAlign: TextAlign.start,
                                                   style: TextStyle(
                                                     fontSize: 12,
@@ -1151,7 +1155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   itemBuilder: (BuildContext context, int index) {
                     return  GestureDetector(
-                      onTap: (){Get.to(BuyScreen());},
+                      onTap: (){Get.to(StakingScreen( ));},
 
 
                       child: Container(
@@ -1202,20 +1206,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
                                                   ),
-                                                  if(index==0)
-                                                    Text(
-                                                      "  TRC20",
-                                                      textAlign: TextAlign.start,
-                                                      style: TextStyle(
-                                                        fontSize: 12,
-                                                        fontWeight: FontWeight.w400,
-                                                        color:
-                                                        lightTextColor.value,
-                                                        fontFamily: "dmsans",
 
-                                                      ),
-
-                                                    ),
                                                 ],
                                               ),
 
@@ -1241,7 +1232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             children: [
 
                                               Text(
-                                                "Bitcoin",
+                                                "",
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
                                                   fontSize: 13,

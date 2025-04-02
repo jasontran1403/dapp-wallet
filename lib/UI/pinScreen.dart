@@ -20,8 +20,6 @@ class _PinScreenState extends State<PinScreen> {
 // Set text
   @override
   void initState() {
-    _pinController.text = '12';
-
     _pinController.clear();
     // TODO: implement initState
     super.initState();

@@ -37,6 +37,7 @@ class WalletProvider extends ChangeNotifier implements WalletAddressService {
     this.privateKey = null;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('privateKey');  // Remove from storage
+    await prefs.remove('accountName');  // Remove from storage
     notifyListeners();
   }
 
@@ -79,6 +80,11 @@ class WalletProvider extends ChangeNotifier implements WalletAddressService {
   Future<String?> getWalletAddress() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('walletAddress');
+  }
+
+  Future<String?> getAccountName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('accountName');
   }
 
   // ✅ Clear Wallet Address from SharedPreferences (Logout)

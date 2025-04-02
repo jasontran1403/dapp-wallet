@@ -6,15 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../common_widgets/inputField.dart';
-class BuyScreen extends StatefulWidget {
-  const BuyScreen({super.key});
+import '../../common_widgets/inputField.dart';
+class StakingScreen extends StatefulWidget {
+  const StakingScreen({super.key});
 
   @override
-  State<BuyScreen> createState() => _BuyScreenState();
+  State<StakingScreen> createState() => _StakingScreenState();
 }
 
-class _BuyScreenState extends State<BuyScreen> {
+class _StakingScreenState extends State<StakingScreen> {
   AppController appController=Get.find<AppController>();
   List coins=[
     {
@@ -125,55 +125,6 @@ class _BuyScreenState extends State<BuyScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      children: [
-                        GestureDetector(
-          
-                            onTap:(){
-                              Get.back();
-          
-                            },
-                            child: Icon(Icons.arrow_back_ios,color: darkBlueColor.value,size: 18,)),
-                        SizedBox(width: 8,),
-                        Text(
-                          "${getTranslated(context,"Buy" )??"Buy"} ETH",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize:15,
-                            fontWeight: FontWeight.w600,
-                            color: darkBlueColor.value,
-                            fontFamily: "dmsans",
-          
-                          ),
-          
-                        ),
-                      ],
-                    ),
-                    InkWell(
-                      onTap: (){
-                        Get.bottomSheet(
-                            clipBehavior: Clip.antiAlias,
-                            isScrollControlled: true,
-                            backgroundColor: primaryBackgroundColor.value,
-                            shape: OutlineInputBorder(
-                                borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
-                            selectCurrency());
-                      },
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 24,
-                            width: 24,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-          
-                            ),
-                            child: Image.asset("assets/images/Ellipse 26 (1).png"),
-                          ),
-                          Icon(Icons.keyboard_arrow_down_outlined,size: 27,color: headingColor.value,)
-                        ],
-                      ),
-                    )
                   ],
                 ),
                 Column(
@@ -239,9 +190,6 @@ class _BuyScreenState extends State<BuyScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-          
-          
-          
                         Text(
                           "USD Dollars",
                           textAlign: TextAlign.center,
@@ -283,58 +231,17 @@ class _BuyScreenState extends State<BuyScreen> {
                 ),
                 Column(
                   children: [
-          
-                    Container(
-                      height: 58,
-                      padding: EdgeInsets.symmetric(horizontal: 12),
-                      decoration: BoxDecoration(
-                        color:appController.isDark.value==true?Color(0xff1A1930): Color(0xffF7F9FC),
-                        borderRadius: BorderRadius.circular(8)
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SvgPicture.asset("assets/svgs/wallet.svg"),
-                          SizedBox(width: 12,),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "${getTranslated(context,"Pay with Credit Card  or Bank" )??"Pay with Credit Card  or Bank"}",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize:18,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0xff8F9BB3),
-                                  fontFamily: "dmsans",
-          
-                                ),),
-                              Text(
-                                "${getTranslated(context,"with Transik" )??"with Transik"}",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize:12,
-                                  fontWeight: FontWeight.w400,
-                                  color: Color(0xff8F9BB3),
-                                  fontFamily: "dmsans",
-          
-                                ),),
-                            ],
-                          ),
-          
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 24,),
+
+
+                    SizedBox(height: 12,),
                     BottomRectangularBtn(onTapFunc: (){
                       Get.back();
                       Get.back();
-          
-                    }, btnTitle: "Buy"),
-                    SizedBox(height: 24,),
-          
-          
+
+                    }, btnTitle: "Interest History"),
+                    SizedBox(height: 12,),
+
+
                   ],
                 )
           

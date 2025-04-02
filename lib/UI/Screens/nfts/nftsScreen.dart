@@ -45,7 +45,7 @@ class _NftsScreenState extends State<NftsScreen> {
                   children: [
 
                     Text(
-                      "${getTranslated(context,"}Your Collectible" )??"}Your Collectible"}",
+                      "${getTranslated(context,"Staking" )??"Staking"}",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize:15,
@@ -56,27 +56,7 @@ class _NftsScreenState extends State<NftsScreen> {
                       ),
 
                     ),
-                    GestureDetector(
-                      onTap: (){
-                        Get.bottomSheet(
-                            clipBehavior: Clip.antiAlias,
-                            isScrollControlled: true,
-                            backgroundColor: primaryBackgroundColor.value,
-                            shape: OutlineInputBorder(
-                                borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
-                            receiveNft());
-                      },
-                      child: Container(
-                        height: 32,
-                        width: 32,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: inputFieldBackgroundColor2.value
 
-                        ),
-                        child: Center(child: Icon(Icons.add,color: headingColor.value,size: 20,)),
-                      ),
-                    )
                   ],
                 ),
                 SizedBox(
@@ -89,7 +69,6 @@ class _NftsScreenState extends State<NftsScreen> {
                     itemCount: 10,
                     itemBuilder: (context, index) {
                       return GestureDetector(
-
                         onTap: () {
                           Get.to(NftDetails());
                         },

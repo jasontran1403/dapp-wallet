@@ -231,75 +231,75 @@ class _PrefrencesScreenState extends State<PrefrencesScreen> {
                       child:
                       Column(
                         children: [
-                          Row
-                            (
-                            children: [
-
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "${getTranslated(context,"Theme" )??"Theme"}",
-                                      textAlign: TextAlign.start,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                        color: headingColor.value,
-                                        fontFamily: "dmsans",
-
-                                      ),
-
-                                    ),
-
-
-
-                                  ],
-                                ),
-                              ),
-
-                              SizedBox(width: 12,),
-                              // Row(
-                              //   children: [
-                              //     Text(
-                              //       "Lite",
-                              //       textAlign: TextAlign.start,
-                              //       style: TextStyle(
-                              //         fontSize: 14,
-                              //         fontWeight: FontWeight.w400,
-                              //         color: lightTextColor.value,
-                              //         fontFamily: "dmsans",
-                              //
-                              //       ),
-                              //
-                              //     ),
-                              //     SizedBox(width: 7,),
-                              //     Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 16,)
-                              //
-                              //   ],
-                              // )   ,
-                              FlutterSwitch(
-                                activeText: "",
-                                inactiveText: "",
-                                activeColor: primaryColor.value,
-                                width: 45.0,
-                                height: 23.0,
-                                valueFontSize: 10.0,
-                                toggleSize: 19.0,
-                                value: _theme.value,
-                                borderRadius: 30.0,
-                                padding: 2.0,
-                                showOnOff: true,
-                                onToggle: (val) async {
-                                  _theme.value = val;
-                                  SharedPreferences prefs = await SharedPreferences.getInstance();
-                                  appController.isDark.value = _theme.value;
-                                  await prefs.setBool('isDarkMode', _theme.value);
-                                  appController.changeTheme();
-                                },
-                              )],
-                          ),
+                          // Row
+                          //   (
+                          //   children: [
+                          //
+                          //     Expanded(
+                          //       child: Column(
+                          //         mainAxisAlignment: MainAxisAlignment.center,
+                          //         crossAxisAlignment: CrossAxisAlignment.start,
+                          //         children: [
+                          //           Text(
+                          //             "${getTranslated(context,"Theme" )??"Theme"}",
+                          //             textAlign: TextAlign.start,
+                          //             style: TextStyle(
+                          //               fontSize: 14,
+                          //               fontWeight: FontWeight.w400,
+                          //               color: headingColor.value,
+                          //               fontFamily: "dmsans",
+                          //
+                          //             ),
+                          //
+                          //           ),
+                          //
+                          //
+                          //
+                          //         ],
+                          //       ),
+                          //     ),
+                          //
+                          //     SizedBox(width: 12,),
+                          //     // Row(
+                          //     //   children: [
+                          //     //     Text(
+                          //     //       "Lite",
+                          //     //       textAlign: TextAlign.start,
+                          //     //       style: TextStyle(
+                          //     //         fontSize: 14,
+                          //     //         fontWeight: FontWeight.w400,
+                          //     //         color: lightTextColor.value,
+                          //     //         fontFamily: "dmsans",
+                          //     //
+                          //     //       ),
+                          //     //
+                          //     //     ),
+                          //     //     SizedBox(width: 7,),
+                          //     //     Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 16,)
+                          //     //
+                          //     //   ],
+                          //     // )   ,
+                          //     FlutterSwitch(
+                          //       activeText: "",
+                          //       inactiveText: "",
+                          //       activeColor: primaryColor.value,
+                          //       width: 45.0,
+                          //       height: 23.0,
+                          //       valueFontSize: 10.0,
+                          //       toggleSize: 19.0,
+                          //       value: _theme.value,
+                          //       borderRadius: 30.0,
+                          //       padding: 2.0,
+                          //       showOnOff: true,
+                          //       onToggle: (val) async {
+                          //         _theme.value = val;
+                          //         SharedPreferences prefs = await SharedPreferences.getInstance();
+                          //         appController.isDark.value = _theme.value;
+                          //         await prefs.setBool('isDarkMode', _theme.value);
+                          //         appController.changeTheme();
+                          //       },
+                          //     )],
+                          // ),
 
 
                         ],

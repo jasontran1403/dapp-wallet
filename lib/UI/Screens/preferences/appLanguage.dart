@@ -93,17 +93,20 @@ class _ApplanguageState extends State<Applanguage> {
     {
       "image":"assets/images/Ellipse 26.png",
       "symbol":"USD",
-
+      "name": "United Kingdom",
+      "currency": "British Pound"
     },
     {
       "image":"assets/images/Ellipse 26 (1).png",
       "symbol":"GBP",
-
+      "name": "United State",
+      "currency": "US Dollar"
     },
     {
       "image":"assets/images/Ellipse 28.png",
       "symbol":"AUD",
-
+      "name": "Australia",
+      "currency": "Australia Dollar"
     },
 
 
@@ -220,7 +223,7 @@ class _ApplanguageState extends State<Applanguage> {
                                       children: [
 
                                         Text(
-                                          "United Kingdom",
+                                          "${fiat[index]['name']}",
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                             fontSize: 15,
@@ -252,108 +255,108 @@ class _ApplanguageState extends State<Applanguage> {
                 SizedBox(height: 16,),
 
 
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 23,
-                      width: 63,
-                      decoration: BoxDecoration(
-                        // color: inputFieldBackgroundColor2.value,
-                          borderRadius: BorderRadius.circular(24),
-                          border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
-
-                      ),
-                      child:   Center(
-                        child: Text(
-                          "${getTranslated(context,"All" )??"All"}",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w400,
-                            color: headingColor.value,
-                            fontFamily: "dmsans",
-
-                          ),
-
-                        ),
-                      ),
-                    ),
-                    Expanded(child: Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,)),
-
-                  ],
-                ),
-                SizedBox(height: 24,),
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-
-                  itemCount: coins.length,
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(height: 12,);
-                  },
-                  itemBuilder: (BuildContext context, int index) {
-                    return  GestureDetector(
-                      onTap: (){
-                        Get.back();
-                      },
-                      child: Container(
-                        height:59,
-                        width: Get.width,
-                        padding: EdgeInsets.all(6),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                                height:24,
-                                width:24,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle
-                                ),
-                                child: Image.asset("assets/images/Ellipse 26 (3).png",height: 40,width: 40,)),
-
-                            SizedBox(width: 12,),
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-
-                                        Text(
-                                          "Azerbaijan",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600,
-                                            color: headingColor.value,
-                                            fontFamily: "dmsans",
-
-                                          ),
-
-                                        ),
-
-
-
-                                      ],
-                                    ),
-                                  ),
-                                  Icon(Icons.arrow_forward_ios,size: 18,color: headingColor.value,)
-
-                                ],
-                              ),
-                            )
-
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                // Row(
+                //   crossAxisAlignment: CrossAxisAlignment.center,
+                //   children: [
+                //     Container(
+                //       height: 23,
+                //       width: 63,
+                //       decoration: BoxDecoration(
+                //         // color: inputFieldBackgroundColor2.value,
+                //           borderRadius: BorderRadius.circular(24),
+                //           border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
+                //
+                //       ),
+                //       child:   Center(
+                //         child: Text(
+                //           "${getTranslated(context,"All" )??"All"}",
+                //           textAlign: TextAlign.start,
+                //           style: TextStyle(
+                //             fontSize: 10,
+                //             fontWeight: FontWeight.w400,
+                //             color: headingColor.value,
+                //             fontFamily: "dmsans",
+                //
+                //           ),
+                //
+                //         ),
+                //       ),
+                //     ),
+                //     Expanded(child: Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,)),
+                //
+                //   ],
+                // ),
+                // SizedBox(height: 24,),
+                // ListView.separated(
+                //   shrinkWrap: true,
+                //   physics: NeverScrollableScrollPhysics(),
+                //
+                //   itemCount: coins.length,
+                //   separatorBuilder: (BuildContext context, int index) {
+                //     return SizedBox(height: 12,);
+                //   },
+                //   itemBuilder: (BuildContext context, int index) {
+                //     return  GestureDetector(
+                //       onTap: (){
+                //         Get.back();
+                //       },
+                //       child: Container(
+                //         height:59,
+                //         width: Get.width,
+                //         padding: EdgeInsets.all(6),
+                //         decoration: BoxDecoration(
+                //             borderRadius: BorderRadius.circular(16),
+                //             border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
+                //         ),
+                //         child: Row(
+                //           children: [
+                //             Container(
+                //                 height:24,
+                //                 width:24,
+                //                 decoration: BoxDecoration(
+                //                     shape: BoxShape.circle
+                //                 ),
+                //                 child: Image.asset("assets/images/Ellipse 26 (3).png",height: 40,width: 40,)),
+                //
+                //             SizedBox(width: 12,),
+                //             Expanded(
+                //               child: Row(
+                //                 children: [
+                //                   Expanded(
+                //                     child: Row(
+                //                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //                       children: [
+                //
+                //                         Text(
+                //                           "Azerbaijan",
+                //                           textAlign: TextAlign.start,
+                //                           style: TextStyle(
+                //                             fontSize: 15,
+                //                             fontWeight: FontWeight.w600,
+                //                             color: headingColor.value,
+                //                             fontFamily: "dmsans",
+                //
+                //                           ),
+                //
+                //                         ),
+                //
+                //
+                //
+                //                       ],
+                //                     ),
+                //                   ),
+                //                   Icon(Icons.arrow_forward_ios,size: 18,color: headingColor.value,)
+                //
+                //                 ],
+                //               ),
+                //             )
+                //
+                //           ],
+                //         ),
+                //       ),
+                //     );
+                //   },
+                // ),
               ],
             ),
           )

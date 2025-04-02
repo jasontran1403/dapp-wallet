@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:crypto_wallet/UI/Screens/profile/privateKey.dart';
 import 'package:crypto_wallet/UI/Screens/socialLogin/socialLogin.dart';
 import 'package:crypto_wallet/UI/common_widgets/inputField.dart';
@@ -13,6 +15,7 @@ import 'package:web3dart/credentials.dart';
 
 import '../../../controllers/appController.dart';
 import '../../../providers/wallet_provider.dart';
+import '../../../services/apiService.dart';
 import '../../common_widgets/bottomRectangularbtn.dart';
 import '../homeScreen/homeScreen.dart';
 
@@ -197,7 +200,40 @@ class _ImportSecretPhraseState extends State<ImportSecretPhrase> {
         // Lưu vào Provider để các component khác có thể sử dụng
         // await walletProvider.setPrivateKey(privateKey);
         // await walletProvider.setWalletAddress(walletAddress.hex);
-        Get.to(() => HomeScreen());
+        dynamic response = await ApiService.login(walletAddress, privateKey);
+
+        String responseWalletAddress = json.decode(response)['walletAddress'];
+        String responseAccountName = json.decode(response)['displayName'];
+        String responsePinCode = json.decode(response)['pinCode'];
+
+        if (responseWalletAddress == walletAddress) {
+          Get.snackbar(
+            "Success",
+            "Sign in successful. Redirect after 1 seconds.",
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+          );
+
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('privateKey', privateKey);
+          await prefs.setString('walletAddress', walletAddress);
+          await prefs.setString('accountName', responseAccountName);
+          await prefs.setString('pinCode', responsePinCode);
+
+          Future.delayed(Duration(seconds: 1), () {
+            Get.off(() => HomeScreen()); // Chuyển sang HomeScreen và xoá trang hiện tại
+          });
+        } else {
+          Get.snackbar(
+            "Error",
+            "Sign in failed.",
+            backgroundColor: Colors.red,
+            colorText: Colors.white,
+          );
+          return;
+        }
+
+
       } else {
         Get.snackbar("Error", "Mnemonics is invalid, please try again!", backgroundColor: Colors.red, colorText: Colors.white);
       }

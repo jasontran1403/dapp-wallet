@@ -11,6 +11,9 @@ import 'package:crypto_wallet/localization/language_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
+
+import '../../../providers/wallet_provider.dart';
 class Profile extends StatefulWidget {
   const Profile({super.key});
 
@@ -20,7 +23,39 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   AppController appController=Get.find<AppController>();
+  String? walletAddress;
+  String? accountName;
   var isTwoFa=true.obs;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadWalletData();
+  }
+
+  Future<void> _loadWalletData() async {
+    try {
+      final walletProvider = Provider.of<WalletProvider>(context, listen: false);
+      await walletProvider.loadPrivateKey();
+
+      String? savedWalletAddress = await walletProvider.getWalletAddress();
+      if (savedWalletAddress == null) {
+        throw Exception("Can't get the wallet address");
+      }
+
+      String? savedAccountName = await walletProvider.getAccountName();
+
+      setState(() {
+        walletAddress = savedWalletAddress;
+        isLoading = false;
+        accountName = savedAccountName;
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -96,7 +131,7 @@ class _ProfileState extends State<Profile> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      "Edric Jaye",
+                                      accountName ?? "Loading...",
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
                                         fontSize: 16.5,
@@ -115,9 +150,7 @@ class _ProfileState extends State<Profile> {
                                         fontWeight: FontWeight.w600,
                                         color: lightTextColor.value,
                                         fontFamily: "dmsans",
-
                                       ),
-
                                     ),
                                   ],
                                 ),
@@ -367,75 +400,75 @@ class _ProfileState extends State<Profile> {
 
                          Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
                          SizedBox(height: 8,),
-                         InkWell(
-                           splashColor: Colors.transparent,
-                           onTap: (){
-                             Get.to(TwoFaScreen());
-                           },
-                           child: Row
-                             (
-                             children: [
-                               Container(
-                                 height: 40,
-                                 width: 40,
-                                 padding: EdgeInsets.all(11),
-                                 decoration: BoxDecoration(
-
-                                     color:appController.isDark.value==true? Color(0xff1A2B56):inputFieldBackgroundColor.value,
-                                     borderRadius: BorderRadius.circular(12)
-                                 ),
-                                 child:  Center(
-                                     child: Image.asset('assets/images/2fa.png', color:appController.isDark.value==true? Color(0xffA2BBFF):headingColor.value,)
-                                 ),
-                               ),
-                               SizedBox(width: 12,),
-                               Expanded(
-                                 child: Column(
-                                   mainAxisAlignment: MainAxisAlignment.center,
-                                   crossAxisAlignment: CrossAxisAlignment.start,
-                                   children: [
-                                     Text(
-                                       "${getTranslated(context,"2FA" )??"2FA"}",
-                                       textAlign: TextAlign.start,
-                                       style: TextStyle(
-                                         fontSize: 14,
-                                         fontWeight: FontWeight.w400,
-                                         color: headingColor.value,
-                                         fontFamily: "dmsans",
-
-                                       ),
-
-                                     ),
-
-
-
-                                   ],
-                                 ),
-                               ),
-
-                               SizedBox(width: 12,),
-                               FlutterSwitch(
-                                 activeColor:appController.isDark.value==true? primaryBackgroundColor.value: primaryColor.value,
-                                 inactiveColor:appController.isDark.value==true? primaryBackgroundColor.value: headingColor.value,
-                                 width: 40.0,
-                                 toggleColor:appController.isDark.value==true? Color(0xffA2BBFF): primaryBackgroundColor.value,
-                                 height: 20.0,
-                                 valueFontSize: 10.0,
-                                 toggleSize: 18.0,
-                                 value: isTwoFa.value,
-                                 borderRadius: 16.0,
-                                 padding: 2.0,
-                                 showOnOff: false,
-                                 onToggle: (val) {
-                                   setState(() {
-                                     isTwoFa.value = val;
-                                   });
-                                 },
-                               ),
-
-                             ],
-                           ),
-                         ),
+                         // InkWell(
+                         //   splashColor: Colors.transparent,
+                         //   onTap: (){
+                         //     Get.to(TwoFaScreen());
+                         //   },
+                         //   child: Row
+                         //     (
+                         //     children: [
+                         //       Container(
+                         //         height: 40,
+                         //         width: 40,
+                         //         padding: EdgeInsets.all(11),
+                         //         decoration: BoxDecoration(
+                         //
+                         //             color:appController.isDark.value==true? Color(0xff1A2B56):inputFieldBackgroundColor.value,
+                         //             borderRadius: BorderRadius.circular(12)
+                         //         ),
+                         //         child:  Center(
+                         //             child: Image.asset('assets/images/2fa.png', color:appController.isDark.value==true? Color(0xffA2BBFF):headingColor.value,)
+                         //         ),
+                         //       ),
+                         //       SizedBox(width: 12,),
+                         //       Expanded(
+                         //         child: Column(
+                         //           mainAxisAlignment: MainAxisAlignment.center,
+                         //           crossAxisAlignment: CrossAxisAlignment.start,
+                         //           children: [
+                         //             Text(
+                         //               "${getTranslated(context,"2FA" )??"2FA"}",
+                         //               textAlign: TextAlign.start,
+                         //               style: TextStyle(
+                         //                 fontSize: 14,
+                         //                 fontWeight: FontWeight.w400,
+                         //                 color: headingColor.value,
+                         //                 fontFamily: "dmsans",
+                         //
+                         //               ),
+                         //
+                         //             ),
+                         //
+                         //
+                         //
+                         //           ],
+                         //         ),
+                         //       ),
+                         //
+                         //       SizedBox(width: 12,),
+                         //       FlutterSwitch(
+                         //         activeColor:appController.isDark.value==true? primaryBackgroundColor.value: primaryColor.value,
+                         //         inactiveColor:appController.isDark.value==true? primaryBackgroundColor.value: headingColor.value,
+                         //         width: 40.0,
+                         //         toggleColor:appController.isDark.value==true? Color(0xffA2BBFF): primaryBackgroundColor.value,
+                         //         height: 20.0,
+                         //         valueFontSize: 10.0,
+                         //         toggleSize: 18.0,
+                         //         value: isTwoFa.value,
+                         //         borderRadius: 16.0,
+                         //         padding: 2.0,
+                         //         showOnOff: false,
+                         //         onToggle: (val) {
+                         //           setState(() {
+                         //             isTwoFa.value = val;
+                         //           });
+                         //         },
+                         //       ),
+                         //
+                         //     ],
+                         //   ),
+                         // ),
                        ],
                                            )
                       ),
@@ -501,56 +534,7 @@ class _ProfileState extends State<Profile> {
 
                               Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
                               SizedBox(height: 8,),
-                              InkWell(
-                                onTap: (){
-                                  Get.to(AddressBookScreen());
-                                },
-                                child: Row
-                                  (
-                                  children: [
-                                    Container(
-                                      height: 40,
-                                      width: 40,
-                                      padding: EdgeInsets.all(11),
-                                      decoration: BoxDecoration(
 
-                                          color:appController.isDark.value==true? Color(0xff1A2B56):inputFieldBackgroundColor.value,
-                                          borderRadius: BorderRadius.circular(12)
-                                      ),
-                                      child:  Center(
-                                          child: Image.asset('assets/images/addressBook.png', color:appController.isDark.value==true? Color(0xffA2BBFF):headingColor.value,)
-                                      ),
-                                    ),
-                                    SizedBox(width: 12,),
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "${getTranslated(context,"Address Book" )??"Address Book"}",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                              color: headingColor.value,
-                                              fontFamily: "dmsans",
-
-                                            ),
-
-                                          ),
-
-
-
-                                        ],
-                                      ),
-                                    ),
-
-                                    SizedBox(width: 12,),
-                                    Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
-                                  ],
-                                ),
-                              ),
 
                             ],
                           )
@@ -592,7 +576,7 @@ class _ProfileState extends State<Profile> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "${getTranslated(context,"Help & Support" )??"Help & Support"}",
+                                          "${getTranslated(context,"Online Support" )??"Online Support"}",
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                             fontSize: 14,
@@ -642,7 +626,7 @@ class _ProfileState extends State<Profile> {
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "${getTranslated(context,"About Crypto Wallet" )??"About Crypto Wallet"}",
+                                          "${getTranslated(context,"About EcoWallet" )??"About EcoWallet"}",
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                             fontSize: 14,

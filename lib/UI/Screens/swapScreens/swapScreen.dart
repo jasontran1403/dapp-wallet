@@ -172,13 +172,14 @@ class _SwapScreenState extends State<SwapScreen> {
                               children: [
                                 InkWell(
                                   onTap:(){
-                                    Get.bottomSheet(
-                                        clipBehavior: Clip.antiAlias,
-                                        isScrollControlled: true,
-                                        backgroundColor: primaryBackgroundColor.value,
-                                        shape: OutlineInputBorder(
-                                            borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
-                                        selectToken());
+                                    // Get.bottomSheet(
+                                    //     clipBehavior: Clip.antiAlias,
+                                    //     isScrollControlled: true,
+                                    //     backgroundColor: primaryBackgroundColor.value,
+                                    //     shape: OutlineInputBorder(
+                                    //         borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
+                                    //     selectToken()
+                                    // );
                                   },
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -538,14 +539,17 @@ class _SwapScreenState extends State<SwapScreen> {
               Column(
                 children: [
                   SizedBox(height: 24,),
-                  BottomRectangularBtn(onTapFunc: (){
-                    Get.bottomSheet(
+                  BottomRectangularBtn(
+                      onTapFunc: (){
+                      Get.bottomSheet(
                         clipBehavior: Clip.antiAlias,
                         isScrollControlled: true,
+
                         backgroundColor: primaryBackgroundColor.value,
                         shape: OutlineInputBorder(
                             borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
-                        confirmSwap());
+                        commingSoon()
+                    );
                   }, btnTitle: "Swap"),
                 ],
               )
@@ -565,6 +569,47 @@ class _SwapScreenState extends State<SwapScreen> {
       ),
     );
   }
+
+  Widget commingSoon(){
+    return Container(
+      height: Get.height*0.3,
+      width: Get.width,
+      padding: EdgeInsets.symmetric(horizontal: 22,vertical: 22),
+      color:appController.isDark.value==true ?Color(0xff1A1930):inputFieldBackgroundColor.value,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(height: 24,),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "This function will be available soon!",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: headingColor.value,
+                  fontFamily: "dmsans",
+
+                ),
+              ),
+              GestureDetector(
+                  onTap: (){
+                    Get.back();
+                  },
+                  child: Icon(Icons.clear,color: headingColor.value,))
+            ],
+          ),
+          SizedBox(height: 24,),
+
+
+
+        ],
+      ),
+    );
+  }
+
   Widget selectToken(){
     return Container(
        height: Get.height*0.9,
