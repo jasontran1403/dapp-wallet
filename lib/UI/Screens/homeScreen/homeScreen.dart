@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:crypto_wallet/UI/Screens/TransactionHistoryScreen/TransactionScreen.dart';
 import 'package:crypto_wallet/UI/Screens/buyScreen.dart';
-import 'package:crypto_wallet/UI/Screens/profile/profile.dart';
 import 'package:crypto_wallet/UI/Screens/receiveScreen.dart';
 import 'package:crypto_wallet/UI/Screens/sendScreens/selectTokenScreen.dart';
 import 'package:crypto_wallet/UI/Screens/swapScreens/swapScreen.dart';
@@ -20,7 +19,6 @@ import 'package:web3dart/web3dart.dart';
 
 import '../../../providers/wallet_provider.dart';
 import '../../common_widgets/inputField.dart';
-import '../nfts/nftsScreen.dart';
 import '../onBoardingScreens/onboardingScreen1.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -37,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? bnbPrice;
 
   var isVisible=false.obs;
-  bool isLoading = true; // Thêm state loading
+  bool isLoading = true;
 
   List coins=[];
 
@@ -86,14 +84,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadWalletData() async {
     try {
-      setState(() => isLoading = true); // Bắt đầu loading
+      setState(() => isLoading = true);
 
       final walletProvider = Provider.of<WalletProvider>(context, listen: false);
       await walletProvider.loadPrivateKey();
 
       String? savedWalletAddress = await walletProvider.getWalletAddress();
       if (savedWalletAddress == null) {
-        throw Exception("Không thể lấy địa chỉ ví");
+        throw Exception("Can't get the wallet address");
       }
 
       String response = await getBalances(savedWalletAddress, 'bnb');
@@ -103,6 +101,10 @@ class _HomeScreenState extends State<HomeScreen> {
       String responseUsdt = await getBalances(savedWalletAddress, 'usdt');
       dynamic dataUsdt = json.decode(responseUsdt);
       String newUsdtBalance = dataUsdt['result'] ?? '0';
+
+      String responseEft = await getBalances(savedWalletAddress, 'eft');
+      dynamic dataEft = json.decode(responseEft);
+      String newEftBalance = dataEft['result'] ?? '0';
 
       // Transform balance from wei to ether
       EtherAmount latestBalance =
@@ -115,38 +117,44 @@ class _HomeScreenState extends State<HomeScreen> {
       String latestBalanceUsdtInEther =
       latestBalanceUsdt.getValueInUnit(EtherUnit.ether).toString();
 
+      EtherAmount latestBalanceEft =
+      EtherAmount.fromBigInt(EtherUnit.wei, BigInt.parse(newEftBalance));
+      String latestBalanceEftInEther =
+      latestBalanceEft.getValueInUnit(EtherUnit.ether).toString();
+
       String responseBNBPrice = await fetchBNBPrice();
       dynamic dataBNBPrice = json.decode(responseBNBPrice);
       String newBNBPrice = dataBNBPrice['price'] ?? '0';
 
-      // String responseTransactionHistory = await fetchTransactionHistory(savedWalletAddress);
-      // dynamic dataTransactions = json.decode(responseTransactionHistory);
-      // List<dynamic> transactions = dataTransactions['result'] ?? null;
-      // print(transactions);
-
-      // Cập nhật danh sách coins với dữ liệu thực
       setState(() {
         coins = [
           {
             "image": "assets/images/bnb.png",
             "symbol": "BNB",
             "amount": latestBalanceInEther,
-            "price": newBNBPrice, // Cập nhật giá trị thực nếu cần
+            "price": newBNBPrice,
             "chain": ""
           },
           {
             "image": "assets/images/usdt.png",
             "symbol": "USDT",
             "amount": latestBalanceUsdtInEther,
-            "price": "1.00", // Cập nhật giá trị thực nếu cần
+            "price": "1.00",
+            "chain": ""
+          },
+          {
+            "image": "assets/images/eft.png",
+            "symbol": "EFT",
+            "amount": latestBalanceEftInEther,
+            "price": "0.15",
             "chain": ""
           },
         ];
         walletAddress = savedWalletAddress;
-        isLoading = false; // Kết thúc loading
+        isLoading = false;
       });
     } catch (e) {
-      setState(() => isLoading = false); // Đảm bảo tắt loading khi có lỗi
+      setState(() => isLoading = false);
     }
   }
 
@@ -162,24 +170,21 @@ class _HomeScreenState extends State<HomeScreen> {
     if (address.length > 20) {
       return address.substring(0, 10) + "..." + address.substring(address.length - 10);
     }
-    return address; // Trả lại nguyên nếu địa chỉ nhỏ hơn hoặc bằng 20 ký tự
+    return address;
   }
 
   String formatBalance(String balance) {
     try {
       double value = double.parse(balance);
 
-      // Nếu số bằng 0, trả về "0"
       if (value == 0) {
         return "0";
       }
 
-      // Nếu số nhỏ hơn 0.0001 thì giữ lại 7 chữ số thập phân (không có dấu `,`)
       if (value < 0.0001) {
         return NumberFormat("0.0000000", "en_US").format(value);
       }
 
-      // Nếu số lớn hơn 0.0001, hiển thị có dấu `,` ngăn cách nghìn, triệu
       return NumberFormat("#,##0.######", "en_US").format(value);
     } catch (e) {
       return "Invalid balance";
@@ -190,17 +195,14 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       double value = double.parse(balance);
 
-      // Nếu số bằng 0, trả về "0"
       if (value == 0) {
         return "0.00";
       }
 
-      // Nếu số nhỏ hơn 0.0001 thì giữ lại 7 chữ số thập phân (không có dấu `,`)
       if (value < 0.0001) {
         return NumberFormat("0.00", "en_US").format(value);
       }
 
-      // Nếu số lớn hơn 0.0001, hiển thị có dấu `,` ngăn cách nghìn, triệu
       return NumberFormat("#,##0.##", "en_US").format(value);
     } catch (e) {
       return "Invalid balance";
@@ -215,458 +217,455 @@ class _HomeScreenState extends State<HomeScreen> {
         body: SafeArea(
           child: isLoading ? Center(
             child: CircularProgressIndicator(
-              color: primaryColor.value,
-            ),
-          )
-              : ListView(
-            padding: EdgeInsets.symmetric(horizontal: 22,vertical: 20),
+                    color: primaryColor.value,
+                ),
+            )
+              :
+          Stack(
             children: [
-              // SizedBox(height: 40,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Positioned.fill(
+                child: Image.asset(
+                  "assets/background/bg7.png",
+                  fit: BoxFit.cover,
+                ),
+              ),
+              ListView (
+                padding: EdgeInsets.symmetric(horizontal: 22,vertical: 20),
                 children: [
-                  InkWell(
-
-                    child: Row(
-                      children: [
-                        Text(
-                          "Edric Jaye",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: headingColor.value,
-                            fontFamily: "dmsans",
-
-                          ),
-                        ),
-                        SizedBox(width: 8,),
-                      ],
-                    ),
-                  ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GestureDetector(
-                        onTap: (){
-                          isVisible.value = !isVisible.value;
-                        },
-                        child: Container(
-                          height: 32,
-                          width: 32,
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: appController.isDark.value ? Color(0xff1A2B56) : inputFieldBackgroundColor.value,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: isVisible == true
-                              ? Icon(Icons.visibility_outlined, color: headingColor.value, size: 17)
-                              : SvgPicture.asset("assets/svgs/hideBalance.svg", color: appController.isDark.value ? Color(0xffA2BBFF) : headingColor.value),
-                        ),
-                      ),
-                      SizedBox(width: 8,),
-                      Container(
-                        height: 32,
-                        width: 32,
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: appController.isDark.value ? Color(0xff1A2B56) : inputFieldBackgroundColor.value,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: GestureDetector(
-                          onTap: () {
-                            // Lưu walletAddress vào clipboard khi nhấn vào container
-                            Clipboard.setData(ClipboardData(text: walletAddress ?? ""));
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Wallet Address copied to clipboard!')),
-                            );
-                          },
-                          child: SvgPicture.asset(
-                            "assets/svgs/u_copy-landscape.svg",
-                            color: appController.isDark.value ? Color(0xffA2BBFF) : headingColor.value,
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 8),
-                      Container(
-                        height: 32,
-                        width: 32,
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: appController.isDark.value ? Color(0xff1A2B56) : inputFieldBackgroundColor.value,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: SvgPicture.asset("assets/svgs/ion_qr-code.svg", color: appController.isDark.value ? Color(0xffA2BBFF) : headingColor.value),
-                      ),
-                      SizedBox(width: 8,), // Thêm khoảng cách trước icon logout
-                      GestureDetector(
-                        onTap: () {
-                          _loadWalletData();
-                        },
-                        child: Container(
-                          height: 32,
-                          width: 32,
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: appController.isDark.value ? Color(0xff1A2B56) : inputFieldBackgroundColor.value,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(Icons.refresh_rounded, color: headingColor.value, size: 20),
-                        ),
-                      ),
-                      SizedBox(width: 8,), // Thêm khoảng cách trước icon logout
-                      GestureDetector(
-                        onTap: () {
-                          final walletProvider = Provider.of<WalletProvider>(context, listen: false);
-                          walletProvider.clearPrivateKey(); // Xóa privateKey khi logout
-                          walletProvider.clearWalletAddress();
-
-                          // Chuyển hướng về màn hình OnBoardingScreen1
-                          Get.offAll(OnBoardingScreen1());
-                        },
-                        child: Container(
-                          height: 32,
-                          width: 32,
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: appController.isDark.value ? Color(0xff1A2B56) : inputFieldBackgroundColor.value,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Icon(Icons.logout, color: headingColor.value, size: 20),
-                        ),
-                      ),
-                    ],
-                  )
-
-                ],
-              ),
-              SizedBox(height: 32,),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  isVisible.value==true?
-                  Text(
-                    "*****",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 56,
-                      fontWeight: FontWeight.w600,
-                      color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
-                      fontFamily: "dmsans",
-
-                    ),
-
-                  ):
-
-
-                  Text(
-                    "\$ ${formatTotalBalance(getTotalBalance(coins).toString())}",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 50,
-                      fontWeight: FontWeight.w600,
-                      color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
-                      fontFamily: "dmsans",
-
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 24,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    _shortenAddress(walletAddress ?? ""),
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      fontStyle: FontStyle.italic, // Làm chữ in nghiêng
-                      color: appController.isDark.value
-                          ? Color(0xffFDFCFD)
-                          : primaryColor.value,
-                      fontFamily: "dmsans",
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 24,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      Get.to(SelectTokenScreen(coins: coins));  // Truyền coins vào tham số coins của SelectTokenScreen
-                    },
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 56,
-                          width: 56,
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                              color:appController.isDark.value==true?Color(0xFF1A2B56): primaryColor.value,
-                              borderRadius: BorderRadius.circular(15)
-                          ),
-                          child: Center(child: SvgPicture.asset("assets/svgs/sendIcon.svg",height: 28,width: 28,color:appController.isDark.value==true?Color(0xFFA2BBFF):primaryBackgroundColor.value)),
-                        ),
-                        SizedBox(height: 12,),
-                        Text(
-                          "${getTranslated(context,"Send" )??"Send"}",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
-                            fontFamily: "dmsans",
-
-                          ),
-
-                        ),
-
-                      ],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (){
-                      Get.bottomSheet(
-                          clipBehavior: Clip.antiAlias,
-                          isScrollControlled: true,
-                          backgroundColor:appController.isDark.value==true? Color(0xffA2BBFF):primaryBackgroundColor.value,
-                          shape: OutlineInputBorder(
-                              borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
-                          selectToken());
-                    },
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 56,
-                          width: 56,
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                              color:appController.isDark.value==true?Color(0xFF1A2B56): primaryColor.value,
-                              borderRadius: BorderRadius.circular(15)
-                          ),
-                          child: Center(child: SvgPicture.asset("assets/svgs/receiveicon.svg",height: 28,width: 28,color:appController.isDark.value==true?Color(0xFFA2BBFF):primaryBackgroundColor.value)),
-                        ),
-                        SizedBox(height: 12,),
-                        Text(
-                          "${getTranslated(context,"Receive" )??"Receive"}",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
-                            fontFamily: "dmsans",
-
-                          ),
-
-                        ),
-
-                      ],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (){
-                      Get.to(SwapScreen());
-                    },
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 56,
-                          width: 56,
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                              color:appController.isDark.value==true?Color(0xFF1A2B56): primaryColor.value,
-                              borderRadius: BorderRadius.circular(15)
-                          ),
-                          child: Center(child: SvgPicture.asset("assets/svgs/swap.svg",height: 28,width: 28,color:appController.isDark.value==true?Color(0xFFA2BBFF):primaryBackgroundColor.value)),
-                        ),
-                        SizedBox(height: 12,),
-                        Text(
-                          "${getTranslated(context,"Swap" )??"Swap"}",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
-                            fontFamily: "dmsans",
-
-                          ),
-
-                        ),
-
-                      ],
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: (){
-                      Get.bottomSheet(
-                          clipBehavior: Clip.antiAlias,
-                          isScrollControlled: true,
-                          backgroundColor: primaryBackgroundColor.value,
-                          shape: OutlineInputBorder(
-                              borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
-                          selectTokenForBuy());
-                    },
-                    child: Column(
-                      children: [
-                        Container(
-                          height: 56,
-                          width: 56,
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                              color:appController.isDark.value==true?Color(0xFF1A2B56): primaryColor.value,
-                              borderRadius: BorderRadius.circular(15)
-                          ),
-                          child: Center(child: SvgPicture.asset("assets/svgs/buy.svg",height: 28,width: 28,color: appController.isDark.value==true?Color(0xFFA2BBFF):primaryBackgroundColor.value,)),
-                        ),
-                        SizedBox(height: 12,),
-                        Text(
-                          "${getTranslated(context,"Buy" )??"Buy"}",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
-                            fontFamily: "dmsans",
-
-                          ),
-
-                        ),
-
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 32,),
-              ListView.separated(
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: coins.length,
-                separatorBuilder: (BuildContext context, int index) {
-                  return SizedBox(height: 12,);
-                },
-                itemBuilder: (BuildContext context, int index) {
-                  return Obx(
-                        () => GestureDetector(
-                      onTap: () {
-                        // Navigate to TransactionScreen and pass the symbol as an argument
-                        print("Navigating to TransactionScreen");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TransactionScreen(symbol: coins[index]['symbol']), // Pass symbol here
-                          ),
-                        );
-                      },
-                      child: Container(
-                        height: 72,
-                        width: Get.width,
-                        padding: EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: inputFieldBackgroundColor2.value,
-                          borderRadius: BorderRadius.circular(16),
-                          border: Border.all(width: 1, color: inputFieldBackgroundColor.value),
-                        ),
+                      InkWell(
                         child: Row(
                           children: [
-                            Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
+                            Text(
+                              "Edric Jaye",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: headingColor.value,
+                                fontFamily: "dmsans",
+
                               ),
-                              child: Image.asset("${coins[index]['image']}", height: 40, width: 40),
                             ),
-                            SizedBox(width: 12),
-                            Expanded(
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                "${coins[index]['symbol']}",
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: appController.isDark.value == true
-                                                      ? Color(0xffFDFCFD)
-                                                      : primaryColor.value,
-                                                  fontFamily: "dmsans",
-                                                ),
-                                              ),
-                                              Text(
-                                                formatBalance(
-                                                  (double.parse(coins[index]['amount'].toString()) *
-                                                      double.parse(coins[index]['price'].toString()))
-                                                      .toString(),
-                                                ),
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: appController.isDark.value
-                                                      ? Color(0xffFDFCFD)
-                                                      : primaryColor.value,
-                                                  fontFamily: "dmsans",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(height: 7),
-                                        Expanded(
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                formatBalance(
-                                                  (double.parse(coins[index]['amount'].toString()).toString()),
-                                                ),
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: lightTextColor.value,
-                                                  fontFamily: "dmsans",
-                                                ),
-                                              ),
-                                              Text(
-                                                "\$ ${formatTotalBalance(coins[index]['price'])}",
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Color(0xff56CDAD),
-                                                  fontFamily: "dmsans",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
+                            SizedBox(width: 8,),
                           ],
                         ),
                       ),
-                    ),
-                  );
-                },
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: (){
+                              isVisible.value = !isVisible.value;
+                            },
+                            child: Container(
+                              height: 32,
+                              width: 32,
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: appController.isDark.value ? Color(0xff1A2B56) : inputFieldBackgroundColor.value,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: isVisible == true
+                                  ? Icon(Icons.visibility_outlined, color: headingColor.value, size: 17)
+                                  : SvgPicture.asset("assets/svgs/hideBalance.svg", color: appController.isDark.value ? Color(0xffA2BBFF) : headingColor.value),
+                            ),
+                          ),
+                          SizedBox(width: 8,),
+                          Container(
+                            height: 32,
+                            width: 32,
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: appController.isDark.value ? Color(0xff1A2B56) : inputFieldBackgroundColor.value,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: GestureDetector(
+                              onTap: () {
+                                // Lưu walletAddress vào clipboard khi nhấn vào container
+                                Clipboard.setData(ClipboardData(text: walletAddress ?? ""));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Wallet Address copied to clipboard!')),
+                                );
+                              },
+                              child: SvgPicture.asset(
+                                "assets/svgs/u_copy-landscape.svg",
+                                color: appController.isDark.value ? Color(0xffA2BBFF) : headingColor.value,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Container(
+                            height: 32,
+                            width: 32,
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: appController.isDark.value ? Color(0xff1A2B56) : inputFieldBackgroundColor.value,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: SvgPicture.asset("assets/svgs/ion_qr-code.svg", color: appController.isDark.value ? Color(0xffA2BBFF) : headingColor.value),
+                          ),
+                          SizedBox(width: 8,), // Thêm khoảng cách trước icon logout
+                          GestureDetector(
+                            onTap: () {
+                              _loadWalletData();
+                            },
+                            child: Container(
+                              height: 32,
+                              width: 32,
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: appController.isDark.value ? Color(0xff1A2B56) : inputFieldBackgroundColor.value,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Icon(Icons.refresh_rounded, color: headingColor.value, size: 20),
+                            ),
+                          ),
+                          SizedBox(width: 8,), // Thêm khoảng cách trước icon logout
+                          GestureDetector(
+                            onTap: () {
+                              final walletProvider = Provider.of<WalletProvider>(context, listen: false);
+                              walletProvider.clearPrivateKey(); // Xóa privateKey khi logout
+                              walletProvider.clearWalletAddress();
+
+                              // Chuyển hướng về màn hình OnBoardingScreen1
+                              Get.offAll(OnBoardingScreen1());
+                            },
+                            child: Container(
+                              height: 32,
+                              width: 32,
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: appController.isDark.value ? Color(0xff1A2B56) : inputFieldBackgroundColor.value,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Icon(Icons.logout, color: headingColor.value, size: 20),
+                            ),
+                          ),
+                        ],
+                      )
+
+                    ],
+                  ),
+                  SizedBox(height: 32,),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      isVisible.value==true?
+                      Text(
+                        "*****",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontSize: 56,
+                          fontWeight: FontWeight.w600,
+                          color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
+                          fontFamily: "dmsans",
+
+                        ),
+
+                      ):
+
+
+                      Text(
+                        "\$ ${formatTotalBalance(getTotalBalance(coins).toString())}",
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.w600,
+                          color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
+                          fontFamily: "dmsans",
+
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 24,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        _shortenAddress(walletAddress ?? ""),
+                        textAlign: TextAlign.start,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          fontStyle: FontStyle.italic,
+                          color: appController.isDark.value
+                              ? Color(0xffFDFCFD)
+                              : primaryColor.value,
+                          fontFamily: "dmsans",
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(height: 24,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(SelectTokenScreen(coins: coins));
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 56,
+                              width: 56,
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                  color:appController.isDark.value==true?Color(0xFF1A2B56): primaryColor.value,
+                                  borderRadius: BorderRadius.circular(15)
+                              ),
+                              child: Center(child: SvgPicture.asset("assets/svgs/sendIcon.svg",height: 28,width: 28,color:appController.isDark.value==true?Color(0xFFA2BBFF):primaryBackgroundColor.value)),
+                            ),
+                            SizedBox(height: 12,),
+                            Text(
+                              "${getTranslated(context,"Send" )??"Send"}",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
+                                fontFamily: "dmsans",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          Get.bottomSheet(
+                              clipBehavior: Clip.antiAlias,
+                              isScrollControlled: true,
+                              backgroundColor:appController.isDark.value==true? Color(0xffA2BBFF):primaryBackgroundColor.value,
+                              shape: OutlineInputBorder(
+                                  borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
+                              selectToken());
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 56,
+                              width: 56,
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                  color:appController.isDark.value==true?Color(0xFF1A2B56): primaryColor.value,
+                                  borderRadius: BorderRadius.circular(15)
+                              ),
+                              child: Center(child: SvgPicture.asset("assets/svgs/receiveicon.svg",height: 28,width: 28,color:appController.isDark.value==true?Color(0xFFA2BBFF):primaryBackgroundColor.value)),
+                            ),
+                            SizedBox(height: 12,),
+                            Text(
+                              "${getTranslated(context,"Receive" )??"Receive"}",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
+                                fontFamily: "dmsans",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          Get.to(SwapScreen());
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 56,
+                              width: 56,
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                  color:appController.isDark.value==true?Color(0xFF1A2B56): primaryColor.value,
+                                  borderRadius: BorderRadius.circular(15)
+                              ),
+                              child: Center(child: SvgPicture.asset("assets/svgs/swap.svg",height: 28,width: 28,color:appController.isDark.value==true?Color(0xFFA2BBFF):primaryBackgroundColor.value)),
+                            ),
+                            SizedBox(height: 12,),
+                            Text(
+                              "${getTranslated(context,"Swap" )??"Swap"}",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
+                                fontFamily: "dmsans",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          Get.bottomSheet(
+                              clipBehavior: Clip.antiAlias,
+                              isScrollControlled: true,
+                              backgroundColor: primaryBackgroundColor.value,
+                              shape: OutlineInputBorder(
+                                  borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
+                              selectTokenForBuy());
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 56,
+                              width: 56,
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                  color:appController.isDark.value==true?Color(0xFF1A2B56): primaryColor.value,
+                                  borderRadius: BorderRadius.circular(15)
+                              ),
+                              child: Center(child: SvgPicture.asset("assets/svgs/buy.svg",height: 28,width: 28,color: appController.isDark.value==true?Color(0xFFA2BBFF):primaryBackgroundColor.value,)),
+                            ),
+                            SizedBox(height: 12,),
+                            Text(
+                              "${getTranslated(context,"Buy" )??"Buy"}",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
+                                fontFamily: "dmsans",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 32,),
+                  ListView.separated(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: coins.length,
+                    separatorBuilder: (BuildContext context, int index) {
+                      return SizedBox(height: 12,);
+                    },
+                    itemBuilder: (BuildContext context, int index) {
+                      return Obx(
+                            () => GestureDetector(
+                          onTap: () {
+                            // Navigate to TransactionScreen and pass the symbol as an argument
+                            print("Navigating to TransactionScreen");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TransactionScreen(symbol: coins[index]['symbol']), // Pass symbol here
+                              ),
+                            );
+                          },
+                          child: Container(
+                            height: 72,
+                            width: Get.width,
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: inputFieldBackgroundColor2.value,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(width: 1, color: inputFieldBackgroundColor.value),
+                            ),
+                            child: Row(
+                              children: [
+                                Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Image.asset("${coins[index]['image']}", height: 40, width: 40),
+                                ),
+                                SizedBox(width: 12),
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Expanded(
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    "${coins[index]['symbol']}",
+                                                    textAlign: TextAlign.start,
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: appController.isDark.value == true
+                                                          ? Color(0xffFDFCFD)
+                                                          : primaryColor.value,
+                                                      fontFamily: "dmsans",
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    formatBalance(
+                                                      (double.parse(coins[index]['amount'].toString()) *
+                                                          double.parse(coins[index]['price'].toString()))
+                                                          .toString(),
+                                                    ),
+                                                    textAlign: TextAlign.start,
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: appController.isDark.value
+                                                          ? Color(0xffFDFCFD)
+                                                          : primaryColor.value,
+                                                      fontFamily: "dmsans",
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(height: 7),
+                                            Expanded(
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    formatBalance(
+                                                      (double.parse(coins[index]['amount'].toString()).toString()),
+                                                    ),
+                                                    textAlign: TextAlign.start,
+                                                    style: TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight: FontWeight.w400,
+                                                      color: lightTextColor.value,
+                                                      fontFamily: "dmsans",
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    "\$ ${formatTotalBalance(coins[index]['price'])}",
+                                                    textAlign: TextAlign.start,
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Color(0xff56CDAD),
+                                                      fontFamily: "dmsans",
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ],
           ),

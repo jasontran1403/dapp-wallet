@@ -189,20 +189,18 @@ class _ImportSecretPhraseState extends State<ImportSecretPhrase> {
       // Lấy private key từ mnemonic
       String privateKey = await walletProvider.getPrivateKey(mnemonicWords.join(" "));
 
-      // Lưu private key vào SharedPreferences
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('privateKey', privateKey);
-
       // Lấy địa chỉ ví từ private key
-      EthereumAddress walletAddress = await walletProvider.getPublicKey(privateKey);
-      await prefs.setString('walletAddress', walletAddress.hex);
+      EthereumAddress ethereumAddress = await walletProvider.getPublicKey(privateKey);
+      String walletAddress = ethereumAddress.hex;
 
-      // Lưu vào Provider để các component khác có thể sử dụng
-      await walletProvider.setPrivateKey(privateKey);
-      await walletProvider.setWalletAddress(walletAddress.hex);
-
-      // Chuyển đến HomeScreen
-      Get.offAll(() => HomeScreen());
+      if (walletAddress.contains("0x")) {
+        // Lưu vào Provider để các component khác có thể sử dụng
+        // await walletProvider.setPrivateKey(privateKey);
+        // await walletProvider.setWalletAddress(walletAddress.hex);
+        Get.to(() => HomeScreen());
+      } else {
+        Get.snackbar("Error", "Mnemonics is invalid, please try again!", backgroundColor: Colors.red, colorText: Colors.white);
+      }
     } catch (e) {
       Get.snackbar("Error", "Failed to generate wallet. Please try again!", backgroundColor: Colors.red, colorText: Colors.white);
     }

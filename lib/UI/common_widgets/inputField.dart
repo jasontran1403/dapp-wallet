@@ -454,6 +454,7 @@ class InputFieldsWithSeparateIcon extends StatefulWidget {
   String? svg;
   TextInputType? inputType;
   FocusNode? focusNode;
+  final TextEditingController? controller; // Thêm controller
 
   InputFieldsWithSeparateIcon(
       {Key? key,
@@ -466,7 +467,8 @@ class InputFieldsWithSeparateIcon extends StatefulWidget {
       this.suffixIcon,
       this.svg,
       this.inputType,
-      required this.onChange})
+      required this.onChange,
+      this.controller})
       : super(key: key);
 
   @override

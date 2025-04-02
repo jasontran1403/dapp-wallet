@@ -72,9 +72,9 @@ class _AddAccountState extends State<AddAccount> {
                 ),
                 SizedBox(height: 24,),
                 InkWell(
-                  onTap: (){
-                    Get.to(CreateAccount());
-                  },
+                  // onTap: (){
+                  //   Get.to(CreateAccount());
+                  // },
                   child: Container(
                     // height: 80,
                     width: Get.width,

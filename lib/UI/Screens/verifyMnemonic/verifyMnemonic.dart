@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:crypto_wallet/UI/Screens/createAccount/createAccount.dart';
 import 'package:crypto_wallet/UI/Screens/homeScreen/homeScreen.dart';
 import 'package:crypto_wallet/constants/colors.dart';
 import 'package:crypto_wallet/localization/language_constants.dart';
@@ -207,21 +208,14 @@ class _VerifyMnemonicState extends State<VerifyMnemonic> {
     try {
       // Lấy private key từ mnemonic
       String privateKey = await walletProvider.getPrivateKey(widget.mnemonicWords.join(" "));
+      EthereumAddress ethereumAddress = await walletProvider.getPublicKey(privateKey);
+      String walletAddress = ethereumAddress.hex;
 
-      // Lưu private key vào SharedPreferences
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('privateKey', privateKey);
-
-      // Lấy địa chỉ ví từ private key
-      EthereumAddress walletAddress = await walletProvider.getPublicKey(privateKey);
-      await prefs.setString('walletAddress', walletAddress.hex);
-
-      // Lưu vào Provider để các component khác có thể sử dụng
-      await walletProvider.setPrivateKey(privateKey);
-      await walletProvider.setWalletAddress(walletAddress.hex);
-
-      // Chuyển đến HomeScreen
-      Get.offAll(() => HomeScreen());
+      if (walletAddress.contains("0x")) {
+        Get.to(() => CreateAccount(walletAddress: walletAddress, privateKey: privateKey, mnemonicWords: widget.mnemonicWords.join(" "),));
+      } else {
+        Get.snackbar("Error", "Mnemonics is invalid, please try again!", backgroundColor: Colors.red, colorText: Colors.white);
+      }
     } catch (e) {
       Get.snackbar("Error", "Failed to generate wallet. Please try again!", backgroundColor: Colors.red, colorText: Colors.white);
     }

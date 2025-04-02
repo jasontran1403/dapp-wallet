@@ -4,6 +4,7 @@ import 'package:crypto_wallet/controllers/appController.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:web3dart/credentials.dart';
 import 'providers/wallet_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -15,14 +16,24 @@ import 'localization/demo_localization.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Load the private key
   WalletProvider walletProvider = WalletProvider();
   await walletProvider.loadPrivateKey();
 
-  // Kiểm tra privateKey có tồn tại không
-  bool isWalletCreated = walletProvider.privateKey != null && walletProvider.privateKey!.isNotEmpty;
+  String? privateKey = walletProvider.privateKey;
 
-  print(walletProvider.privateKey);
+  bool isWalletCreated = privateKey != null && privateKey.isNotEmpty;
+
+  if (isWalletCreated) {
+    EthereumAddress ethereumAddress = await walletProvider.getPublicKey(privateKey);
+    String walletAddress = ethereumAddress.hex;
+
+    if (walletAddress.contains("0x")) {
+      isWalletCreated = true;
+    } else {
+      isWalletCreated = false;
+    }
+  }
+
   runApp(
     ChangeNotifierProvider<WalletProvider>.value(
       value: walletProvider,
@@ -101,7 +112,6 @@ class MyApp extends StatelessWidget {
           transitionDuration: const Duration(milliseconds: 500),
           defaultTransition: Transition.rightToLeftWithFade,
           home: isWalletCreated ? PinScreen() : OnBoardingScreen1(),
-
         );
       });
   }

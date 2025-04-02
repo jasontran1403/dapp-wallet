@@ -1,4 +1,3 @@
-import 'dart:convert'; // Thêm thư viện để xử lý JSON
 import 'package:http/http.dart' as http;
 
 Future<String> getBalances(String walletAddress, String chain) async {
@@ -16,6 +15,14 @@ Future<String> getBalances(String walletAddress, String chain) async {
       'module': 'account',
       'action': 'tokenbalance',
       'contractaddress': '0x55d398326f99059ff775485246999027b3197955',
+      'address': walletAddress,
+      'apikey': 'T8YV1F7ABVNFNRMI5AEG58RBHN91DPU15N',
+    });
+  } else if (chain == 'eft') {
+    url = Uri.https('api.bscscan.com', '/api', {
+      'module': 'account',
+      'action': 'tokenbalance',
+      'contractaddress': '0x3A72d1c47197Cc7DF6d4D28dADbc25dcB09DA55C',
       'address': walletAddress,
       'apikey': 'T8YV1F7ABVNFNRMI5AEG58RBHN91DPU15N',
     });
@@ -55,6 +62,8 @@ Future<String> fetchTransactionHistory(String walletAddress, String symbol) asyn
     url = 'https://api.bscscan.com/api?module=account&action=txlist&address=$walletAddress&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apikey=$apiKey';
   } else if (symbolLowerCase == 'usdt') {
     url = 'https://api.bscscan.com/api?module=account&action=tokentx&contractaddress=0x55d398326f99059fF775485246999027B3197955&address=$walletAddress&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apikey=$apiKey';
+  } else if (symbolLowerCase == 'eft') {
+    url = 'https://api.bscscan.com/api?module=account&action=tokentx&contractaddress=0x3A72d1c47197Cc7DF6d4D28dADbc25dcB09DA55C&address=$walletAddress&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apikey=$apiKey';
   } else {
     throw Exception('Unsupported symbol: $symbolLowerCase');
   }

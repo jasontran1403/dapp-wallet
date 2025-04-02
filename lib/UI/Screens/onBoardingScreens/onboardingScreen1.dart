@@ -25,23 +25,25 @@ class _OnBoardingScreen1State extends State<OnBoardingScreen1> {
 
   List onboardingList=[
     {
-      "title":"Ensuring Your \nCrypto's Safety",
-      "subTitle":"Safeguard your crypto assets with confidence on our platform, trusted by millions of users for its reliability and security.",
+      "title":"EcoWallet\nYour Crypto Assets Grow Daily",
+      "subTitle1":"Maximum Security: EcoWallet uses advanced encryption technology to ensure that your assets are always safe from threats.",
+      "subTitle2":"Easy Transactions: The user-friendly interface and support for multiple cryptocurrencies allow you to trade quickly and conveniently.",
+      "subTitle3":"Smart Earning: EcoWallet offers smart staking features so you can maximize your returns on your investments",
       "darkImage":"assets/images/Trust (1).png",
       "lightImage":"assets/images/Trust.png"
     },
-    {
-      "title":"Deposit & Withdraw \nCrypto",
-      "subTitle":"Easily deposit and withdraw your cryptocurrency assets with our secure platform, ensuring seamless transactions for your peace of mind.",
-      "darkImage":"assets/images/Send money abroad (1).png",
-      "lightImage":"assets/svgs/Send money abroad.png"
-    },
-    {
-      "title":"Buy Crypto \nEffortlessly",
-      "subTitle":"Streamline your crypto purchases effortlessly on our platform, providing you with a hassle-free experience and peace of mind.",
-      "darkImage":"assets/images/Receive Money (1).png",
-      "lightImage":"assets/images/Receive Money.png"
-    },
+    // {
+    //   "title":"Deposit & Withdraw \nCrypto",
+    //   "subTitle":"Easily deposit and withdraw your cryptocurrency assets with our secure platform, ensuring seamless transactions for your peace of mind.",
+    //   "darkImage":"assets/images/Send money abroad (1).png",
+    //   "lightImage":"assets/svgs/Send money abroad.png"
+    // },
+    // {
+    //   "title":"Buy Crypto \nEffortlessly",
+    //   "subTitle":"Streamline your crypto purchases effortlessly on our platform, providing you with a hassle-free experience and peace of mind.",
+    //   "darkImage":"assets/images/Receive Money (1).png",
+    //   "lightImage":"assets/images/Receive Money.png"
+    // },
   ];
   @override
   void dispose() {
@@ -67,7 +69,6 @@ class _OnBoardingScreen1State extends State<OnBoardingScreen1> {
                   width: Get.width,
                   child: Column(
                     children: [
-
                       Image.asset("assets/images/onboardingBackgroundImage.png",width: Get.width,height: MediaQuery.of(context).size.height*0.6,),
                       Expanded(child: SizedBox())
                     ],
@@ -77,12 +78,10 @@ class _OnBoardingScreen1State extends State<OnBoardingScreen1> {
                       ()=> Container(
                     height: Get.height,
                     width: Get.width,
-
                     child: ListView(
                       physics: NeverScrollableScrollPhysics(),
                       children: [
                         Container(
-
                             width:Get.width,
                             // color: primaryBackgroundColor.value,
                             child: Stack(
@@ -100,20 +99,18 @@ class _OnBoardingScreen1State extends State<OnBoardingScreen1> {
                         Column(
                           children: [
                             Transform.translate(
-                              offset:appController.isDark.value==true? Offset(0, -80):Offset(0, -40),
+                              offset:appController.isDark.value==true? Offset(0, -120):Offset(0, -80),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 18.0),
                                 child: Column(
                                   children: [
                                     Container(
-                                      height: Get.height*0.4,
+                                      height: Get.height*0.5,
                                       width: Get.width,
                                       padding: EdgeInsets.all(24),
                                       decoration: BoxDecoration(
                                           color: primaryBackgroundColor.value,
-
-                                          borderRadius: BorderRadius.circular(8),
-
+                                          borderRadius: BorderRadius.circular(12),
                                           boxShadow: [
                                             BoxShadow(
                                               color: headingColor.value.withOpacity(0.15),
@@ -138,57 +135,69 @@ class _OnBoardingScreen1State extends State<OnBoardingScreen1> {
                                             ),
 
                                           ),
+                                          SizedBox(height: 12,),
                                           Text(
-                                            "${getTranslated(context,"${onboardingList[selectedIndex.value]['subTitle']}" )??"${onboardingList[selectedIndex.value]['subTitle']}"}",
+                                            "${getTranslated(context,"${onboardingList[selectedIndex.value]['subTitle1']}" )??"${onboardingList[selectedIndex.value]['subTitle1']}"}",
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                              color: lightTextColor.value,
+                                              fontFamily: "dmsans",
+                                            ),
+                                          ),
+                                          SizedBox(height: 3,),
+                                          Text(
+                                            "${getTranslated(context,"${onboardingList[selectedIndex.value]['subTitle2']}" )??"${onboardingList[selectedIndex.value]['subTitle2']}"}",
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               fontSize: 14,
-                                              fontWeight: FontWeight.w400,
+                                              fontWeight: FontWeight.w600,
                                               color: lightTextColor.value,
                                               fontFamily: "dmsans",
-
                                             ),
-
                                           ),
-                                          SizedBox(height: 20,),
+                                          SizedBox(height: 3,),
+                                          Text(
+                                            "${getTranslated(context,"${onboardingList[selectedIndex.value]['subTitle3']}" )??"${onboardingList[selectedIndex.value]['subTitle3']}"}",
+                                            textAlign: TextAlign.right,
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w600,
+                                              color: lightTextColor.value,
+                                              fontFamily: "dmsans",
+                                            ),
+                                          ),
+                                          SizedBox(height: 12,),
                                           BottomRectangularBtn(
                                             color: appController.isDark.value==true?Color(0xff5C87FF): primaryColor.value,
                                             onTapFunc: (){
-                                              if(selectedIndex==0){
-                                                selectedIndex.value=1;
-
-                                                // _pageController.animateToPage(
-                                                //   selectedIndex.value,
-                                                //   duration: Duration(milliseconds: 300), // Animation duration
-                                                //   curve: Curves.easeInOut, // Animation curve
-                                                // );
-                                              }else if(selectedIndex==1){
-
-                                                selectedIndex.value=2;
-                                                // _pageController.animateToPage(
-                                                //   selectedIndex.value,
-                                                //   duration: Duration(milliseconds: 300), // Animation duration
-                                                //   curve: Curves.easeInOut, // Animation curve
-                                                // );
-                                              }else{
-                                                Get.to(SocialLogin());
-                                              }
+                                              // if(selectedIndex==0){
+                                              //   selectedIndex.value=1;
+                                              //   // _pageController.animateToPage(
+                                              //   //   selectedIndex.value,
+                                              //   //   duration: Duration(milliseconds: 300), // Animation duration
+                                              //   //   curve: Curves.easeInOut, // Animation curve
+                                              //   // );
+                                              // }else if(selectedIndex==1){
+                                              //   selectedIndex.value=2;
+                                              //   // _pageController.animateToPage(
+                                              //   //   selectedIndex.value,
+                                              //   //   duration: Duration(milliseconds: 300), // Animation duration
+                                              //   //   curve: Curves.easeInOut, // Animation curve
+                                              //   // );
+                                              // }else{
+                                              //
+                                              // }
+                                              Get.to(SocialLogin());
                                               setState(() {
-
                                               });
-
-
-
                                           }, btnTitle: "Next",hasIcon: true,svgName:"arrow_next" ,)
-
                                         ],
                                       ),
                                     ),
                                     SizedBox(height:32,),
                                 AnimatedSmoothIndicator(
-
-
-
                                   activeIndex: selectedIndex.value,
                                   count: onboardingList.length,
                                   effect: ExpandingDotsEffect(
@@ -202,9 +211,6 @@ class _OnBoardingScreen1State extends State<OnBoardingScreen1> {
                                   ),
                                 )
                                     ,SizedBox(height: 20,),
-
-
-
                                   ],
                                 ),
                               ),
@@ -212,10 +218,6 @@ class _OnBoardingScreen1State extends State<OnBoardingScreen1> {
                           ],
                         ),
                         SizedBox(height: 20,),
-
-
-
-
                       ],
                     ),
                   ),

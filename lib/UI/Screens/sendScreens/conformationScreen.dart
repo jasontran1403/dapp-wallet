@@ -370,7 +370,9 @@ Future<void> _sendTransaction(BuildContext context, String walletAddressReceiver
       result = await sendBNB(walletAddressReceiver, double.parse(amount), privateKey);
     } else if (symbol == "USDT") {
       result = await sendUSDTBEP20(walletAddressReceiver, double.parse(amount), privateKey);
-    } else {
+    } else if (symbol == "EFT") {
+      result = await sendEFT(walletAddressReceiver, double.parse(amount), privateKey);
+    }  else {
       result = "Failed";
     }
 
@@ -442,7 +444,7 @@ Future<String> sendBNB(String receiver, double amount, String privateKey) async 
     final nonce = await client.getTransactionCount(credentials.address);
 
     // Convert the amount to Wei (BNB is 18 decimals)
-    final weiAmount = BigInt.from((amount * pow(10, 18)).toInt());
+    final weiAmount = BigInt.parse((amount * 1e18).toStringAsFixed(0));
 
     // Set gas price and gas limit
     final gasPrice = await client.getGasPrice();
@@ -495,7 +497,7 @@ Future<String> sendUSDTBEP20(String receiver, double amount, String privateKey) 
     final credentials = EthPrivateKey.fromHex('0x' + privateKey);
 
     // Convert amount to token's base unit (USDT has 18 decimals, so multiply by 10^6)
-    final tokenAmount = BigInt.from((amount * 1e18).toInt());
+    final tokenAmount = BigInt.parse((amount * 1e18).toStringAsFixed(0));
 
     // Define the ABI for the ERC-20 contract methods we will call
     String abi = '''
@@ -574,6 +576,94 @@ Future<String> sendUSDTBEP20(String receiver, double amount, String privateKey) 
   }
 }
 
+Future<String> sendEFT(String receiver, double amount, String privateKey) async {
+  const String MAINNET_URL = "https://bsc-dataseed.binance.org/";
+  const String USDTBEP20_CONTRACT_ADDRESS = "0x3A72d1c47197Cc7DF6d4D28dADbc25dcB09DA55C"; // USDT contract on BSC
+
+  try {
+    // Set up Web3 client and credentials
+    final client = Web3Client(MAINNET_URL, http.Client());
+    final credentials = EthPrivateKey.fromHex('0x' + privateKey);
+
+    // Convert amount to token's base unit (USDT has 18 decimals, so multiply by 10^6)
+    final tokenAmount = BigInt.parse((amount * 1e18).toStringAsFixed(0));
+
+    // Define the ABI for the ERC-20 contract methods we will call
+    String abi = '''
+    [
+      {
+        "constant": true,
+        "inputs": [{"name": "owner", "type": "address"}],
+        "name": "balanceOf",
+        "outputs": [{"name": "", "type": "uint256"}],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "constant": false,
+        "inputs": [{"name": "recipient", "type": "address"}, {"name": "amount", "type": "uint256"}],
+        "name": "transfer",
+        "outputs": [{"name": "", "type": "bool"}],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+      }
+    ]
+    ''';
+
+    // Load the contract
+    final contract = DeployedContract(
+      ContractAbi.fromJson(abi, 'USDT'),
+      EthereumAddress.fromHex(USDTBEP20_CONTRACT_ADDRESS),
+    );
+
+    // Get the balance of the sender
+    final balanceFunction = contract.function('balanceOf');
+    final balance = await client.call(
+      contract: contract,
+      function: balanceFunction,
+      params: [credentials.address],
+    );
+    final senderBalance = balance[0] as BigInt;
+
+    // Check if the sender has enough balance to send the specified amount
+    if (senderBalance.compareTo(tokenAmount) < 0) {
+      return "Insufficient USDT balance.";
+    }
+
+    // Get the latest nonce for the transaction
+    final nonce = await client.getTransactionCount(credentials.address);
+
+    // Define gas price and gas limit for the transaction
+    final gasPrice = await client.getGasPrice();
+    final gasLimit = 60000; // Gas limit for ERC-20 transfers
+
+    // Create the transaction to send USDT
+    final transferFunction = contract.function('transfer');
+    final transaction = Transaction.callContract(
+      contract: contract,
+      function: transferFunction,
+      parameters: [
+        EthereumAddress.fromHex(receiver), // Recipient's address
+        tokenAmount, // Amount of USDT to send
+      ],
+      gasPrice: gasPrice,
+      maxGas: gasLimit,
+    );
+
+    // Send the transaction
+    final transactionHash = await client.sendTransaction(
+      credentials,
+      transaction,
+      chainId: 56, // BSC Chain ID
+    );
+
+    return transactionHash; // Return the transaction hash
+  } catch (e) {
+    return "Transaction failed: $e"; // Return the error message if something goes wrong
+  }
+}
 
 const erc20Abi = '''[
   {"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},

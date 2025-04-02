@@ -1,19 +1,13 @@
-import 'package:crypto_wallet/UI/Screens/createAccount/createAccount.dart';
-import 'package:crypto_wallet/UI/Screens/createAccount/importPrivateKey.dart';
 import 'package:crypto_wallet/UI/Screens/socialLogin/socialLogin.dart';
 import 'package:crypto_wallet/UI/Screens/verifyMnemonic/verifyMnemonic.dart';
 import 'package:crypto_wallet/constants/colors.dart';
 import 'package:crypto_wallet/localization/language_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:crypto_wallet/providers/wallet_provider.dart';
-import 'package:web3dart/credentials.dart';
 
 import '../../../controllers/appController.dart';
-import '../createAccount/importSecretPhrase.dart';
-
 
 class CreateWallet extends StatefulWidget {
   CreateWallet({super.key});
@@ -30,6 +24,8 @@ class _CreateWalletState extends State<CreateWallet> {
     final walletProvider = Provider.of<WalletProvider>(context);
     final mnemonic = walletProvider.generateMnemonic();
     final mnemonicWords = mnemonic.split(' ');
+
+    print(mnemonicWords);
 
     return Scaffold(
       backgroundColor: primaryBackgroundColor.value,
@@ -187,10 +183,9 @@ class _CreateWalletState extends State<CreateWallet> {
                                 ),
                               ),
                             ),
+
                           ],
                         ),
-
-
                       ],
                     ),
                   ),

@@ -31,9 +31,7 @@ class _SocialLoginState extends State<SocialLogin> {
               width: Get.width,
               decoration: BoxDecoration(
                 color: primaryBackgroundColor.value
-
               ),
-
               child: SvgPicture.asset("assets/svgs/backgroundPlaceHolder.svg",),
             ),
             Positioned.fill(child:  Container(
@@ -41,7 +39,6 @@ class _SocialLoginState extends State<SocialLogin> {
               width: Get.width,
               padding: EdgeInsets.symmetric(horizontal: 22),
               decoration: BoxDecoration(
-
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -49,7 +46,6 @@ class _SocialLoginState extends State<SocialLogin> {
                   Column(
                     children: [
                       SizedBox(height: 100,),
-
                       Container(
                         height: 114,
                         width: 128,
@@ -75,7 +71,7 @@ class _SocialLoginState extends State<SocialLogin> {
                       Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Text(
-                          "${getTranslated(context,"Welcome to Crypto Wallet! Begin your journey by using Apple, Google or your email address." )??"Welcome to Crypto Wallet! Begin your journey by using Apple, Google or your email address."}",
+                          "${getTranslated(context,"Welcome to EcoWallet!" )??"Welcome to EcoWallet!"}",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 16,
@@ -102,7 +98,6 @@ class _SocialLoginState extends State<SocialLogin> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              // SvgPicture.asset("assets/svgs/apple.svg",color: headingColor.value,),
                               SizedBox(width: 14,),
                               Text(
                                 "${getTranslated(context,"Create new wallet" )??"Create new wallet"}",
@@ -145,19 +140,12 @@ class _SocialLoginState extends State<SocialLogin> {
                                   fontWeight: FontWeight.w400,
                                   color: headingColor.value,
                                   fontFamily: "dmsans",
-
                                 ),
-
                               ),
-
                             ],
                           ),
                         ),
                       ),
-
-
-
-
                     ],
                   ),
                 ],

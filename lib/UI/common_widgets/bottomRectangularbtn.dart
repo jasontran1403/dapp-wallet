@@ -40,7 +40,6 @@ final  String? svgName;
 
   @override
   Widget build(BuildContext context) {
-    print(color);
     return InkWell(
       onTap: () {
         if(isDisabled != true){
