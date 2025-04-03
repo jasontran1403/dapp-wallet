@@ -38,6 +38,8 @@ class WalletProvider extends ChangeNotifier implements WalletAddressService {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('privateKey');  // Remove from storage
     await prefs.remove('accountName');  // Remove from storage
+    await prefs.remove('pinCode');  // Remove from storage
+    await prefs.remove('walletAddress');  // Remove from storage
     notifyListeners();
   }
 
@@ -54,7 +56,6 @@ class WalletProvider extends ChangeNotifier implements WalletAddressService {
     final child = root.derivePath("m/44'/60'/0'/0/0");
 
     final privateKey = HEX.encode(child.privateKey!); // Generate private key
-    await setPrivateKey(privateKey); // Store private key in SharedPreferences
     return privateKey;
   }
 

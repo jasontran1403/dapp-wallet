@@ -42,149 +42,162 @@ class _VerifyMnemonicState extends State<VerifyMnemonic> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: primaryBackgroundColor.value,
-      body: Obx(
-            () => SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 22.0, vertical: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Obx(
+          ()=> Scaffold(
+        backgroundColor: primaryBackgroundColor.value,
+        body: SafeArea(
+          child:
+          Stack(
+            children: [
+              Positioned.fill(
+                child:
+                Image.asset(
+                  "assets/background/bg7.png",
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 22.0, vertical: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "${getTranslated(context, "Verify mnemonic") ?? "Verify mnemonic"}",
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: headingColor.value,
+                            fontFamily: "dmsans",
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Get.back();
+                          },
+                          child: Container(
+                            height: 32,
+                            width: 32,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: inputFieldBackgroundColor.value,
+                              border: Border.all(width: 1, color: inputFieldBackgroundColor.value),
+                            ),
+                            child: Icon(
+                              Icons.clear,
+                              size: 18,
+                              color: appController.isDark.value ? Color(0xffA2BBFF) : headingColor.value,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 24),
                     Text(
-                      "${getTranslated(context, "Verify mnemonic") ?? "Verify mnemonic"}",
+                      "${getTranslated(context, "Please enter the missing keywords.") ?? "Please enter the missing keywords."}",
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 13.5,
                         fontWeight: FontWeight.w600,
-                        color: headingColor.value,
+                        color: redColor.value,
                         fontFamily: "dmsans",
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: Container(
-                        height: 32,
-                        width: 32,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: inputFieldBackgroundColor.value,
-                          border: Border.all(width: 1, color: inputFieldBackgroundColor.value),
-                        ),
-                        child: Icon(
-                          Icons.clear,
-                          size: 18,
-                          color: appController.isDark.value ? Color(0xffA2BBFF) : headingColor.value,
-                        ),
+                    SizedBox(height: 8),
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 1.5,
+                        crossAxisSpacing: 8,
+                        mainAxisSpacing: 8,
                       ),
-                    )
-                  ],
-                ),
-                SizedBox(height: 24),
-                Text(
-                  "${getTranslated(context, "Please enter the missing keywords.") ?? "Please enter the missing keywords."}",
-                  style: TextStyle(
-                    fontSize: 13.5,
-                    fontWeight: FontWeight.w600,
-                    color: redColor.value,
-                    fontFamily: "dmsans",
-                  ),
-                ),
-                SizedBox(height: 8),
-                GridView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 1.5,
-                    crossAxisSpacing: 8,
-                    mainAxisSpacing: 8,
-                  ),
-                  itemCount: 12,
-                  itemBuilder: (context, index) {
-                    bool isHidden = hiddenIndexes.contains(index);
-                    if (isHidden) {
-                      controllers[index] = TextEditingController();
-                    }
-                    return Row(
-                      children: [
-                        Text(
-                          "${index + 1}.",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: headingColor.value,
-                          ),
-                        ),
-                        SizedBox(width: 4),
-                        Expanded(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                            decoration: BoxDecoration(
-                              color: appController.isDark.value
-                                  ? Color(0xff1A2B56)
-                                  : inputFieldBackgroundColor.value,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(width: 1, color: inputFieldBackgroundColor.value),
-                            ),
-                            child: isHidden
-                                ? TextField(
-                              controller: controllers[index],
-                              textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: headingColor.value),
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "____",
-                                hintStyle: TextStyle(color: Colors.grey),
+                      itemCount: 12,
+                      itemBuilder: (context, index) {
+                        bool isHidden = hiddenIndexes.contains(index);
+                        if (isHidden) {
+                          controllers[index] = TextEditingController();
+                        }
+                        return Row(
+                          children: [
+                            Text(
+                              "${index + 1}.",
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: headingColor.value,
                               ),
-                            )
-                                : Center(
-                              child: Text(
-                                widget.mnemonicWords[index],
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: headingColor.value,
+                            ),
+                            SizedBox(width: 4),
+                            Expanded(
+                              child: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                                decoration: BoxDecoration(
+                                  color: appController.isDark.value
+                                      ? Color(0xff1A2B56)
+                                      : inputFieldBackgroundColor.value,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(width: 1, color: inputFieldBackgroundColor.value),
+                                ),
+                                child: isHidden
+                                    ? TextField(
+                                  controller: controllers[index],
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: headingColor.value),
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "____",
+                                    hintStyle: TextStyle(color: Colors.grey),
+                                  ),
+                                )
+                                    : Center(
+                                  child: Text(
+                                    widget.mnemonicWords[index],
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: headingColor.value,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                          ],
+                        );
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: _validateMnemonics,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                      ],
-                    );
-                  },
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: _validateMnemonics,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        "Verify & Create Wallet",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    "Verify & Create Wallet",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
-                    ),
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
+
 
   void _validateMnemonics() {
     bool isCorrect = true;

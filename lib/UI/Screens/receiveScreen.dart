@@ -2,10 +2,21 @@ import 'package:crypto_wallet/constants/colors.dart';
 import 'package:crypto_wallet/controllers/appController.dart';
 import 'package:crypto_wallet/localization/language_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+
 class ReceiveScreen extends StatefulWidget {
-  const ReceiveScreen({super.key});
+  final String? symbol;
+  final String? image;
+  final String? walletAddress;
+
+  const ReceiveScreen({
+    required this.symbol,
+    required this.image,
+    required this.walletAddress,
+    super.key});
 
   @override
   State<ReceiveScreen> createState() => _ReceiveScreenState();
@@ -25,10 +36,8 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
            Row(
              children: [
                GestureDetector(
-
                    onTap:(){
                      Get.back();
-
                    },
                    child: Icon(Icons.arrow_back_ios,color: headingColor.value,size: 18,)),
                SizedBox(width: 8,),
@@ -58,19 +67,17 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle
                     ),
-                    child: Image.asset('assets/images/usd.png')),
+                    child: Image.asset(widget.image ?? "assets/images/bnb.png")),
                 SizedBox(width: 10,),
                 Text(
-                  "USDC",
+                  widget.symbol ?? "BNB",
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.w700,
                     color: headingColor.value,
                     fontFamily: "dmsans",
-
                   ),
-
                 ),
               ],
             ),
@@ -86,9 +93,14 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(18),
                     color: inputFieldBackgroundColor.value,
-                    border: Border.all(width: 1,color: inputFieldBackgroundColor2.value)
+                    border: Border.all(width: 1, color: inputFieldBackgroundColor2.value),
                   ),
-                  child: Image.asset("assets/images/Mask group.png",color: appController.isDark.value==true?headingColor.value:primaryColor.value,),
+                  child: QrImageView(
+                    data: widget.walletAddress ?? "",
+                    version: QrVersions.auto,
+                    size: 200,
+                    backgroundColor: Colors.white, // Giúp QR dễ quét hơn
+                  ),
                 ),
               ],
             ),
@@ -99,11 +111,10 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
-                color: lightTextColor.value,
+                color: Colors.red,
                 fontFamily: "dmsans",
-
+                fontStyle: FontStyle.italic, // Thêm chữ nghiêng
               ),
-
             ),
             SizedBox(height: 32,),
             Divider(height: 1,color: inputFieldBackgroundColor2.value,),
@@ -114,7 +125,7 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
-                color: lightTextColor.value,
+                color: headingColor.value,
                 fontFamily: "dmsans",
 
               ),
@@ -122,10 +133,10 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
             ),
             SizedBox(height: 16,),
             Text(
-              "0x000ahdkakckoeiwkwkojxiz",
+              widget.walletAddress ?? "Loading...",
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 15,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
                 color: headingColor.value,
                 fontFamily: "dmsans",
@@ -140,64 +151,39 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
             Row(
               children: [
                 Expanded(
-                  child: Container(
-                    height:
-                    50,
-                    decoration: BoxDecoration(
+                  child: GestureDetector(
+                    onTap: () {
+                      Clipboard.setData(ClipboardData(text: widget.walletAddress ?? "null"));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Copied wallet address to clipboard!"),
+                          duration: Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      height: 50,
+                      decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
-                        color: inputFieldBackgroundColor2.value,
-                      border: Border.all(width: 1,color: primaryColor.value)
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset("assets/svgs/ic_round-share.svg",color: primaryColor.value,),
-                        SizedBox(width: 10,),
-
-                        Text(
-                          "${getTranslated(context,"Share" )??"Share"}",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: primaryColor.value,
-                            fontFamily: "dmsans",
-
+                        color: primaryColor.value,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset("assets/svgs/Test.svg"),
+                          SizedBox(width: 10),
+                          Text(
+                            "${getTranslated(context, "Copy") ?? "Copy"}",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xffFFFFFF),
+                              fontFamily: "dmsans",
+                            ),
                           ),
-
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                SizedBox(width: 12,),
-                Expanded(
-                  child: Container(
-                    height:
-                    50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: primaryColor.value
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SvgPicture.asset("assets/svgs/Test.svg"),
-                        SizedBox(width: 10,),
-
-                        Text(
-                          "${getTranslated(context,"Copy" )??"Copy"}",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xffFFFFFF),
-                            fontFamily: "dmsans",
-
-                          ),
-
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 )

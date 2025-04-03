@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:crypto_wallet/UI/Screens/createAccount/connectWallet.dart';
 import 'package:crypto_wallet/UI/Screens/homeScreen/homeScreen.dart';
 import 'package:crypto_wallet/UI/Screens/onBoardingScreens/onboardingScreen1.dart';
+import 'package:crypto_wallet/UI/common_widgets/bottomNavBar.dart';
 import 'package:crypto_wallet/constants/colors.dart';
 import 'package:crypto_wallet/localization/language_constants.dart';
 import 'package:crypto_wallet/services/apiService.dart';
@@ -98,8 +99,8 @@ class _CreateAccountState extends State<CreateAccount> {
       return; // Nếu trống thì không gọi API
     }
 
-    if (accountNameController.text.length < 8) {
-      Get.snackbar("Error", "Account name length must be greater than 8",
+    if (accountNameController.text.length < 4) {
+      Get.snackbar("Error", "Account name length must be greater than 4",
           backgroundColor: Colors.red, colorText: Colors.white);
       return; // Nếu trống thì không gọi API
     }
@@ -150,7 +151,7 @@ class _CreateAccountState extends State<CreateAccount> {
       await prefs.setString('pinCode', pinController.text);
 
       Future.delayed(Duration(seconds: 1), () {
-        Get.off(() => HomeScreen()); // Chuyển sang HomeScreen và xoá trang hiện tại
+        Get.offAll(BottomBar());
       });
     } else {
       Get.snackbar(
@@ -161,234 +162,241 @@ class _CreateAccountState extends State<CreateAccount> {
       );
       return;
     }
-
-    print(response);
-
-    // Get.to(() => HomeScreen());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: primaryBackgroundColor.value,
-      body: Obx(
-            () => SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 22.0, vertical: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${getTranslated(context, "Create Account") ?? "Create Account"}",
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: headingColor.value,
-                        fontFamily: "dmsans",
-                      ),
-                    ),
-                    SizedBox(height: 24),
-
-                    TextField(
-                      controller: accountNameController,
-                      style: TextStyle(color: Colors.black),
-                      maxLength: 12, // Giới hạn tối đa 12 ký tự
-                      decoration: InputDecoration(
-                        labelText: "Account Name",
-                        labelStyle: TextStyle(color: Colors.black),
-                        hintText: "Enter account name",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.blue, width: 2),
-                        ),
-                        counterText: "", // Ẩn bộ đếm ký tự mặc định
-                      ),
-                      onChanged: (value) {
-
-                      },
-                    ),
-
-                    SizedBox(height: 24),
-
-                    TextField(
-                      controller: referralController,
-                      style: TextStyle(color: Colors.black), // ✅ Màu chữ đen khi nhập
-                      readOnly: isReferralValid.value, // ✅ Không cho phép chỉnh sửa nếu valid
-                      decoration: InputDecoration(
-                        labelText: "Referral Code",
-                        labelStyle: TextStyle(color: Colors.black), // ✅ Màu label luôn đen
-                        hintText: "Enter referral code",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.grey),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.blue, width: 2),
-                        ),
-                        suffixIcon: Obx(() => isCheckingReferral.value
-                            ? Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                            : GestureDetector(
-                          onTap: checkReferralCode,
-                          child: Icon(Icons.check_rounded,
-                              color: headingColor.value, size: 16),
-                        )),
-                      ),
-                      onChanged: (value) {
-                        if (!isReferralValid.value) {
-                          print("Current referral code: $value");
-                        }
-                      },
-                    ),
-
-                    SizedBox(height: 24),
-                    TextField(
-                      controller: pinController,
-                      style: TextStyle(color: Colors.black),
-                      keyboardType: TextInputType.number,
-                      maxLength: 4,
-                      obscureText: !isPinVisible.value,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: InputDecoration(
-                        labelText: "PIN Code",
-                        labelStyle: TextStyle(color: Colors.black),
-                        hintText: "Enter 4-digit PIN",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: pinBorderColor.value),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.blue, width: 2),
-                        ),
-                        suffixIcon: Obx(
-                              () => GestureDetector(
-                            onTap: () => isPinVisible.value = !isPinVisible.value,
-                            child: Icon(
-                              isPinVisible.value ? Icons.visibility : Icons.visibility_off,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(height: 24),
-                    TextField(
-                      controller: confirmPinController,
-                      style: TextStyle(color: Colors.black),
-                      keyboardType: TextInputType.number,
-                      maxLength: 4,
-                      obscureText: !isPinVisible.value,
-                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                      decoration: InputDecoration(
-                        labelText: "Confirm PIN Code",
-                        labelStyle: TextStyle(color: Colors.black),
-                        hintText: "Enter 4-digit PIN",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: pinBorderColor.value),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide: BorderSide(color: Colors.blue, width: 2),
-                        ),
-                        suffixIcon: Obx(
-                              () => GestureDetector(
-                            onTap: () => isPinVisible.value = !isPinVisible.value,
-                            child: Icon(
-                              isPinVisible.value ? Icons.visibility : Icons.visibility_off,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                      onChanged: (value) => validatePin(),
-                    ),
-
-                    Obx(
-                          () => pinErrorText.value.isNotEmpty
-                          ? Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          pinErrorText.value,
-                          style: TextStyle(color: Colors.red, fontSize: 14),
-                        ),
-                      )
-                          : SizedBox.shrink(),
-                    )
-
-                  ],
+    return Obx(
+          ()=> Scaffold(
+        backgroundColor: primaryBackgroundColor.value,
+        body: SafeArea(
+          child:
+          Stack(
+            children: [
+              Positioned.fill(
+                child:
+                Image.asset(
+                  "assets/background/bg7.png",
+                  fit: BoxFit.cover,
                 ),
-                Row(
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 22.0, vertical: 20),
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          SharedPreferences prefs = await SharedPreferences.getInstance();
-                          await prefs.remove('privateKey');
-                          await prefs.remove('walletAddress');
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${getTranslated(context, "Create Account") ?? "Create Account"}",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: headingColor.value,
+                            fontFamily: "dmsans",
+                          ),
+                        ),
+                        SizedBox(height: 24),
 
-                          Get.offAll(() => OnBoardingScreen1());
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.redAccent,
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                        TextField(
+                          controller: accountNameController,
+                          style: TextStyle(color: Colors.black),
+                          maxLength: 12, // Giới hạn tối đa 12 ký tự
+                          decoration: InputDecoration(
+                            labelText: "Account Name",
+                            labelStyle: TextStyle(color: Colors.black),
+                            hintText: "Enter account name",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: Colors.blue, width: 2),
+                            ),
+                            counterText: "", // Ẩn bộ đếm ký tự mặc định
+                          ),
+                          onChanged: (value) {
+
+                          },
+                        ),
+
+                        SizedBox(height: 24),
+
+                        TextField(
+                          controller: referralController,
+                          style: TextStyle(color: Colors.black), // ✅ Màu chữ đen khi nhập
+                          readOnly: isReferralValid.value, // ✅ Không cho phép chỉnh sửa nếu valid
+                          decoration: InputDecoration(
+                            labelText: "Referral Code",
+                            labelStyle: TextStyle(color: Colors.black), // ✅ Màu label luôn đen
+                            hintText: "Enter referral code",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: Colors.blue, width: 2),
+                            ),
+                            suffixIcon: Obx(() => isCheckingReferral.value
+                                ? Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                                : GestureDetector(
+                              onTap: checkReferralCode,
+                              child: Icon(Icons.check_rounded,
+                                  color: headingColor.value, size: 16),
+                            )),
+                          ),
+                          onChanged: (value) {
+                            if (!isReferralValid.value) {
+                            }
+                          },
+                        ),
+
+                        SizedBox(height: 24),
+                        TextField(
+                          controller: pinController,
+                          style: TextStyle(color: Colors.black),
+                          keyboardType: TextInputType.number,
+                          maxLength: 4,
+                          obscureText: !isPinVisible.value,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          decoration: InputDecoration(
+                            labelText: "PIN Code",
+                            labelStyle: TextStyle(color: Colors.black),
+                            hintText: "Enter 4-digit PIN",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: pinBorderColor.value),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: Colors.blue, width: 2),
+                            ),
+                            suffixIcon: Obx(
+                                  () => GestureDetector(
+                                onTap: () => isPinVisible.value = !isPinVisible.value,
+                                child: Icon(
+                                  isPinVisible.value ? Icons.visibility : Icons.visibility_off,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                        child: Text(
-                          "Cancel",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            fontStyle: FontStyle.italic,
+
+                        SizedBox(height: 24),
+                        TextField(
+                          controller: confirmPinController,
+                          style: TextStyle(color: Colors.black),
+                          keyboardType: TextInputType.number,
+                          maxLength: 4,
+                          obscureText: !isPinVisible.value,
+                          inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                          decoration: InputDecoration(
+                            labelText: "Confirm PIN Code",
+                            labelStyle: TextStyle(color: Colors.black),
+                            hintText: "Enter 4-digit PIN",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: pinBorderColor.value),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide(color: Colors.blue, width: 2),
+                            ),
+                            suffixIcon: Obx(
+                                  () => GestureDetector(
+                                onTap: () => isPinVisible.value = !isPinVisible.value,
+                                child: Icon(
+                                  isPinVisible.value ? Icons.visibility : Icons.visibility_off,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
                           ),
+                          onChanged: (value) => validatePin(),
                         ),
-                      ),
+
+                        Obx(
+                              () => pinErrorText.value.isNotEmpty
+                              ? Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Text(
+                              pinErrorText.value,
+                              style: TextStyle(color: Colors.red, fontSize: 14),
+                            ),
+                          )
+                              : SizedBox.shrink(),
+                        )
+
+                      ],
                     ),
-                    SizedBox(width: 16), // ✅ Thêm khoảng cách giữa hai nút
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          createAccount();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: isReferralValid.value ? Colors.greenAccent : Colors.grey,
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              SharedPreferences prefs = await SharedPreferences.getInstance();
+                              await prefs.remove('privateKey');
+                              await prefs.remove('walletAddress');
+
+                              Get.offAll(() => OnBoardingScreen1());
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.redAccent,
+                              padding: EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
                           ),
                         ),
-                        child: Text(
-                          "Create account",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.white,
-                            fontStyle: FontStyle.italic,
+                        SizedBox(width: 16), // ✅ Thêm khoảng cách giữa hai nút
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () async {
+                              createAccount();
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: isReferralValid.value ? Colors.greenAccent : Colors.grey,
+                              padding: EdgeInsets.symmetric(vertical: 12),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            child: Text(
+                              "Create account",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
+                      ],
+                    )
                   ],
-                )
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

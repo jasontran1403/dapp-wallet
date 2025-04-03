@@ -39,6 +39,7 @@ class _BottomBarState extends State<BottomBar> {
   DateTime? lastPressed;
   late DateTime currentBackPressTime;
 
+  List<bool> isLoadingPages = [false, false, false, false, false]; // Mỗi trang có một trạng thái loading riêng
 
   @override
   void initState() {
@@ -46,6 +47,11 @@ class _BottomBarState extends State<BottomBar> {
     super.initState();
 
     appController.selectedBOttomTabIndex.value = 0;
+  }
+
+  // Hàm kiểm tra trạng thái loading của trang trước khi chuyển tab
+  bool canSwitchTab(int index) {
+    return !isLoadingPages[index];
   }
 
   @override

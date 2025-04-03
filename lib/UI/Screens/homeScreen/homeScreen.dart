@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:crypto_wallet/UI/Screens/TransactionHistoryScreen/TransactionScreen.dart';
+import 'package:crypto_wallet/UI/Screens/profile/profile.dart';
 import 'package:crypto_wallet/UI/Screens/receiveScreen.dart';
 import 'package:crypto_wallet/UI/Screens/sendScreens/selectTokenScreen.dart';
 import 'package:crypto_wallet/UI/Screens/stakingScreen/stakingScreen.dart';
@@ -136,21 +137,24 @@ class _HomeScreenState extends State<HomeScreen> {
             "symbol": "BNB",
             "amount": latestBalanceInEther,
             "price": newBNBPrice,
-            "chain": ""
+            "chain": "",
+            "des": "Binance Coin"
           },
           {
             "image": "assets/images/usdt.png",
             "symbol": "USDT",
             "amount": latestBalanceUsdtInEther,
             "price": "1.00",
-            "chain": ""
+            "chain": "",
+            "des": "Tether USD"
           },
           {
             "image": "assets/images/eft.png",
             "symbol": "EFT",
             "amount": latestBalanceEftInEther,
             "price": "0.15",
-            "chain": ""
+            "chain": "",
+            "des": "Ecofusion Token"
           },
         ];
         walletAddress = savedWalletAddress;
@@ -214,21 +218,40 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Obx(
-          ()=> Scaffold(
-        backgroundColor:primaryBackgroundColor.value,
+          () => Scaffold(
+        backgroundColor: primaryBackgroundColor.value,
         body: SafeArea(
-          child: isLoading ? Center(
-            child: CircularProgressIndicator(
-                    color: primaryColor.value,
+          child: isLoading
+              ? Stack(
+            fit: StackFit.expand, // Đảm bảo nền phủ toàn màn hình
+            children: [
+              // Background Image
+              Image.asset(
+                'assets/background/bg7.png',
+                fit: BoxFit.cover, // Phủ kín màn hình
+              ),
+
+              // Loading Spinner
+              Center(
+                child: CircularProgressIndicator(
+                  color: primaryColor.value,
                 ),
-            )
+              ),
+            ],
+          )
               :
           Stack(
             children: [
               Positioned.fill(
-                child: Image.asset(
+                child:
+                Image.asset(
                   "assets/background/bg7.png",
                   fit: BoxFit.cover,
                 ),
@@ -240,6 +263,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
+                        onTap: (){
+                          Get.to(() => Profile());
+                        },
                         child: Row(
                           children: [
                             Text(
@@ -331,7 +357,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             onTap: () {
                               final walletProvider = Provider.of<WalletProvider>(context, listen: false);
                               walletProvider.clearPrivateKey(); // Xóa privateKey khi logout
-                              walletProvider.clearWalletAddress();
 
                               // Chuyển hướng về màn hình OnBoardingScreen1
                               Get.offAll(OnBoardingScreen1());
@@ -677,6 +702,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+
   Widget selectToken(){
     return Container(
       height: Get.height*0.95,
@@ -725,7 +752,7 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (BuildContext context, int index) {
                 return  GestureDetector(
                   onTap: (){
-                    Get.to(ReceiveScreen());
+                    Get.to(ReceiveScreen(symbol: coins[index]['symbol'], image: coins[index]['image'], walletAddress: walletAddress));
                   },
                   child: Container(
                     height:72,
@@ -795,7 +822,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                            "Bitcoin",
+                                            "${coins[index]['des']}",
                                             textAlign: TextAlign.start,
                                             style: TextStyle(
                                               fontSize: 13,
@@ -842,13 +869,6 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ),
-
-
-
-
-
-
-
         ],
       ),
     );

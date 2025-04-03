@@ -3,6 +3,7 @@ import 'package:crypto_wallet/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../Screens/homeScreen/homeScreen.dart';
 import 'bottomNavBar.dart';
@@ -13,6 +14,7 @@ class CustomNumPad extends StatelessWidget {
   final TextEditingController controller;
   final Function() delete;
   final Function() onSubmit;
+
 
   const CustomNumPad({
     Key? key,
@@ -167,8 +169,6 @@ class CustomNumPad extends StatelessWidget {
   }
 }
 
-// define NumberButton widget
-// its shape is round
 class NumberButton extends StatefulWidget {
   final dynamic number;
   final double size;
@@ -188,11 +188,25 @@ class NumberButton extends StatefulWidget {
 }
 
 class _NumberButtonState extends State<NumberButton> {
+  String? pinCode;
+
+  Future<void> _loadPinCode() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      pinCode = prefs.getString('pinCode');
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPinCode();
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    return SizedBox(
+    return
+      SizedBox(
       width: widget.size,
       height: widget.size,
       child: ElevatedButton(
@@ -204,15 +218,23 @@ class _NumberButtonState extends State<NumberButton> {
           ),
         ),
         onPressed: () {
+          if (widget.controller.text.length < 4) widget.controller.text += widget.number.toString();
 
+          if (widget.controller.text.length == 4) {
+            if (pinCode != null && widget.controller.text == pinCode) {
+              Get.offAll(() => BottomBar());
+            } else {
+              Get.snackbar(
+                "Error",
+                "Wrong pin code!",
+                backgroundColor: Colors.redAccent,
+                colorText: Colors.white,
+              );
 
-            widget.controller.text += widget.number.toString();
-            if( widget.controller.text.length==4){
-              Get.offAll(BottomBar());
+              widget.controller.text = "";
             }
-            setState(() {
-
-            });
+          }
+          setState(() {});
         },
         child: Center(
           child: Text(

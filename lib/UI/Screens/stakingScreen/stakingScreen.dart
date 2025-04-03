@@ -16,6 +16,9 @@ class StakingScreen extends StatefulWidget {
 
 class _StakingScreenState extends State<StakingScreen> {
   AppController appController=Get.find<AppController>();
+
+  bool isLoading = false;
+
   List coins=[
     {
       "image":"assets/images/usd.png",
@@ -110,148 +113,102 @@ class _StakingScreenState extends State<StakingScreen> {
 
 
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    simulateLoading();
+  }
+
+  void simulateLoading() {
+    setState(() {
+      isLoading = true; // Bắt đầu loading
+    });
+
+    Future.delayed(Duration(seconds: 1), () {
+      setState(() {
+        isLoading = false; // Kết thúc loading sau 1 giây
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(
-      ()=> Scaffold(
+          () => Scaffold(
         backgroundColor: primaryBackgroundColor.value,
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 22.0,vertical: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // SizedBox(height: 70,),
-                Row(
+          child: isLoading
+              ? Stack(
+            fit: StackFit.expand, // Đảm bảo nền phủ toàn màn hình
+            children: [
+              // Background Image
+              Image.asset(
+                'assets/background/bg7.png',
+                fit: BoxFit.cover, // Phủ kín màn hình
+              ),
+
+              // Loading Spinner
+              Center(
+                child: CircularProgressIndicator(
+                  color: primaryColor.value,
+                ),
+              ),
+            ],
+          )
+              :
+          Stack(
+            children: [
+              Positioned.fill(
+                child:
+                Image.asset(
+                  "assets/background/bg7.png",
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 22.0,vertical: 20),
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    // SizedBox(height: 70,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                      ],
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        SizedBox(height: 12,),
+                        BottomRectangularBtn(onTapFunc: (){
+
+                        }, btnTitle: "Interest History"),
+                        SizedBox(height: 12,),
+                      ],
+                    )
+
                   ],
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-          
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-          
-          
-          
-                        Text(
-                          "\$",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize:54,
-                            fontWeight: FontWeight.w700,
-                            color: headingColor.value,
-                            fontFamily: "dmsans",
-          
-                          ),
-          
-                        ),
-                        Container(
-                           width:150,
-                          child: TextFormField(
-
-                            showCursor: false,
-          
-                            autofocus: true,
-                            keyboardType: TextInputType.number,
-          
-                            style: TextStyle(
-                              fontSize:54,
-                              fontWeight: FontWeight.w700,
-                              color: headingColor.value,
-                              fontFamily: "dmsans",
-          
-          
-                            ),
-          
-                            decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                              border:OutlineInputBorder(
-                                  borderSide: BorderSide.none
-                              ),
-                              focusedBorder:OutlineInputBorder(
-                                  borderSide: BorderSide.none
-                              ),
-                              enabledBorder:OutlineInputBorder(
-                                  borderSide: BorderSide.none
-                              ),
-                            ),
-                          ),
-                        ),
-          
-          
-          
-                      ],
-                    ),
-
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "USD Dollars",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize:16,
-                            fontWeight: FontWeight.w400,
-                            color: lightTextColor.value,
-                            fontFamily: "dmsans",
-          
-                          ),),
-          
-          
-                      ],
-                    ),
-                    SizedBox(height: 12,),
-          
-          
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-          
-          
-          
-                        Text(
-                          "≈ 0.00832 ETH",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize:18,
-                            fontWeight: FontWeight.w400,
-                            color: lightTextColor.value,
-                            fontFamily: "dmsans",
-          
-                          ),),
-          
-                      ],
-                    ),
-          
-                  ],
-                ),
-                Column(
-                  children: [
-
-
-                    SizedBox(height: 12,),
-                    BottomRectangularBtn(onTapFunc: (){
-                      Get.back();
-                      Get.back();
-
-                    }, btnTitle: "Interest History"),
-                    SizedBox(height: 12,),
-
-
-                  ],
-                )
-          
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
+
   Widget selectCurrency(){
     return Container(
       height: Get.height*0.95,

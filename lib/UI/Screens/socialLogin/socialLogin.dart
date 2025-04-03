@@ -17,75 +17,70 @@ class SocialLogin extends StatefulWidget {
 }
 
 class _SocialLoginState extends State<SocialLogin> {
-  AppController appController=Get.find<AppController>();
+  AppController appController = Get.find<AppController>();
+
   @override
   Widget build(BuildContext context) {
     return Obx(
-      ()=> Scaffold(
+          () => Scaffold(
         backgroundColor: primaryBackgroundColor.value,
-        body: Stack(
-          children: [
-        if(appController.isDark.value==false)
-            Container(
-              height: Get.height,
-              width: Get.width,
-              decoration: BoxDecoration(
-                color: primaryBackgroundColor.value
+        body: SafeArea(
+          child: Stack(
+            children: [
+              // Đặt ảnh nền ở đây
+              Positioned.fill(
+                child: Image.asset(
+                  "assets/images/Trust.png",
+                  fit: BoxFit.cover, // Đảm bảo ảnh phủ toàn màn hình
+                ),
               ),
-              child: SvgPicture.asset("assets/svgs/backgroundPlaceHolder.svg",),
-            ),
-            Positioned.fill(child:  Container(
-              height: Get.height,
-              width: Get.width,
-              padding: EdgeInsets.symmetric(horizontal: 22),
-              decoration: BoxDecoration(
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
+
+              Positioned.fill(
+                child: Container(
+                  height: Get.height,
+                  width: Get.width,
+                  padding: EdgeInsets.symmetric(horizontal: 22),
+                  decoration: BoxDecoration(),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween, // Sử dụng spaceBetween để phân bố đều
                     children: [
-                      SizedBox(height: 100,),
-                      Container(
-                        height: 114,
-                        width: 128,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(24),
-                          color:appController.isDark.value==true?Color(0xff1A2B56): inputFieldBackgroundColor.value
-                        ),
-                        child: Center(child: SvgPicture.asset("assets/svgs/bitcoin-icons_node-hardware-outline.svg",color: appController.isDark.value?Color(0xffA2BBFF):darkBlueColor.value,)),
-                      ),
-                      SizedBox(height: 40,),
-                      Text(
-                        "${getTranslated(context,"Crypto Wallet" )??"Crypto Wallet"}",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w700,
-                          color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
-                          fontFamily: "dmsans",
-
-                        ),
-
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text(
-                          "${getTranslated(context,"Welcome to EcoWallet!" )??"Welcome to EcoWallet!"}",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: lightTextColor.value,
-                            fontFamily: "dmsans",
-
+                      Column(
+                        children: [
+                          SizedBox(height: 100),
+                          Text(
+                            "${getTranslated(context, "Ecofution Wallet") ?? "Ecofution Wallet"}",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w700,
+                              color: appController.isDark.value == true
+                                  ? Color(0xffFDFCFD)
+                                  : Colors.white,
+                              fontFamily: "dmsans",
+                            ),
                           ),
-
-                        ),
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text(
+                              "${getTranslated(context, "Welcome to EcoWallet!") ?? "Welcome to EcoWallet!"}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: lightTextColor.value,
+                                fontFamily: "dmsans",
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(height: 40,),
+
+                      // Spacer to push buttons down to the bottom
+                      Spacer(),
+
+                      // Create new wallet button
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Get.offAll(CreateWallet());
                         },
                         child: Container(
@@ -93,47 +88,46 @@ class _SocialLoginState extends State<SocialLogin> {
                           width: Get.width,
                           decoration: BoxDecoration(
                             color: inputFieldBackgroundColor.value,
-                            borderRadius: BorderRadius.circular(16)
+                            borderRadius: BorderRadius.circular(16),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              SizedBox(width: 14,),
+                              SizedBox(width: 14),
                               Text(
-                                "${getTranslated(context,"Create new wallet" )??"Create new wallet"}",
+                                "${getTranslated(context, "Create new wallet") ?? "Create new wallet"}",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                   color: headingColor.value,
                                   fontFamily: "dmsans",
-
                                 ),
-
                               ),
-
                             ],
                           ),
                         ),
                       ),
-                      SizedBox(height: 8,),
+                      SizedBox(height: 20),
+
+                      // Import existing wallet button
                       GestureDetector(
-                        onTap: (){
-                          Get.offAll(ImportSecretPhrase());},
+                        onTap: () {
+                          Get.offAll(ImportSecretPhrase());
+                        },
                         child: Container(
                           height: 56,
                           width: Get.width,
                           decoration: BoxDecoration(
-                              color: inputFieldBackgroundColor.value,
-                              borderRadius: BorderRadius.circular(16)
+                            color: inputFieldBackgroundColor.value,
+                            borderRadius: BorderRadius.circular(16),
                           ),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              // SvgPicture.asset("assets/svgs/google.svg"),
-                              SizedBox(width: 14,),
+                              SizedBox(width: 14),
                               Text(
-                                "${getTranslated(context,"Import existing wallet" )??"Import existing wallet"}",
+                                "${getTranslated(context, "Import existing wallet") ?? "Import existing wallet"}",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 16,
@@ -146,13 +140,15 @@ class _SocialLoginState extends State<SocialLogin> {
                           ),
                         ),
                       ),
+
+                      SizedBox(height: 60),
                     ],
                   ),
-                ],
-              ),
-            ),)
-          ],
-        )
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

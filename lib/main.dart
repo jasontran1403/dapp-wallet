@@ -1,4 +1,3 @@
-import 'package:crypto_wallet/UI/Screens/onBoardingScreens/onboardingScreen2.dart';
 import 'package:crypto_wallet/UI/pinScreen.dart';
 import 'package:crypto_wallet/controllers/appController.dart';
 import 'package:flutter/material.dart';
