@@ -40,6 +40,7 @@ class WalletProvider extends ChangeNotifier implements WalletAddressService {
     await prefs.remove('accountName');  // Remove from storage
     await prefs.remove('pinCode');  // Remove from storage
     await prefs.remove('walletAddress');  // Remove from storage
+    await prefs.remove('mnemonics');  // Remove from storage
     notifyListeners();
   }
 
@@ -83,9 +84,19 @@ class WalletProvider extends ChangeNotifier implements WalletAddressService {
     return prefs.getString('walletAddress');
   }
 
+  Future<String?> getMnemonics() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('mnemonics');
+  }
+
   Future<String?> getAccountName() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('accountName');
+  }
+
+  Future<String?> getPrivateKeyFromStorage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('privateKey');
   }
 
   // ✅ Clear Wallet Address from SharedPreferences (Logout)

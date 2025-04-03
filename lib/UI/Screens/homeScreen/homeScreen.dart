@@ -352,26 +352,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Icon(Icons.refresh_rounded, color: headingColor.value, size: 20),
                             ),
                           ),
-                          SizedBox(width: 8,), // Thêm khoảng cách trước icon logout
-                          GestureDetector(
-                            onTap: () {
-                              final walletProvider = Provider.of<WalletProvider>(context, listen: false);
-                              walletProvider.clearPrivateKey(); // Xóa privateKey khi logout
-
-                              // Chuyển hướng về màn hình OnBoardingScreen1
-                              Get.offAll(OnBoardingScreen1());
-                            },
-                            child: Container(
-                              height: 32,
-                              width: 32,
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                color: appController.isDark.value ? Color(0xff1A2B56) : inputFieldBackgroundColor.value,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Icon(Icons.logout, color: headingColor.value, size: 20),
-                            ),
-                          ),
                         ],
                       )
 

@@ -1,10 +1,13 @@
+import 'package:crypto_wallet/UI/Screens/profile/privateKey.dart';
 import 'package:crypto_wallet/constants/colors.dart';
 import 'package:crypto_wallet/localization/language_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 import '../../../controllers/appController.dart';
+import '../../../providers/wallet_provider.dart';
 import '../../common_widgets/bottomRectangularbtn.dart';
 import 'chooseAccountForPrivateKey.dart';
 
@@ -20,6 +23,36 @@ class _ShowPrivateKeyState extends State<ShowPrivateKey> {
   final appController = Get.find<AppController>();
   var isCheckBox= false.obs;
   var ch = ''.obs;
+  bool isLoading = false;
+  String? privateKey;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadWalletData();
+  }
+
+  Future<void> _loadWalletData() async {
+    isLoading = true;
+    try {
+      final walletProvider = Provider.of<WalletProvider>(context, listen: false);
+
+      String? savedPrivateKey = await walletProvider.getPrivateKeyFromStorage();
+
+      if (savedPrivateKey == null) {
+        throw Exception("Can't get the mnemonic words");
+      }
+
+      setState(() {
+        privateKey = savedPrivateKey;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -368,8 +401,8 @@ class _ShowPrivateKeyState extends State<ShowPrivateKey> {
                         color: isCheckBox.value==true?primaryColor.value:inputFieldBackgroundColor2.value,
                         isDisabled: isCheckBox==false?true:false,
                         onTapFunc: () {
-                          Get.to(ChooseAccountForPrivateKey());
-
+                          // Get.to(ChooseAccountForPrivateKey());
+                          Get.to(PrivateKey(privateKey: privateKey!));
                         },
                         btnTitle: "Continue"),
                     SizedBox(height: 16),

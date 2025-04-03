@@ -20,30 +20,21 @@ class _ChooseAccountForPrivateKeyState extends State<ChooseAccountForPrivateKey>
   List coins=[
 
     {
-      "image":"assets/images/eth.png",
-      "symbol":"Ethereum",
+      "image":"assets/images/bnb.png",
+      "symbol":"BNB",
       "price1":"\$1,571.45",
       "price2":"\$1,571.45",
       "percentage":"8.75%",
       "chain":""
     },
     {
-      "image":"assets/images/bttc.png",
-      "symbol":"Bitcoin",
+      "image":"assets/images/eft.png",
+      "symbol":"EFT",
       "price1":"\$1,571.45",
       "price2":"\$1,571.45",
       "percentage":"8.75%",
       "chain":""
     },
-    {
-      "image":"assets/images/solana.png",
-      "symbol":"Solana",
-      "price1":"\$1,571.45",
-      "price2":"\$1,571.45",
-      "percentage":"8.75%",
-      "chain":"Solana"
-    },
-
 
   ];
   final appController = Get.find<AppController>();
@@ -158,7 +149,7 @@ class _ChooseAccountForPrivateKeyState extends State<ChooseAccountForPrivateKey>
                     itemBuilder: (BuildContext context, int index) {
                       return  GestureDetector(
                         onTap: (){
-                           Get.to(PrivateKey());
+                           Get.to(PrivateKey(privateKey: "Private Key"));
                         },
                         child: Container(
                           height:70,

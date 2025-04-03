@@ -10,42 +10,17 @@ import '../../common_widgets/bottomRectangularbtn.dart';
 
 
 class PrivateKey extends StatefulWidget {
-  PrivateKey({super.key});
+  final String? privateKey;
+
+  PrivateKey({
+    required this.privateKey,
+    super.key});
 
   @override
   State<PrivateKey> createState() => _PrivateKeyState();
 }
 
 class _PrivateKeyState extends State<PrivateKey> {
-  List coins=[
-
-    {
-      "image":"assets/images/eth.png",
-      "symbol":"Ethereum",
-      "price1":"\$1,571.45",
-      "price2":"\$1,571.45",
-      "percentage":"8.75%",
-      "chain":""
-    },
-    {
-      "image":"assets/images/bttc.png",
-      "symbol":"Bitcoin",
-      "price1":"\$1,571.45",
-      "price2":"\$1,571.45",
-      "percentage":"8.75%",
-      "chain":""
-    },
-    {
-      "image":"assets/images/solana.png",
-      "symbol":"Solana",
-      "price1":"\$1,571.45",
-      "price2":"\$1,571.45",
-      "percentage":"8.75%",
-      "chain":"Solana"
-    },
-
-
-  ];
   final appController = Get.find<AppController>();
   var isCheckBox= false.obs;
   var ch = ''.obs;
@@ -66,7 +41,7 @@ class _PrivateKeyState extends State<PrivateKey> {
 
                         onTap:(){
                           Get.back();
-
+                          Get.back();
                         },
                         child: Icon(Icons.arrow_back_ios,color: headingColor.value,size: 18,)),
                     SizedBox(width: 8,),
@@ -135,7 +110,7 @@ class _PrivateKeyState extends State<PrivateKey> {
                 Row(
                   children: [
                     Text(
-                      'Private Key',
+                      "Private key",
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: headingColor.value,
@@ -156,7 +131,7 @@ class _PrivateKeyState extends State<PrivateKey> {
                 borderRadius: BorderRadius.circular(16)
               ),
               child: Text(
-                'MIICWwIBAAKBgFtpfGcFlI+eRGBV+zGxQ5qULDeYglhLCRAwnxoqpJzuU3vRhUK4WiuI+TxcMTs+9DjwrXoNYq6lDfhVW/9Cqf9pGVc+0f7uFwKmW0JMFtcxo98ZOc1KtL6ideodFkrJinT2sP1315Poq',
+                widget.privateKey ?? "Loading...",
                 style: TextStyle(
                   color: headingColor.value,
                   fontSize: 14,
@@ -168,7 +143,7 @@ class _PrivateKeyState extends State<PrivateKey> {
                 SizedBox(height: 16,),
                 GestureDetector(
                   onTap: (){
-                    UtilService().copyToClipboard("privateKey");
+                    UtilService().copyToClipboard(widget.privateKey!);
                   },
                   child: Container(
                     height: 40,

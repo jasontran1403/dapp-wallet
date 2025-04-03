@@ -1,8 +1,10 @@
 import 'package:crypto_wallet/UI/Screens/addressBookScreens/addressBookScreen.dart';
 import 'package:crypto_wallet/UI/Screens/manageAccounts/manageAccounts.dart';
 import 'package:crypto_wallet/UI/Screens/notifications/notifications.dart';
+import 'package:crypto_wallet/UI/Screens/onBoardingScreens/onboardingScreen1.dart';
 import 'package:crypto_wallet/UI/Screens/preferences/prefrences.dart';
 import 'package:crypto_wallet/UI/Screens/profile/editProfile.dart';
+import 'package:crypto_wallet/UI/Screens/referralsScreen/referralScreen.dart';
 import 'package:crypto_wallet/UI/Screens/securityAndPrivacy/securityAndPrivacy.dart';
 import 'package:crypto_wallet/UI/Screens/twoFa/twoFaScreen.dart';
 import 'package:crypto_wallet/constants/colors.dart';
@@ -127,7 +129,7 @@ class _ProfileState extends State<Profile> {
                                     ),
                                     child:  Center(
                                       child: Text(
-                                        "E",
+                                        "",
                                         textAlign: TextAlign.start,
                                         style: TextStyle(
                                           fontSize: 16,
@@ -157,16 +159,16 @@ class _ProfileState extends State<Profile> {
                                           ),
 
                                         ),
-                                        Text(
-                                          "\$0.00",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontSize: 16.5,
-                                            fontWeight: FontWeight.w600,
-                                            color: lightTextColor.value,
-                                            fontFamily: "dmsans",
-                                          ),
-                                        ),
+                                        // Text(
+                                        //   "\$0.00",
+                                        //   textAlign: TextAlign.start,
+                                        //   style: TextStyle(
+                                        //     fontSize: 16.5,
+                                        //     fontWeight: FontWeight.w600,
+                                        //     color: lightTextColor.value,
+                                        //     fontFamily: "dmsans",
+                                        //   ),
+                                        // ),
                                       ],
                                     ),
                                   ),
@@ -178,66 +180,7 @@ class _ProfileState extends State<Profile> {
                             ),
                           ),
                           SizedBox(height: 20,),
-                          InkWell(
-                            splashColor: Colors.transparent,
-                            onTap: (){
-                              Get.to(NotificationScreen());
-                            },
-                            child: Container(
-                              // height: 80,
-                              width: Get.width,
-                              padding: EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                  color: inputFieldBackgroundColor2.value,
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
-                              ),
-                              child:
-                              Row
-                                (
-                                children: [
-                                  Container(
-                                    height: 40,
-                                    width: 40,
-                                    decoration: BoxDecoration(
-                                        color:appController.isDark.value==true? Color(0xff1A2B56):inputFieldBackgroundColor.value,
-                                        borderRadius: BorderRadius.circular(12)
-                                    ),
-                                    child:  Center(
-                                        child: Image.asset('assets/images/notifications.png', color:appController.isDark.value==true? Color(0xffA2BBFF):headingColor.value,)
-                                    ),
-                                  ),
-                                  SizedBox(width: 12,),
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "${getTranslated(context,"Notifications" )??"Notifications"}",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            color: headingColor.value,
-                                            fontFamily: "dmsans",
 
-                                          ),
-
-                                        ),
-
-
-
-                                      ],
-                                    ),
-                                  ),
-
-                                  SizedBox(width: 12,),
-                                  Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
-                                ],
-                              ),
-                            ),
-                          ),
                           SizedBox(height: 20,),
                           Container(
                             // height: 80,
@@ -253,7 +196,7 @@ class _ProfileState extends State<Profile> {
                                 children: [
                                   InkWell(
                                     onTap: (){
-                                      Get.to(ManageAccounts());
+                                      Get.to(ReferralScreen());
                                     },
                                     splashColor: Colors.transparent,
                                     child: Row
@@ -279,7 +222,7 @@ class _ProfileState extends State<Profile> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                "${getTranslated(context,"Manage Accounts" )??"Manage Accounts"}",
+                                                "${getTranslated(context,"Referrals" )??"Referrals"}",
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
                                                   fontSize: 14,
@@ -488,72 +431,6 @@ class _ProfileState extends State<Profile> {
                               )
                           ),
                           SizedBox(height: 20,),
-                          Container(
-                            // height: 80,
-                              width: Get.width,
-                              padding: EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                  color: inputFieldBackgroundColor2.value,
-                                  borderRadius: BorderRadius.circular(16),
-                                  border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
-                              ),
-                              child:
-                              Column(
-                                children: [
-                                  Row
-                                    (
-                                    children: [
-                                      Container(
-                                        height: 40,
-                                        width: 40,
-                                        padding: EdgeInsets.all(11),
-                                        decoration: BoxDecoration(
-
-                                            color:appController.isDark.value==true? Color(0xff1A2B56):inputFieldBackgroundColor.value,
-                                            borderRadius: BorderRadius.circular(12)
-                                        ),
-                                        child:  Center(
-                                            child: Image.asset('assets/images/tabler_world.png', color:appController.isDark.value==true? Color(0xffA2BBFF):headingColor.value,)
-                                        ),
-                                      ),
-                                      SizedBox(width: 12,),
-                                      Expanded(
-                                        child: Column(
-                                          mainAxisAlignment: MainAxisAlignment.center,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              "${getTranslated(context,"Active Networks" )??"Active Networks"}",
-                                              textAlign: TextAlign.start,
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.w400,
-                                                color: headingColor.value,
-                                                fontFamily: "dmsans",
-
-                                              ),
-
-                                            ),
-
-
-
-                                          ],
-                                        ),
-                                      ),
-
-                                      SizedBox(width: 12,),
-                                      Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
-                                    ],
-                                  ),
-                                  SizedBox(height: 8,),
-
-                                  Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
-                                  SizedBox(height: 8,),
-
-
-                                ],
-                              )
-                          ),
 
                           SizedBox(height: 20,),
                           Container(
@@ -669,7 +546,109 @@ class _ProfileState extends State<Profile> {
                           ),
 
                           SizedBox(height: 20,),
+                          Container(
+                            // height: 80,
+                              width: Get.width,
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                  color: inputFieldBackgroundColor2.value,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
+                              ),
+                              child:
+                              Column(
+                                children: [
+                                  // Replace the existing sign-out container with this:
+                                  InkWell(
+                                    onTap: () async {
+                                      // Show confirmation dialog
+                                      bool confirm = await showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                            title: Text(getTranslated(context, "Sign Out") ?? "Sign Out"),
+                                            content: Text(getTranslated(context, "Are you sure you want to sign out?") ?? "Are you sure you want to sign out?"),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                child: Text(getTranslated(context, "Cancel") ?? "Cancel"),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop(false);
+                                                },
+                                              ),
+                                              TextButton(
+                                                child: Text(getTranslated(context, "Sign Out") ?? "Sign Out", style: TextStyle(color: Colors.red)),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop(true);
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
 
+                                      if (confirm == true) {
+                                        // Xóa privateKey khi logout
+                                        final walletProvider = Provider.of<WalletProvider>(context, listen: false);
+                                        await walletProvider.clearPrivateKey(); // Xóa privateKey
+
+                                        // Chuyển hướng về màn hình OnBoardingScreen1
+                                        Get.offAll(OnBoardingScreen1());
+                                      }
+                                    },
+                                    child: Container(
+                                      width: Get.width,
+                                      padding: EdgeInsets.all(0),
+                                      decoration: BoxDecoration(
+                                          color: inputFieldBackgroundColor2.value,
+                                          borderRadius: BorderRadius.circular(16),
+                                          border: Border.all(width: 1, color: inputFieldBackgroundColor.value)
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            height: 40,
+                                            width: 40,
+                                            padding: EdgeInsets.all(11),
+                                            decoration: BoxDecoration(
+                                                color: appController.isDark.value == true ? Color(0xff1A2B56) : inputFieldBackgroundColor.value,
+                                                borderRadius: BorderRadius.circular(12)
+                                            ),
+                                            child: Center(
+                                                child: Image.asset(
+                                                  'assets/images/helpandsupport.png',
+                                                  color: appController.isDark.value == true ? Color(0xffA2BBFF) : headingColor.value,
+                                                )
+                                            ),
+                                          ),
+                                          SizedBox(width: 12),
+                                          Expanded(
+                                            child: Column(
+                                              mainAxisAlignment: MainAxisAlignment.center,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "${getTranslated(context, "Sign out") ?? "Sign out"}",
+                                                  textAlign: TextAlign.start,
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: headingColor.value,
+                                                    fontFamily: "dmsans",
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Icon(Icons.arrow_forward_ios, color: headingColor.value, size: 18)
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                ],
+                              )
+                          ),
+                          SizedBox(height: 20,),
                         ],
                       ),
                     ),

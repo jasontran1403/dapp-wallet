@@ -21,7 +21,7 @@ class SecurityAndPrivacy extends StatefulWidget {
 }
 
 class _SecurityAndPrivacyState extends State<SecurityAndPrivacy> {
-  var faceId=true.obs;
+  var faceId=false.obs;
 
   @override
   void initState() {
@@ -84,7 +84,7 @@ class _SecurityAndPrivacyState extends State<SecurityAndPrivacy> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "${getTranslated(context,"Use Face ID" )??"Use Face ID"}",
+                                "${getTranslated(context,"Face ID" )??"Face ID"}",
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                   fontSize: 14,
@@ -106,20 +106,32 @@ class _SecurityAndPrivacyState extends State<SecurityAndPrivacy> {
                         FlutterSwitch(
                           activeColor: primaryColor.value,
                           inactiveColor: headingColor.value,
-                          width: 40.0,
+                          width: 50.0,
                           height: 20.0,
                           valueFontSize: 10.0,
                           toggleSize: 18.0,
-                          value: faceId.value,
+                          value: faceId.value, // Mặc định false
                           borderRadius: 16.0,
                           padding: 2.0,
-                          showOnOff: false,
+                          showOnOff: true,
                           onToggle: (val) {
+                            if (val) { // Nếu bật lên
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text("This feature is currently unavailable, please try again later."),
+                                  behavior: SnackBarBehavior.floating,
+                                  margin: EdgeInsets.only(top: 50, left: 0, right: 0),
+                                  duration: Duration(seconds: 2),
+                                ),
+                              );
+                            }
+
                             setState(() {
-                              faceId.value = val;
+                              faceId.value = false; // Luôn đặt lại về false
                             });
                           },
-                        ),                              ],
+                        ),
+                      ],
                     ),
 
 
@@ -127,59 +139,59 @@ class _SecurityAndPrivacyState extends State<SecurityAndPrivacy> {
                 )
             ),
             SizedBox(height: 16,),
-            InkWell(
-              onTap: (){
-                Get.to(RecetAndPrivateData());
-              },
-              child: Container(
-                // height: 80,
-                  width: Get.width,
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                      color: inputFieldBackgroundColor2.value,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
-                  ),
-                  child:
-                  Column(
-                    children: [
-                      Row
-                        (
-                        children: [
-
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${getTranslated(context,"Reset App" )??"Reset App"}",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: redColor.value,
-                                    fontFamily: "dmsans",
-
-                                  ),
-
-                                ),
-
-
-
-                              ],
-                            ),
-                          ),
-
-                          SizedBox(width: 12,),
-                         Icon(Icons.arrow_forward_ios,size: 17,color: headingColor.value,)                             ],
-                      ),
-
-
-                    ],
-                  )
-              ),
-            ),
+            // InkWell(
+            //   onTap: (){
+            //     Get.to(RecetAndPrivateData());
+            //   },
+            //   child: Container(
+            //     // height: 80,
+            //       width: Get.width,
+            //       padding: EdgeInsets.all(16),
+            //       decoration: BoxDecoration(
+            //           color: inputFieldBackgroundColor2.value,
+            //           borderRadius: BorderRadius.circular(16),
+            //           border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
+            //       ),
+            //       child:
+            //       Column(
+            //         children: [
+            //           Row
+            //             (
+            //             children: [
+            //
+            //               Expanded(
+            //                 child: Column(
+            //                   mainAxisAlignment: MainAxisAlignment.center,
+            //                   crossAxisAlignment: CrossAxisAlignment.start,
+            //                   children: [
+            //                     Text(
+            //                       "${getTranslated(context,"Reset App" )??"Reset App"}",
+            //                       textAlign: TextAlign.start,
+            //                       style: TextStyle(
+            //                         fontSize: 14,
+            //                         fontWeight: FontWeight.w400,
+            //                         color: redColor.value,
+            //                         fontFamily: "dmsans",
+            //
+            //                       ),
+            //
+            //                     ),
+            //
+            //
+            //
+            //                   ],
+            //                 ),
+            //               ),
+            //
+            //               SizedBox(width: 12,),
+            //              Icon(Icons.arrow_forward_ios,size: 17,color: headingColor.value,)                             ],
+            //           ),
+            //
+            //
+            //         ],
+            //       )
+            //   ),
+            // ),
 
             SizedBox(height: 32,),
 

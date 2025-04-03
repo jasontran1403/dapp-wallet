@@ -149,6 +149,7 @@ class _CreateAccountState extends State<CreateAccount> {
       await prefs.setString('walletAddress', widget.walletAddress);
       await prefs.setString('accountName', accountNameController.text);
       await prefs.setString('pinCode', pinController.text);
+      await prefs.setString('mnemonics', widget.mnemonicWords);
 
       Future.delayed(Duration(seconds: 1), () {
         Get.offAll(BottomBar());

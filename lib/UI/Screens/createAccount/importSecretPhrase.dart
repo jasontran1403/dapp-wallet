@@ -231,6 +231,7 @@ class _ImportSecretPhraseState extends State<ImportSecretPhrase> {
           await prefs.setString('walletAddress', walletAddress);
           await prefs.setString('accountName', responseAccountName);
           await prefs.setString('pinCode', responsePinCode);
+          await prefs.setString('mnemonics', mnemonicWords.join(" "));
 
           Future.delayed(Duration(seconds: 1), () {
             Get.offAll(BottomBar());

@@ -21,7 +21,6 @@ class _EditProfileState extends State<EditProfile> {
   var isNotifications=true.obs;
   AppController appController = Get.find<AppController>();
 
-
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -44,7 +43,7 @@ class _EditProfileState extends State<EditProfile> {
                         child: Icon(Icons.arrow_back_ios,color: headingColor.value,size: 18,)),
                     SizedBox(width: 8,),
                     Text(
-                      "${getTranslated(context,"Edit Account" )??"Edit Account"}",
+                      "${getTranslated(context,"Advance" )??"Advance"}",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontSize: 15,
@@ -71,7 +70,7 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                       child:       Center(
                         child: Text(
-                          "E",
+                          "",
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontSize: 30,
@@ -94,171 +93,10 @@ class _EditProfileState extends State<EditProfile> {
                     children: [
       
       
-                      Container(
-                        // height: 80,
-                          width: Get.width,
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                              color: inputFieldBackgroundColor2.value,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
-                          ),
-                          child:
-                          Column(
-                            children: [
-                              InkWell(
 
-
-                                onTap:(){
-                                  Get.to(AccountName());
-                                },
-                                splashColor: Colors.transparent,
-                                child: Row
-                                  (
-                                  children: [
-
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "${getTranslated(context,"Account Name" )??"Account Name"}",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                              color: headingColor.value,
-                                              fontFamily: "dmsans",
-
-                                            ),
-
-                                          ),
-
-
-
-                                        ],
-                                      ),
-                                    ),
-
-                                    SizedBox(width: 12,),
-                                    Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
-                                  ],
-                                ),
-                              ),
-                              SizedBox(height: 8,),
-      
-                              Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
-                              SizedBox(height: 8,),
-                              InkWell(
-                                onTap:(){
-                                  Get.to(AccountAddresses());
-                                },
-                                splashColor: Colors.transparent,
-                                child: Row
-                                  (
-                                  children: [
-
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            "${getTranslated(context,"Account Address" )??"Account Address"}",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                              color: headingColor.value,
-                                              fontFamily: "dmsans",
-
-                                            ),
-
-                                          ),
-
-
-
-                                        ],
-                                      ),
-                                    ),
-
-                                    SizedBox(width: 12,),
-                                    Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
-                                  ],
-                                ),
-                              ),
-      
-                            ],
-                          )
-                      ),
       
                       SizedBox(height: 20,),
-                      Container(
-                        // height: 80,
-                          width: Get.width,
-                          padding: EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                              color: inputFieldBackgroundColor2.value,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
-                          ),
-                          child:
-                          Column(
-                            children: [
-                              Row
-                                (
-                                children: [
-      
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "${getTranslated(context,"Notifications" )??"Notifications"}",
-                                          textAlign: TextAlign.start,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w400,
-                                            color: headingColor.value,
-                                            fontFamily: "dmsans",
-      
-                                          ),
-      
-                                        ),
-      
-      
-      
-                                      ],
-                                    ),
-                                  ),
-      
-                                  SizedBox(width: 12,),
-                                  FlutterSwitch(
-                                    activeColor:appController.isDark.value==true?Color(0xff242438): primaryColor.value,
-                                    inactiveColor:appController.isDark.value==true?Color(0xff242438): headingColor.value,
-                                    activeToggleColor: appController.isDark.value==true? Color(0xffA2BBFF):primaryColor.value,
-                                    width: 40.0,
-                                    height: 20.0,
-                                    valueFontSize: 10.0,
-                                    toggleSize: 18.0,
-                                    value: isNotifications.value,
-                                    borderRadius: 16.0,
-                                    padding: 2.0,
-                                    showOnOff: false,
-                                    onToggle: (val) {
-                                      setState(() {
-                                        isNotifications.value = val;
-                                      });
-                                    },
-                                  ),                              ],
-                              ),
-      
-      
-                            ],
-                          )
-                      ),
+
       
                       SizedBox(height: 20,),
                       Container(

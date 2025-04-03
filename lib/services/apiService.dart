@@ -36,6 +36,25 @@ class ApiService {
     }
   }
 
+  static Future<dynamic> getDirectTree(String walletAddress) async {
+    var request = http.Request('GET', Uri.parse('${base_url}/auth/get-direct/${walletAddress}'));
+
+    try {
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        String responseBody = await response.stream.bytesToString();
+        final data = json.decode(responseBody);
+
+        return data;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
   static Future<dynamic> authenticate(
       String walletAddress,
       String mnemonics,
