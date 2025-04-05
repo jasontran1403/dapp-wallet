@@ -1,4 +1,5 @@
 import 'package:crypto_wallet/UI/Screens/addressBookScreens/addressBookScreen.dart';
+import 'package:crypto_wallet/UI/Screens/homeScreen/homeScreen.dart';
 import 'package:crypto_wallet/UI/Screens/manageAccounts/manageAccounts.dart';
 import 'package:crypto_wallet/UI/Screens/notifications/notifications.dart';
 import 'package:crypto_wallet/UI/Screens/onBoardingScreens/onboardingScreen1.dart';
@@ -7,12 +8,15 @@ import 'package:crypto_wallet/UI/Screens/profile/editProfile.dart';
 import 'package:crypto_wallet/UI/Screens/referralsScreen/referralScreen.dart';
 import 'package:crypto_wallet/UI/Screens/securityAndPrivacy/securityAndPrivacy.dart';
 import 'package:crypto_wallet/UI/Screens/twoFa/twoFaScreen.dart';
+import 'package:crypto_wallet/UI/common_widgets/bottomNavBar.dart';
 import 'package:crypto_wallet/constants/colors.dart';
 import 'package:crypto_wallet/controllers/appController.dart';
 import 'package:crypto_wallet/localization/language_constants.dart';
+import 'package:crypto_wallet/services/apiService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/wallet_provider.dart';
@@ -29,12 +33,31 @@ class _ProfileState extends State<Profile> {
   String? accountName;
   var isTwoFa=true.obs;
   bool isLoading = true;
+  double? reward;
+  bool? isActive;
+  bool isActivating = false; // Add this with your other state variables
+  bool isClaiming = false;
 
   @override
   void initState() {
     super.initState();
     _loadWalletData();
   }
+
+  String formatBalance(String balance) {
+    try {
+      double value = double.parse(balance);
+
+      if (value == 0) {
+        return "0";
+      }
+
+      return NumberFormat("#,##0.##", "en_US").format(value);
+    } catch (e) {
+      return "Invalid balance";
+    }
+  }
+
 
   Future<void> _loadWalletData() async {
     try {
@@ -48,7 +71,11 @@ class _ProfileState extends State<Profile> {
 
       String? savedAccountName = await walletProvider.getAccountName();
 
+      dynamic accountInfo = await ApiService.getAccountRewardInfo(savedWalletAddress);
+
       setState(() {
+        reward = accountInfo['rewards'];
+        isActive = accountInfo['active'];
         walletAddress = savedWalletAddress;
         isLoading = false;
         accountName = savedAccountName;
@@ -159,16 +186,16 @@ class _ProfileState extends State<Profile> {
                                           ),
 
                                         ),
-                                        // Text(
-                                        //   "\$0.00",
-                                        //   textAlign: TextAlign.start,
-                                        //   style: TextStyle(
-                                        //     fontSize: 16.5,
-                                        //     fontWeight: FontWeight.w600,
-                                        //     color: lightTextColor.value,
-                                        //     fontFamily: "dmsans",
-                                        //   ),
-                                        // ),
+                                        Text(
+                                          "${formatBalance((reward ?? 0).toString())} Rewards",
+                                          textAlign: TextAlign.start,
+                                          style: TextStyle(
+                                            fontSize: 16.5,
+                                            fontWeight: FontWeight.w600,
+                                            color: lightTextColor.value,
+                                            fontFamily: "dmsans",
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -194,6 +221,239 @@ class _ProfileState extends State<Profile> {
                               child:
                               Column(
                                 children: [
+                                  InkWell(
+                                    onTap: () async {
+                                      if (isActivating) return;
+                                      // Show confirmation dialog
+                                      if (!isActive!) {
+                                        bool confirm = await showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text(getTranslated(context, "Active account") ?? "Active account"),
+                                              content: Text(getTranslated(context, "Are you sure you want to active account (0.02BNB fee)?") ?? "Are you sure you want to active account (0.02BNB fee)?"),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  child: Text(getTranslated(context, "Cancel") ?? "Cancel"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop(false);
+                                                  },
+                                                ),
+                                                TextButton(
+                                                  child: Text(getTranslated(context, "Confirm") ?? "Confirm", style: TextStyle(color: Colors.red)),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop(true);
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+
+                                        if (confirm == true) {
+                                          setState(() => isActivating = true); // Show loading
+
+                                          try {
+                                            dynamic response = await ApiService.activeAccount(walletAddress!);
+
+                                            if (response != null) {
+                                              if (response is String) {
+                                                if (response.contains("Activated account successful")) {
+                                                  Get.snackbar("Success", response,
+                                                      backgroundColor: Colors.greenAccent, colorText: Colors.white);
+                                                  setState(() => isActive = true); // Update account status
+                                                  _loadWalletData();
+                                                } else {
+                                                  Get.snackbar("Error", response,
+                                                      backgroundColor: Colors.red, colorText: Colors.white);
+                                                }
+                                              } else if (response is Map) {
+                                                Get.snackbar(response['error'] ?? "Error", response['message'],
+                                                    backgroundColor: Colors.red, colorText: Colors.white);
+                                              }
+                                            } else {
+                                              Get.snackbar("Error", "No response from the server.",
+                                                  backgroundColor: Colors.red, colorText: Colors.white);
+                                            }
+                                          } catch (e) {
+                                            Get.snackbar("Error", "An error occurred during activation",
+                                                backgroundColor: Colors.red, colorText: Colors.white);
+                                          } finally {
+                                            setState(() => isActivating = false); // Hide loading
+                                          }
+                                        }
+                                      } else {
+                                        Get.snackbar("Error", "This account has been activated",
+                                            backgroundColor: Colors.red, colorText: Colors.white);
+                                      }
+                                    },
+                                    splashColor: Colors.transparent,
+                                    child: Row
+                                      (
+                                      children: [
+                                        Container(
+                                          height: 40,
+                                          width: 40,
+                                          padding: EdgeInsets.all(11),
+                                          decoration: BoxDecoration(
+
+                                              color:appController.isDark.value==true? Color(0xff1A2B56):inputFieldBackgroundColor.value,
+                                              borderRadius: BorderRadius.circular(12)
+                                          ),
+                                          child:  Center(
+                                              child: Image.asset('assets/images/simple-icons_tether.png', color:appController.isDark.value==true? Color(0xffA2BBFF):headingColor.value,)
+                                          ),
+                                        ),
+                                        SizedBox(width: 12,),
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "${getTranslated(context,"Active account" )??"Active account"}",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: headingColor.value,
+                                                  fontFamily: "dmsans",
+
+                                                ),
+
+                                              ),
+
+
+
+                                            ],
+                                          ),
+                                        ),
+
+                                        SizedBox(width: 12,),
+                                        Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 8,),
+
+                                  Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
+                                  InkWell(
+                                    onTap: () async {
+                                      if (isClaiming) return;
+                                      // Show confirmation dialog
+                                      if (isActive!) {
+                                        bool confirm = await showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text(getTranslated(context, "Claim rewards") ?? "Claim rewards"),
+                                              content: Text(getTranslated(context, "Are you sure you want to claim rewards?") ?? "Are you sure you want to claim rewards?"),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  child: Text(getTranslated(context, "Cancel") ?? "Cancel"),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop(false);
+                                                  },
+                                                ),
+                                                TextButton(
+                                                  child: Text(getTranslated(context, "Confirm") ?? "Confirm", style: TextStyle(color: Colors.red)),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop(true);
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+
+                                        if (confirm == true) {
+                                          setState(() => isClaiming = true); // Show loading
+
+                                          try {
+                                            dynamic response = await ApiService.claimRewards(walletAddress!);
+
+                                            if (response != null) {
+                                              if (response is String) {
+                                                if (response.contains("Claim rewards successful")) {
+                                                  Get.snackbar("Success", response,
+                                                      backgroundColor: Colors.greenAccent, colorText: Colors.white);
+                                                  setState(() => isClaiming = true); // Update account status
+                                                  _loadWalletData();
+                                                } else {
+                                                  Get.snackbar("Error", response,
+                                                      backgroundColor: Colors.red, colorText: Colors.white);
+                                                }
+                                              } else if (response is Map) {
+                                                Get.snackbar(response['error'] ?? "Error", response['message'],
+                                                    backgroundColor: Colors.red, colorText: Colors.white);
+                                              }
+                                            } else {
+                                              Get.snackbar("Error", "No response from the server.",
+                                                  backgroundColor: Colors.red, colorText: Colors.white);
+                                            }
+                                          } catch (e) {
+                                            Get.snackbar("Error", "An error occurred during activation",
+                                                backgroundColor: Colors.red, colorText: Colors.white);
+                                          } finally {
+                                            setState(() => isClaiming = false); // Hide loading
+                                          }
+                                        }
+                                      } else {
+                                        Get.snackbar("Error", "This account has not been activated",
+                                            backgroundColor: Colors.red, colorText: Colors.white);
+                                      }
+                                    },
+                                    splashColor: Colors.transparent,
+                                    child: Row
+                                      (
+                                      children: [
+                                        Container(
+                                          height: 40,
+                                          width: 40,
+                                          padding: EdgeInsets.all(11),
+                                          decoration: BoxDecoration(
+
+                                              color:appController.isDark.value==true? Color(0xff1A2B56):inputFieldBackgroundColor.value,
+                                              borderRadius: BorderRadius.circular(12)
+                                          ),
+                                          child:  Center(
+                                              child: Image.asset('assets/images/simple-icons_tether.png', color:appController.isDark.value==true? Color(0xffA2BBFF):headingColor.value,)
+                                          ),
+                                        ),
+                                        SizedBox(width: 12,),
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "${getTranslated(context,"Claim rewards" )??"Claim rewards"}",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: headingColor.value,
+                                                  fontFamily: "dmsans",
+
+                                                ),
+
+                                              ),
+
+
+
+                                            ],
+                                          ),
+                                        ),
+
+                                        SizedBox(width: 12,),
+                                        Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 8,),
+
+                                  Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
+                                  SizedBox(height: 8,),
                                   InkWell(
                                     onTap: (){
                                       Get.to(ReferralScreen());

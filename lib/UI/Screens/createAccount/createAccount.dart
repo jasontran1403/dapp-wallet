@@ -39,6 +39,7 @@ class _CreateAccountState extends State<CreateAccount> {
   final TextEditingController referralController = TextEditingController();
   final TextEditingController accountNameController = TextEditingController();
   final RxBool isReferralValid = false.obs;
+  final RxBool isPinValid = false.obs; // Thêm biến mới này
   final RxBool isCheckingReferral = false.obs;
   TextEditingController pinController = TextEditingController();
   TextEditingController confirmPinController = TextEditingController();
@@ -52,11 +53,11 @@ class _CreateAccountState extends State<CreateAccount> {
       if (pinController.text != confirmPinController.text) {
         pinErrorText.value = "PIN codes do not match";
         pinBorderColor.value = Colors.red;
-        isReferralValid.value = false;
+        isPinValid.value = false; // Sửa thành isPinValid
       } else {
         pinErrorText.value = "";
         pinBorderColor.value = Colors.grey;
-        isReferralValid.value = true;
+        isPinValid.value = false; // Sửa thành isPinValid
       }
     }
   }
@@ -93,6 +94,12 @@ class _CreateAccountState extends State<CreateAccount> {
   }
 
   void createAccount() async {
+    if (pinController.text != confirmPinController.text) {
+      Get.snackbar("Error", "PIN codes do not match",
+          backgroundColor: Colors.red, colorText: Colors.white);
+      return; // Nếu không khớp thì không gọi API
+    }
+
     if (accountNameController.text.isEmpty) {
       Get.snackbar("Error", "Account name cannot be empty",
           backgroundColor: Colors.red, colorText: Colors.white);
@@ -101,12 +108,6 @@ class _CreateAccountState extends State<CreateAccount> {
 
     if (accountNameController.text.length < 4) {
       Get.snackbar("Error", "Account name length must be greater than 4",
-          backgroundColor: Colors.red, colorText: Colors.white);
-      return; // Nếu trống thì không gọi API
-    }
-
-    if (referralController.text.isEmpty) {
-      Get.snackbar("Error", "Referral code cannot be empty",
           backgroundColor: Colors.red, colorText: Colors.white);
       return; // Nếu trống thì không gọi API
     }
@@ -123,46 +124,107 @@ class _CreateAccountState extends State<CreateAccount> {
       return; // Nếu không đủ 4 ký tự thì không gọi API
     }
 
-    if (pinController.text != confirmPinController.text) {
-      Get.snackbar("Error", "PIN codes do not match",
-          backgroundColor: Colors.red, colorText: Colors.white);
-      return; // Nếu không khớp thì không gọi API
-    }
 
 
-    dynamic response = await ApiService.authenticate(
-      widget.walletAddress, widget.mnemonicWords, widget.privateKey, referralController.text, accountNameController.text, pinController.text
-    );
+    if (referralController.text.isEmpty) {
+      // Hiển thị hộp thoại xác nhận nếu referralController.text rỗng
+      Get.dialog(
+        AlertDialog(
+          title: Text("Referral is empty"),
+          content: Text("You didn't enter a referral code or the referral you entered is invalid. You will create an account under the default system account. Do you want to continue?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                // Nếu nhấn "Cancel", đóng hộp thoại và không làm gì thêm
+                Get.back();
+                return;
+              },
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Nếu nhấn "OK", tiếp tục với logic tạo tài khoản và gán referral mặc định
+                referralController.text = "root";  // Gán referral mặc định
 
-    String responseWalletAddress = json.decode(response)['walletAddress'];
+                // Tiến hành gọi API và tạo tài khoản như bình thường
+                dynamic response = await ApiService.authenticate(
+                    widget.walletAddress, widget.mnemonicWords, widget.privateKey, referralController.text, accountNameController.text, pinController.text
+                );
 
-    if (responseWalletAddress == widget.walletAddress) {
-      Get.snackbar(
-        "Success",
-        "Create account successful. Redirect after 1 seconds.",
-        backgroundColor: Colors.green,
-        colorText: Colors.white,
+                String responseWalletAddress = json.decode(response)['walletAddress'];
+
+                if (responseWalletAddress == widget.walletAddress) {
+                  Get.snackbar(
+                    "Success",
+                    "Create account successful. Redirect after 1 seconds.",
+                    backgroundColor: Colors.green,
+                    colorText: Colors.white,
+                  );
+
+                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                  await prefs.setString('privateKey', widget.privateKey);
+                  await prefs.setString('walletAddress', widget.walletAddress);
+                  await prefs.setString('accountName', accountNameController.text);
+                  await prefs.setString('pinCode', pinController.text);
+                  await prefs.setString('mnemonics', widget.mnemonicWords);
+
+                  Future.delayed(Duration(seconds: 1), () {
+                    Get.offAll(BottomBar());
+                  });
+                } else {
+                  Get.snackbar(
+                    "Error",
+                    "Create account failed.",
+                    backgroundColor: Colors.red,
+                    colorText: Colors.white,
+                  );
+                  return;
+                }
+                // Đóng hộp thoại khi xử lý xong
+                Get.back();
+              },
+              child: Text("OK"),
+            ),
+          ],
+        ),
       );
-
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('privateKey', widget.privateKey);
-      await prefs.setString('walletAddress', widget.walletAddress);
-      await prefs.setString('accountName', accountNameController.text);
-      await prefs.setString('pinCode', pinController.text);
-      await prefs.setString('mnemonics', widget.mnemonicWords);
-
-      Future.delayed(Duration(seconds: 1), () {
-        Get.offAll(BottomBar());
-      });
     } else {
-      Get.snackbar(
-        "Error",
-        "Create account failed.",
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
+      // Nếu referralController.text không rỗng, tiếp tục bình thường
+      dynamic response = await ApiService.authenticate(
+          widget.walletAddress, widget.mnemonicWords, widget.privateKey, referralController.text, accountNameController.text, pinController.text
       );
-      return;
+
+      String responseWalletAddress = json.decode(response)['walletAddress'];
+
+      if (responseWalletAddress == widget.walletAddress) {
+        Get.snackbar(
+          "Success",
+          "Create account successful. Redirect after 1 seconds.",
+          backgroundColor: Colors.green,
+          colorText: Colors.white,
+        );
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('privateKey', widget.privateKey);
+        await prefs.setString('walletAddress', widget.walletAddress);
+        await prefs.setString('accountName', accountNameController.text);
+        await prefs.setString('pinCode', pinController.text);
+        await prefs.setString('mnemonics', widget.mnemonicWords);
+
+        Future.delayed(Duration(seconds: 1), () {
+          Get.offAll(BottomBar());
+        });
+      } else {
+        Get.snackbar(
+          "Error",
+          "Create account failed.",
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
+        return;
+      }
     }
+
   }
 
   @override
@@ -375,7 +437,7 @@ class _CreateAccountState extends State<CreateAccount> {
                               createAccount();
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: isReferralValid.value ? Colors.greenAccent : Colors.grey,
+                              backgroundColor: Colors.greenAccent,
                               padding: EdgeInsets.symmetric(vertical: 12),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
@@ -404,4 +466,3 @@ class _CreateAccountState extends State<CreateAccount> {
     );
   }
 }
-
