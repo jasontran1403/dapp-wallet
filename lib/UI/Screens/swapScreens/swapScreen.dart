@@ -119,7 +119,8 @@ class _SwapScreenState extends State<SwapScreen> {
     return Scaffold(
       backgroundColor: primaryBackgroundColor.value,
       body: SafeArea(
-        child: Padding(
+        child:
+        Padding(
           padding: EdgeInsets.symmetric(horizontal: 22,vertical: 20),
           child: Column(
             children: [
@@ -145,12 +146,12 @@ class _SwapScreenState extends State<SwapScreen> {
               child: ListView(children: [
 
 
-              
-              
-              
-              
-              
-              
+
+
+
+
+
+
                 Stack(
                   children: [
                     Container(
@@ -246,9 +247,9 @@ class _SwapScreenState extends State<SwapScreen> {
                                         fontWeight: FontWeight.w700,
                                         color: headingColor.value,
                                         fontFamily: "dmsans",
-              
+
                                       ),
-              
+
                                     ),
                                     Container(
                                       height: 24,
@@ -266,17 +267,17 @@ class _SwapScreenState extends State<SwapScreen> {
                                             fontWeight: FontWeight.w600,
                                             color: Color(0xffFFFFFF),
                                             fontFamily: "dmsans",
-              
+
                                           ),
-              
+
                                         ),
                                       ),
                                     )
-              
+
                                   ],
                                 ),
-              
-              
+
+
                               ],
                             ),
                           ),
@@ -364,9 +365,9 @@ class _SwapScreenState extends State<SwapScreen> {
                                         fontWeight: FontWeight.w700,
                                         color: headingColor.value,
                                         fontFamily: "dmsans",
-              
+
                                       ),
-              
+
                                     ),
                                     Text(
                                       "\$0.00",
@@ -376,15 +377,15 @@ class _SwapScreenState extends State<SwapScreen> {
                                         fontWeight: FontWeight.w400,
                                         color: lightTextColor.value,
                                         fontFamily: "dmsans",
-              
+
                                       ),
-              
+
                                     )
-              
+
                                   ],
                                 ),
-              
-              
+
+
                               ],
                             ),
                           ),
@@ -402,11 +403,11 @@ class _SwapScreenState extends State<SwapScreen> {
                                 colors: [
                                   Color(0xff55DDAF),
                                   Color(0xff76CF56),
-              
-              
+
+
                                 ]
                             )
-              
+
                         ),
                         child: SvgPicture.asset("assets/svgs/convert.svg"),
                       ),
@@ -414,8 +415,8 @@ class _SwapScreenState extends State<SwapScreen> {
                   ],
                 ),
                 SizedBox(height: 32,),
-              
-              
+
+
                 Container(
                   // height: 148,
                   width: Get.width,
@@ -432,8 +433,8 @@ class _SwapScreenState extends State<SwapScreen> {
                         children: [
                           Row(
                             children: [
-              
-              
+
+
                               Text(
                                 "${getTranslated(context,"Swap Details" )??"Swap Details"}",
                                 textAlign: TextAlign.center,
@@ -442,20 +443,20 @@ class _SwapScreenState extends State<SwapScreen> {
                                   fontWeight: FontWeight.w600,
                                   color: headingColor.value,
                                   fontFamily: "dmsans",
-              
+
                                 ),
-              
+
                               )
                             ],
                           ),
-              
+
                           Icon(Icons.keyboard_arrow_up_outlined,color: headingColor.value,size: 25,)
                         ],
                       ),
                       SizedBox(height: 15,),
                       Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
                       SizedBox(height: 15,),
-              
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -469,9 +470,9 @@ class _SwapScreenState extends State<SwapScreen> {
                                   fontWeight: FontWeight.w600,
                                   color: headingColor.value,
                                   fontFamily: "dmsans",
-              
+
                                 ),
-              
+
                               ),
                               SvgPicture.asset("assets/svgs/Question.svg")
                             ],
@@ -484,15 +485,15 @@ class _SwapScreenState extends State<SwapScreen> {
                               fontWeight: FontWeight.w600,
                               color: headingColor.value,
                               fontFamily: "dmsans",
-              
+
                             ),
-              
+
                           )
-              
+
                         ],
                       ),
                       SizedBox(height: 15,),
-              
+
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -504,9 +505,9 @@ class _SwapScreenState extends State<SwapScreen> {
                               fontWeight: FontWeight.w600,
                               color: headingColor.value,
                               fontFamily: "dmsans",
-              
+
                             ),
-              
+
                           ),
                           Row(
                             children: [
@@ -518,19 +519,19 @@ class _SwapScreenState extends State<SwapScreen> {
                                   fontWeight: FontWeight.w600,
                                   color: headingColor.value,
                                   fontFamily: "dmsans",
-              
+
                                 ),
-              
+
                               ),
                               SizedBox(width:7,),
                               SvgPicture.asset("assets/svgs/mingcute_settings-6-line.svg")
                             ],
                           )
-              
+
                         ],
                       ),
-              
-              
+
+
                     ],
                   ),
                 ),
