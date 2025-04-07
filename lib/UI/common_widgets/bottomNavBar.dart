@@ -193,8 +193,8 @@ class _BottomBarState extends State<BottomBar> {
                                   // appController.isDark == true
                                   //     ?
                                   appController.selectedBOttomTabIndex.value == 2
-                                      ? SvgPicture.asset("assets/svgs/Activity.svg",color: appController.isDark.value==true?greenCardColor.value:primaryColor.value,)
-                                      : SvgPicture.asset("assets/svgs/unselectedHistory.svg",color:appController.isDark.value==true?Color(0xff6C7CA7): headingColor.value,),
+                                      ? appController.isDark.value==true?SvgPicture.asset("assets/svgs/Activity.svg",): SvgPicture.asset("assets/svgs/Group 62915.svg",)
+                                      : SvgPicture.asset("assets/svgs/unselectedHistory.svg",color:appController.isDark.value==true?Color(0xff6C7CA7):Color(0xff1A2B56),),
                                   SizedBox(height: 5,),
                                   appController.selectedBOttomTabIndex.value == 2
                                       ? Container(
@@ -236,8 +236,8 @@ class _BottomBarState extends State<BottomBar> {
                                   // appController.isDark == true
                                   //     ?
                                   appController.selectedBOttomTabIndex.value == 3
-                                      ?appController.isDark.value==true?SvgPicture.asset("assets/svgs/swapSelected.svg",): SvgPicture.asset("assets/svgs/Group 62915.svg",)
-                                      : SvgPicture.asset("assets/svgs/swapSelected.svg",color:appController.isDark.value==true?Color(0xff6C7CA7):Color(0xff1A2B56),),
+                                      ? appController.isDark.value==true?SvgPicture.asset("assets/svgs/swapSelected.svg",): SvgPicture.asset("assets/svgs/swapSelected.svg",)
+                                      : SvgPicture.asset("assets/svgs/swap.svg",color:appController.isDark.value==true?Color(0xff6C7CA7):Color(0xff1A2B56),),
                                   SizedBox(height: 5,),
                                   appController.selectedBOttomTabIndex.value == 3
                                       ? Container(

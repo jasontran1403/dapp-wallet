@@ -58,13 +58,13 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-
   Future<void> _loadWalletData() async {
     try {
       final walletProvider = Provider.of<WalletProvider>(context, listen: false);
       await walletProvider.loadPrivateKey();
 
       String? savedWalletAddress = await walletProvider.getWalletAddress();
+
       if (savedWalletAddress == null) {
         throw Exception("Can't get the wallet address");
       }

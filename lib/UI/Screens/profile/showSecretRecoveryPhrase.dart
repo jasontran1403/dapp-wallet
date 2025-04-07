@@ -130,8 +130,8 @@ class _ShowSecretRecoveryPhraseState extends State<ShowSecretRecoveryPhrase> {
                     ),
                     itemBuilder: (BuildContext context, int index) {
                       return Container(
-                        height: 64,
-                        width: 100,
+                        height: 56,
+                        width: 80,
                         decoration: BoxDecoration(
                           color: inputFieldBackgroundColor2.value,
                           border: Border.all(width: 1, color: inputFieldBackgroundColor.value),
@@ -145,7 +145,7 @@ class _ShowSecretRecoveryPhraseState extends State<ShowSecretRecoveryPhrase> {
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: headingColor.value,
-                                fontSize: 14,
+                                fontSize: 12,
                                 fontFamily: 'dmsans',
                                 fontWeight: FontWeight.w400,
                               ),
