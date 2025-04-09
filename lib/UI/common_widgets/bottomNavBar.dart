@@ -2,6 +2,7 @@
 
 import 'package:crypto_wallet/Constants/colors.dart';
 import 'package:crypto_wallet/UI/Screens/TransactionHistoryScreen/TransactionScreen.dart';
+import 'package:crypto_wallet/UI/Screens/TransactionHistoryScreen/rewardHistory.dart';
 import 'package:crypto_wallet/UI/Screens/homeScreen/homeScreen.dart';
 import 'package:crypto_wallet/UI/Screens/market/market.dart';
 import 'package:crypto_wallet/UI/Screens/nfts/nftsScreen.dart';
@@ -29,7 +30,7 @@ class _BottomBarState extends State<BottomBar> {
     HomeScreen(),
     StakingScreen(),
     MarketScreen(),
-    TransactionScreen(symbol: 'bnb'),
+    RewardHistoryScreen(),
     Profile(
       // fromPage: 'bottomNav',
     ),

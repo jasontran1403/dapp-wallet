@@ -10,37 +10,24 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../providers/wallet_provider.dart';
+import '../../../services/apiService.dart';
 import '../../../utils/get_balances.dart';
-class TransactionScreen extends StatefulWidget {
-  final String symbol;  // Thêm biến này để nhận symbol từ màn hình trước
-
-  const TransactionScreen({super.key, required this.symbol});  // Sử dụng required để đảm bảo symbol được truyền vào
+class RewardHistoryScreen extends StatefulWidget {
+  const RewardHistoryScreen({super.key});  // Sử dụng required để đảm bảo symbol được truyền vào
 
   @override
-  State<TransactionScreen> createState() => _TransactionScreenState();
+  State<RewardHistoryScreen> createState() => _RewardHistoryScreenState();
 }
 
-class _TransactionScreenState extends State<TransactionScreen> {
+class _RewardHistoryScreenState extends State<RewardHistoryScreen> {
   List transaction=[];
   bool isLoading = true; // Thêm state loading
   String? walletAddress;
-  late String symbolConverted;  // Định nghĩa biến mới
 
   @override
   void initState() {
     super.initState();
-    symbolConverted = widget.symbol.toUpperCase();  // Chuyển symbol thành chữ hoa
     _loadWalletData();
-  }
-
-
-  double parseNanoBalance(String nanoBalance) {
-    try {
-      double balance = double.tryParse(nanoBalance) ?? 0.0;
-      return balance / 1000000000000000000;  // Chia cho 10^18 để chuyển đổi từ wei sang BNB
-    } catch (e) {
-      return 0.0;
-    }
   }
 
   String formatTotalBalance(String balance) {
@@ -77,13 +64,12 @@ class _TransactionScreenState extends State<TransactionScreen> {
       }
 
       // Sử dụng symbolConverted thay vì symbol
-      String responseTransactionHistory = await fetchTransactionHistory(savedWalletAddress, symbolConverted);
-      dynamic dataTransactions = json.decode(responseTransactionHistory);
-      List tempTransactions = dataTransactions['result'] ?? null;
+      dynamic dataTransactions = await ApiService.getRewardHistory(savedWalletAddress);
+      print(dataTransactions);
 
       // Cập nhật danh sách coins với dữ liệu thực
       setState(() {
-        transaction = tempTransactions;
+        transaction = dataTransactions;
         isLoading = false; // Kết thúc loading
         walletAddress = savedWalletAddress;
       });
@@ -206,7 +192,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                           style: TextStyle(
                                             fontSize: 15,
                                             fontWeight: FontWeight.w600,
-                                            color: darkBlueColor.value,
+                                            color: Colors.greenAccent,
                                             fontFamily: "dmsans",
                                           ),
                                         ),
@@ -242,7 +228,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                               Row(
                                                 children: [
                                                   Text(
-                                                    "From: ",
+                                                    "",
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontSize: 12,
@@ -252,7 +238,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    _shortenAddress(transaction[index]['from']),
+                                                    // _shortenAddress("transaction[index]['from']"),
+                                                    "",
                                                     textAlign: TextAlign.center,
                                                     style: TextStyle(
                                                       fontSize: 12,
@@ -268,37 +255,17 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                               height: 20,
                                               padding: EdgeInsets.symmetric(horizontal: 12),
                                               decoration: BoxDecoration(
-                                                color: symbolConverted == "BNB"
-                                                    ? (transaction[index]['txreceipt_status'].toString() == "1"
-                                                    ? Color(0xff0FC085) // Completed (Green)
-                                                    : (transaction[index]['txreceipt_status'].toString() == "0"
-                                                    ? Color(0xFFFFD700) // Pending (Yellow)
-                                                    : Color(0xffFF1100) // Rejected (Red)
-                                                )
-                                                ): (
-                                                    (transaction[index]['confirmations'] is int
-                                                        ? transaction[index]['confirmations']
-                                                        : int.tryParse(transaction[index]['confirmations'].toString()) ?? 0) > 30
-                                                        ? Color(0xff0FC085) // Completed (Green)
-                                                        : Color(0xFFFFD700) // Pending (Yellow)
-                                                ),
+                                                color: transaction[index]['status'].toString() == "1"
+                                                  ? Color(0xff0FC085) // Completed (Green)
+                                                      : (transaction[index]['status'].toString() == "0"
+                                                  ? Color(0xFFFFD700) // Pending (Yellow)
+                                                      : Colors.redAccent),
                                                 borderRadius: BorderRadius.circular(5),
                                               ),
                                               child: Center(
-                                                child: Text(
-                                                  symbolConverted == "BNB"
-                                                      ? (transaction[index]['txreceipt_status'].toString() == "1"
-                                                      ? "Completed"
-                                                      : (transaction[index]['txreceipt_status'].toString() == "0"
-                                                      ? "Pending"
-                                                      : "Rejected"))
-                                                      : (
-                                                      (transaction[index]['confirmations'] is int
-                                                          ? transaction[index]['confirmations']
-                                                          : int.tryParse(transaction[index]['confirmations'].toString()) ?? 0) > 30
-                                                          ? "Completed"
-                                                          : "Pending (${transaction[index]['confirmations']}/30)"
-                                                  ),
+                                                child:
+                                                Text(
+                                                  transaction[index]['status'].toString() == "1" ? "Completed" : (transaction[index]['status'].toString() == "0" ? "Pending" : "Rejected"),
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                     fontSize: 8,
@@ -307,7 +274,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                                     fontFamily: "dmsans",
                                                   ),
                                                 ),
-
                                               ),
                                             )
                                           ],
@@ -351,7 +317,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                             Row(
                                               children: [
                                                 Text(
-                                                  formatTotalBalance(parseNanoBalance(transaction[index]['value']).toString()),
+                                                  formatTotalBalance(transaction[index]['value']).toString(),
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
                                                     fontSize: 14,
@@ -361,14 +327,10 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  symbolConverted == "BNB"
-                                                      ? "  $symbolConverted"
-                                                      : "  ${transaction[index]['tokenName']}", // Nếu là USDT thì lấy tokenName từ transaction[index]
+                                                  "  ${transaction[index]['tokenName']}",
                                                   textAlign: TextAlign.center,
                                                   style: TextStyle(
-                                                    fontSize: symbolConverted == "BNB"
-                                                        ? 12
-                                                        : 10,
+                                                    fontSize: 10,
                                                     fontWeight: FontWeight.w700,
                                                     color: lightTextColor.value,
                                                     fontFamily: "dmsans",
@@ -377,7 +339,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                               ],
                                             ),
                                             Text(
-                                              formatTimestamp(transaction[index]['timeStamp']),
+                                              transaction[index]['timeStamp'],
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 fontSize: 12,

@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:crypto_wallet/UI/Screens/TransactionHistoryScreen/TransactionScreen.dart';
 import 'package:crypto_wallet/UI/Screens/homeScreen/homeScreen.dart';
+import 'package:crypto_wallet/UI/common_widgets/bottomNavBar.dart';
 import 'package:crypto_wallet/UI/common_widgets/bottomRectangularbtn.dart';
 import 'package:crypto_wallet/UI/common_widgets/inputField.dart';
 import 'package:crypto_wallet/constants/colors.dart';
@@ -402,7 +403,7 @@ void _showSuccessDialog(BuildContext context, String transactionHash) {
             onPressed: () {
               // Navigate to HomeScreen after closing the dialog
               Navigator.of(context).pop(); // Close the dialog
-              Get.to(HomeScreen());
+              Get.offAll(BottomBar());
             },
             child: Text("OK"),
           ),

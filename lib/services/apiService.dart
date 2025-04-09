@@ -117,6 +117,106 @@ class ApiService {
 
   }
 
+  static Future<String> staking(String walletAddress, String symbol, double amount, double price, int duration) async {
+    var headers = {'Content-Type': 'application/json'};
+
+    var request = http.Request('POST', Uri.parse('${base_url}/auth/staking'));
+
+    request.body = json.encode({
+      "walletAddress": walletAddress,
+      "symbol": symbol,
+      "amount": amount,
+      "price": price,
+      "duration": duration
+    });
+
+    request.headers.addAll(headers);
+
+    try {
+      http.StreamedResponse response = await request.send();
+      String responseBody = await response.stream.bytesToString();
+
+      return responseBody; // vì API trả về là 1 chuỗi string
+    } catch (e) {
+      return "Server busy, please try again later";
+    }
+
+  }
+
+  static Future<dynamic> getInternalBalance(String walletAddress) async {
+    var request = http.Request('GET', Uri.parse('${base_url}/auth/get-internals-balance/${walletAddress}'));
+
+    try {
+      // Gửi yêu cầu HTTP
+      http.StreamedResponse response = await request.send();
+
+      // Kiểm tra mã trạng thái của phản hồi
+      if (response.statusCode == 200) {
+        // Đọc body của phản hồi và giải mã từ JSON
+        String responseBody = await response.stream.bytesToString();
+        final data = json.decode(responseBody);
+
+        // Trả về giá trị 'isValid' từ API
+        return data;  // Nếu không có 'isValid', trả về false
+      } else {
+        // Nếu mã trạng thái không phải 200, in lỗi và trả về false
+        print('Error: ${response.reasonPhrase}');
+        return null;
+      }
+    } catch (e) {
+      // Nếu có lỗi xảy ra trong quá trình gửi yêu cầu, in lỗi và trả về false
+      print('Exception: $e');
+      return null;
+    }
+  }
+
+  static Future<String> withdrawInternal(String walletAddress, String symbol) async {
+    var headers = {'Content-Type': 'application/json'};
+
+    var request = http.Request('POST', Uri.parse('${base_url}/auth/withdraw-rewards'));
+    request.body = json.encode({
+      "walletAddress": walletAddress,
+      "symbol": symbol,
+    });
+    request.headers.addAll(headers);
+
+    try {
+      http.StreamedResponse response = await request.send();
+      String responseBody = await response.stream.bytesToString();
+
+      return responseBody; // vì API trả về là 1 chuỗi string
+    } catch (e) {
+      return "Server busy, please try again later.";
+    }
+  }
+
+  static Future<dynamic> getRewardHistory(String walletAddress) async {
+    var request = http.Request('GET', Uri.parse('${base_url}/auth/get-account-rewards/${walletAddress}'));
+
+    try {
+      // Gửi yêu cầu HTTP
+      http.StreamedResponse response = await request.send();
+
+      // Kiểm tra mã trạng thái của phản hồi
+      if (response.statusCode == 200) {
+        // Đọc body của phản hồi và giải mã từ JSON
+        String responseBody = await response.stream.bytesToString();
+        final data = json.decode(responseBody);
+
+        // Trả về giá trị 'isValid' từ API
+        return data;  // Nếu không có 'isValid', trả về false
+      } else {
+        // Nếu mã trạng thái không phải 200, in lỗi và trả về false
+        print('Error: ${response.reasonPhrase}');
+        return null;
+      }
+    } catch (e) {
+      // Nếu có lỗi xảy ra trong quá trình gửi yêu cầu, in lỗi và trả về false
+      print('Exception: $e');
+      return null;
+    }
+  }
+
   static Future<dynamic> getAccountRewardInfo(String walletAddress) async {
     var request = http.Request('GET', Uri.parse('${base_url}/auth/get-account-info/${walletAddress}'));
 
