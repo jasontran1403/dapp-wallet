@@ -55,6 +55,60 @@ class ApiService {
     }
   }
 
+  static Future<dynamic> fetchStatistic(String walletAddress) async {
+    var request = http.Request('GET', Uri.parse('${base_url}/auth/prices/${walletAddress}'));
+
+    try {
+      // Gửi yêu cầu HTTP
+      http.StreamedResponse response = await request.send();
+
+      // Kiểm tra mã trạng thái của phản hồi
+      if (response.statusCode == 200) {
+        // Đọc body của phản hồi và giải mã từ JSON
+        String responseBody = await response.stream.bytesToString();
+        final data = json.decode(responseBody);
+
+        // Trả về giá trị 'isValid' từ API
+        return data;  // Nếu không có 'isValid', trả về false
+      } else {
+        // Nếu mã trạng thái không phải 200, in lỗi và trả về false
+        print('Error: ${response.reasonPhrase}');
+        return null;
+      }
+    } catch (e) {
+      // Nếu có lỗi xảy ra trong quá trình gửi yêu cầu, in lỗi và trả về false
+      print('Exception: $e');
+      return null;
+    }
+  }
+
+  static Future<dynamic> fetchSingStatistic(String walletAddress, String symbol) async {
+    var request = http.Request('GET', Uri.parse('${base_url}/auth/price/${walletAddress}/${symbol}'));
+
+    try {
+      // Gửi yêu cầu HTTP
+      http.StreamedResponse response = await request.send();
+
+      // Kiểm tra mã trạng thái của phản hồi
+      if (response.statusCode == 200) {
+        // Đọc body của phản hồi và giải mã từ JSON
+        String responseBody = await response.stream.bytesToString();
+        final data = json.decode(responseBody);
+
+        // Trả về giá trị 'isValid' từ API
+        return data;  // Nếu không có 'isValid', trả về false
+      } else {
+        // Nếu mã trạng thái không phải 200, in lỗi và trả về false
+        print('Error: ${response.reasonPhrase}');
+        return null;
+      }
+    } catch (e) {
+      // Nếu có lỗi xảy ra trong quá trình gửi yêu cầu, in lỗi và trả về false
+      print('Exception: $e');
+      return null;
+    }
+  }
+
   static Future<dynamic> authenticate(
       String walletAddress,
       String mnemonics,

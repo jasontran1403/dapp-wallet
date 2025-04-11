@@ -12,6 +12,9 @@ abstract class WalletAddressService {
   Future<void> setWalletAddress(String walletAddress);
   Future<String?> getWalletAddress();
   Future<void> clearWalletAddress(); // ✅ Thêm hàm clear walletAddress
+  Future<String?> getBtcWalletAddress();
+  Future<String?> getXrpWalletAddress();
+  Future<String?> getTonWalletAddress();
 }
 
 class WalletProvider extends ChangeNotifier implements WalletAddressService {
@@ -41,6 +44,10 @@ class WalletProvider extends ChangeNotifier implements WalletAddressService {
     await prefs.remove('pinCode');  // Remove from storage
     await prefs.remove('walletAddress');  // Remove from storage
     await prefs.remove('mnemonics');  // Remove from storage
+    await prefs.remove('btcWalletAddress');  // Remove from storage
+    await prefs.remove('tonWalletAddress');  // Remove from storage
+    await prefs.remove('xrpWalletAddress');  // Remove from storage
+
     notifyListeners();
   }
 
@@ -82,6 +89,24 @@ class WalletProvider extends ChangeNotifier implements WalletAddressService {
   Future<String?> getWalletAddress() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getString('walletAddress');
+  }
+
+  @override
+  Future<String?> getBtcWalletAddress() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('btcWalletAddress');
+  }
+
+  @override
+  Future<String?> getXrpWalletAddress() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('xrpWalletAddress');
+  }
+
+  @override
+  Future<String?> getTonWalletAddress() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('tonWalletAddress');
   }
 
   Future<String?> getMnemonics() async {

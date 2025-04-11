@@ -124,8 +124,6 @@ class _CreateAccountState extends State<CreateAccount> {
       return; // Nếu không đủ 4 ký tự thì không gọi API
     }
 
-
-
     if (referralController.text.isEmpty) {
       // Hiển thị hộp thoại xác nhận nếu referralController.text rỗng
       Get.dialog(

@@ -31,18 +31,6 @@ class _OnBoardingScreen1State extends State<OnBoardingScreen1> {
       "darkImage":"assets/images/Trust.png",
       "lightImage":"assets/images/Trust.png"
     },
-    // {
-    //   "title":"Deposit & Withdraw \nCrypto",
-    //   "subTitle":"Easily deposit and withdraw your cryptocurrency assets with our secure platform, ensuring seamless transactions for your peace of mind.",
-    //   "darkImage":"assets/images/Send money abroad (1).png",
-    //   "lightImage":"assets/svgs/Send money abroad.png"
-    // },
-    // {
-    //   "title":"Buy Crypto \nEffortlessly",
-    //   "subTitle":"Streamline your crypto purchases effortlessly on our platform, providing you with a hassle-free experience and peace of mind.",
-    //   "darkImage":"assets/images/Receive Money (1).png",
-    //   "lightImage":"assets/images/Receive Money.png"
-    // },
   ];
   @override
   void dispose() {

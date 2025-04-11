@@ -29,7 +29,7 @@ class _StakingScreenState extends State<StakingScreen> {
   TextEditingController cycleController = TextEditingController(text: "30 days");
   int indexSelected = 0;
   bool isLoading = false;
-  List<bool> tokenLoadingStates = [false, false, false]; // Track loading state for each token
+  List<bool> tokenLoadingStates = List.filled(7, false); // Match coinsUI length
   TextEditingController interestController = TextEditingController();
   TextEditingController amountContoller = TextEditingController();
   String? walletAddress;
@@ -63,35 +63,49 @@ class _StakingScreenState extends State<StakingScreen> {
     "price": "0.15",
     "chain": "",
     "name": "Ecofusion Token"
-    }
+    },
+    {
+      "image": "assets/images/btc.png",
+      "symbol": "BTC",
+      "amount": 0,
+      "price": "0.15",
+      "chain": "",
+      "name": "Bitcoin"
+    },
+    {
+      "image": "assets/images/eth.png",
+      "symbol": "ETH",
+      "amount": 0,
+      "price": "0.15",
+      "chain": "",
+      "name": "Ethereum"
+    },
+    {
+      "image": "assets/images/xrp.png",
+      "symbol": "XRP",
+      "amount": 0,
+      "price": "0.15",
+      "chain": "",
+      "name": "Ripple"
+    },
+    {
+      "image": "assets/images/ton.png",
+      "symbol": "TON",
+      "amount": 0,
+      "price": "0.15",
+      "chain": "",
+      "name": "TON Coin"
+    },
   ];
+  double? limitStaking;
 
   Future<void> _loadInternalBalance(String walletInput) async {
     try {
       dynamic dataTemp  = await ApiService.getInternalBalance(walletInput);
-      dynamic data = dataTemp['result'] ?? [];
+      List data = dataTemp['result'] ?? null;
 
       setState(() {
-        internalBalances = [
-          {
-            "image": "assets/images/${data[0]['symbol']}.png",
-            "symbol": "${data[0]['symbol'].toString().toUpperCase()}",
-            "amount": data[0]['balance'].toString(),
-            "name": "${data[0]['name']}"
-          },
-          {
-            "image": "assets/images/${data[1]['symbol']}.png",
-            "symbol": "${data[1]['symbol'].toString().toUpperCase()}",
-            "amount": data[1]['balance'].toString(),
-            "name": "${data[1]['name']}"
-          },
-          {
-            "image": "assets/images/${data[1]['symbol']}.png",
-            "symbol": "${data[2]['symbol'].toString().toUpperCase()}",
-            "amount": data[2]['balance'].toString(),
-            "name": "${data[2]['name']}"
-          },
-        ];
+        internalBalances = data;
       });
     } catch (e) {
       print(e);
@@ -237,45 +251,22 @@ class _StakingScreenState extends State<StakingScreen> {
   }
 
   Future<void> _loadTokenData(int tokenIndex, String walletAddress) async {
-    if (tokenIndex < 0 || tokenIndex > 2) return;
+    if (tokenIndex < 0 || tokenIndex >= coinsUI.length) return; // Update range check
 
     setState(() {
       tokenLoadingStates[tokenIndex] = true;
     });
 
+    String extractSymbol = coinsUI[tokenIndex]['symbol'] ?? '';
+
     try {
-      String symbol = ['bnb', 'usdt', 'eft'][tokenIndex];
-      String response = await getBalances(walletAddress, symbol);
-      dynamic data = json.decode(response);
-      String newBalance = data['result'] ?? '0';
-
-      EtherAmount latestBalance = EtherAmount.fromBigInt(EtherUnit.wei, BigInt.parse(newBalance));
-      String latestBalanceInEther = latestBalance.getValueInUnit(EtherUnit.ether).toString();
-
-      String price;
-      if (tokenIndex == 0) {
-        String responseBNBPrice = await fetchBNBPrice();
-        dynamic dataBNBPrice = json.decode(responseBNBPrice);
-        price = dataBNBPrice['price'] ?? '0';
-      } else if (tokenIndex == 1) {
-        price = "1.00";
-      } else {
-        price = "0.15";
-      }
+      dynamic response = await ApiService.fetchSingStatistic(walletAddress, extractSymbol);
 
       setState(() {
-        currentCoin = {
-          "image": "assets/images/${symbol.toLowerCase()}.png",
-          "symbol": symbol.toUpperCase(),
-          "amount": latestBalanceInEther,
-          "price": price,
-          "chain": "",
-          "name": tokenIndex == 0 ? "Binance Coin" :
-          tokenIndex == 1 ? "Tether USD" : "Ecofusion Token"
-        };
+        currentCoin = response;
+        limitStaking = response['stakingLeft'];
         tokenLoadingStates[tokenIndex] = false;
-        _updateInterestText(0, currentCoin['symbol']);
-
+        _updateInterestText(tokenIndex, currentCoin['symbol']);
       });
     } catch (e) {
       setState(() {
@@ -347,7 +338,7 @@ class _StakingScreenState extends State<StakingScreen> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Container(
-                                      height: 350,
+                                      height: 370,
                                       width: Get.width,
                                       padding: EdgeInsets.all(16),
                                       decoration: BoxDecoration(
@@ -570,6 +561,34 @@ class _StakingScreenState extends State<StakingScreen> {
                                               ),
                                             ],
                                           ),
+                                          SizedBox(width: 32),
+                                          if (currentCoin['symbol'] != "EFT")
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  "Limit staking left: ",
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Colors.redAccent,
+                                                    fontStyle: FontStyle.italic,
+                                                    fontFamily: "dmsans",
+                                                  ),
+                                                ),
+                                                SizedBox(width: 8),
+                                                Text(
+                                                  "\$ ${currentCoin['stakingLeft']}",
+                                                  style: TextStyle(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.w900,
+                                                    color: Colors.redAccent,
+                                                    fontStyle: FontStyle.italic,
+                                                    fontFamily: "dmsans",
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+
                                           SizedBox(width: 32),
                                           Column(
                                             children: [

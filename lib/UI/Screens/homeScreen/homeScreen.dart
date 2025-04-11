@@ -9,6 +9,7 @@ import 'package:crypto_wallet/UI/Screens/swapScreens/swapScreen.dart';
 import 'package:crypto_wallet/constants/colors.dart';
 import 'package:crypto_wallet/controllers/appController.dart';
 import 'package:crypto_wallet/localization/language_constants.dart';
+import 'package:crypto_wallet/services/apiService.dart';
 import 'package:crypto_wallet/utils/get_balances.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +21,6 @@ import 'package:web3dart/web3dart.dart';
 
 import '../../../providers/wallet_provider.dart';
 import '../../common_widgets/inputField.dart';
-import '../onBoardingScreens/onboardingScreen1.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -34,6 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
   String? bnbBalance;
   String? usdtBalance;
   String? bnbPrice;
+  String? btcWalletAddress;
+  String? xrpWalletAddress;
+  String? tonWalletAddress;
   String? accountName;
 
   var isVisible=false.obs;
@@ -97,66 +100,9 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       String? savedAccountName = await walletProvider.getAccountName();
-
-      String response = await getBalances(savedWalletAddress, 'bnb');
-      dynamic data = json.decode(response);
-      String newBalance = data['result'] ?? '0';
-
-      String responseUsdt = await getBalances(savedWalletAddress, 'usdt');
-      dynamic dataUsdt = json.decode(responseUsdt);
-      String newUsdtBalance = dataUsdt['result'] ?? '0';
-
-      String responseEft = await getBalances(savedWalletAddress, 'eft');
-      dynamic dataEft = json.decode(responseEft);
-      String newEftBalance = dataEft['result'] ?? '0';
-
-      // Transform balance from wei to ether
-      EtherAmount latestBalance =
-      EtherAmount.fromBigInt(EtherUnit.wei, BigInt.parse(newBalance));
-      String latestBalanceInEther =
-      latestBalance.getValueInUnit(EtherUnit.ether).toString();
-
-      EtherAmount latestBalanceUsdt =
-      EtherAmount.fromBigInt(EtherUnit.wei, BigInt.parse(newUsdtBalance));
-      String latestBalanceUsdtInEther =
-      latestBalanceUsdt.getValueInUnit(EtherUnit.ether).toString();
-
-      EtherAmount latestBalanceEft =
-      EtherAmount.fromBigInt(EtherUnit.wei, BigInt.parse(newEftBalance));
-      String latestBalanceEftInEther =
-      latestBalanceEft.getValueInUnit(EtherUnit.ether).toString();
-
-      String responseBNBPrice = await fetchBNBPrice();
-      dynamic dataBNBPrice = json.decode(responseBNBPrice);
-      String newBNBPrice = dataBNBPrice['price'] ?? '0';
-
+      dynamic response = await ApiService.fetchStatistic(savedWalletAddress);
       setState(() {
-        coins = [
-          {
-            "image": "assets/images/bnb.png",
-            "symbol": "BNB",
-            "amount": latestBalanceInEther,
-            "price": newBNBPrice,
-            "chain": "",
-            "des": "Binance Coin"
-          },
-          {
-            "image": "assets/images/usdt.png",
-            "symbol": "USDT",
-            "amount": latestBalanceUsdtInEther,
-            "price": "1.00",
-            "chain": "",
-            "des": "Tether USD"
-          },
-          {
-            "image": "assets/images/eft.png",
-            "symbol": "EFT",
-            "amount": latestBalanceEftInEther,
-            "price": "0.15",
-            "chain": "",
-            "des": "Ecofusion Token"
-          },
-        ];
+        coins = response;
         walletAddress = savedWalletAddress;
         isLoading = false;
         accountName = savedAccountName;
@@ -274,9 +220,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w900,
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontFamily: "dmsans",
-
+                                fontStyle: FontStyle.italic
                               ),
                             ),
                             SizedBox(width: 8,),
@@ -311,29 +257,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: appController.isDark.value ? Color(0xff1A2B56) : inputFieldBackgroundColor.value,
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: GestureDetector(
-                              onTap: () {
-                                // Lưu walletAddress vào clipboard khi nhấn vào container
-                                Clipboard.setData(ClipboardData(text: walletAddress ?? ""));
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Wallet Address copied to clipboard!')),
-                                );
-                              },
-                              child: SvgPicture.asset(
-                                "assets/svgs/u_copy-landscape.svg",
-                                color: appController.isDark.value ? Color(0xffA2BBFF) : headingColor.value,
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 8),
-                          Container(
-                            height: 32,
-                            width: 32,
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: appController.isDark.value ? Color(0xff1A2B56) : inputFieldBackgroundColor.value,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
                             child: SvgPicture.asset("assets/svgs/ion_qr-code.svg", color: appController.isDark.value ? Color(0xffA2BBFF) : headingColor.value),
                           ),
                           SizedBox(width: 8,), // Thêm khoảng cách trước icon logout
@@ -354,7 +277,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ],
                       )
-
                     ],
                   ),
                   SizedBox(height: 32,),
@@ -369,21 +291,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(
                           fontSize: 56,
                           fontWeight: FontWeight.w600,
-                          color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
+                          color: Colors.white,
                           fontFamily: "dmsans",
-
                         ),
-
                       ):
-
-
                       Text(
                         "\$ ${formatTotalBalance(getTotalBalance(coins).toString())}",
                         textAlign: TextAlign.start,
                         style: TextStyle(
                           fontSize: 50,
                           fontWeight: FontWeight.w600,
-                          color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
+                          color:Colors.white,
                           fontFamily: "dmsans",
 
                         ),
@@ -391,26 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   SizedBox(height: 24,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        _shortenAddress(walletAddress ?? ""),
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          fontStyle: FontStyle.italic,
-                          color: appController.isDark.value
-                              ? Color(0xffFDFCFD)
-                              : primaryColor.value,
-                          fontFamily: "dmsans",
-                        ),
-                      ),
-                    ],
-                  ),
 
-                  SizedBox(height: 24,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -437,7 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
-                                color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
+                                color: Colors.white,
                                 fontFamily: "dmsans",
                               ),
                             ),
@@ -473,7 +372,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
-                                color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
+                                color: Colors.white,
                                 fontFamily: "dmsans",
                               ),
                             ),
@@ -503,7 +402,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
-                                color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
+                                color: Colors.white,
                                 fontFamily: "dmsans",
                               ),
                             ),
@@ -539,7 +438,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
-                                color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
+                                color: Colors.white,
                                 fontFamily: "dmsans",
                               ),
                             ),
@@ -718,8 +617,6 @@ class _HomeScreenState extends State<HomeScreen> {
           InputFields(
             hintText: "",
             icon:Image.asset("assets/images/Search.png"),
-
-
           ),
           SizedBox(height: 24,),
           Expanded(
@@ -732,7 +629,7 @@ class _HomeScreenState extends State<HomeScreen> {
               itemBuilder: (BuildContext context, int index) {
                 return  GestureDetector(
                   onTap: (){
-                    Get.to(ReceiveScreen(symbol: coins[index]['symbol'], image: coins[index]['image'], walletAddress: walletAddress));
+                    Get.to(ReceiveScreen(symbol: coins[index]['symbol'], image: coins[index]['image'], walletAddress: coins[index]['walletAddress']));
                   },
                   child: Container(
                     height:72,

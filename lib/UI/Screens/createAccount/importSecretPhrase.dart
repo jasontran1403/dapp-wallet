@@ -217,6 +217,11 @@ class _ImportSecretPhraseState extends State<ImportSecretPhrase> {
         String responseWalletAddress = json.decode(response)['walletAddress'];
         String responseAccountName = json.decode(response)['displayName'];
         String responsePinCode = json.decode(response)['pinCode'];
+        String responseBtcWalletAddress = json.decode(response)['btcWalletAddress'];
+        String responseXrpWalletAddress = json.decode(response)['xrpWalletAddress'];
+        String responseTonWalletAddress = json.decode(response)['tonWalletAddress'];
+
+        print(responseBtcWalletAddress + " " + responseXrpWalletAddress + " " + responseTonWalletAddress);
 
         if (responseWalletAddress == walletAddress) {
           Get.snackbar(
@@ -232,6 +237,9 @@ class _ImportSecretPhraseState extends State<ImportSecretPhrase> {
           await prefs.setString('accountName', responseAccountName);
           await prefs.setString('pinCode', responsePinCode);
           await prefs.setString('mnemonics', mnemonicWords.join(" "));
+          await prefs.setString('btcWalletAddress', responseBtcWalletAddress);
+          await prefs.setString('xrpWalletAddress', responseXrpWalletAddress);
+          await prefs.setString('tonWalletAddress', responseTonWalletAddress);
 
           Future.delayed(Duration(seconds: 1), () {
             Get.offAll(BottomBar());

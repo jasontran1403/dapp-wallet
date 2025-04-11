@@ -23,6 +23,7 @@ class ConformationScreen extends StatefulWidget {
   final String amount;
   final String symbol;
   final String price;
+  final String memo;
 
   // Nhận walletAddress và amount từ SendScreen
   const ConformationScreen({
@@ -30,6 +31,7 @@ class ConformationScreen extends StatefulWidget {
     required this.amount,
     required this.symbol,
     required this.price,
+    required this.memo,
     super.key
   });
 
@@ -108,7 +110,7 @@ class _ConformationScreenState extends State<ConformationScreen> {
                       clipBehavior: Clip.none,
                       children: [
                         Container(
-                          height: 350,
+                          height: 420,
                           width: Get.width,
                           padding: EdgeInsets.symmetric(horizontal: 16),
                           decoration: BoxDecoration(
@@ -120,7 +122,7 @@ class _ConformationScreenState extends State<ConformationScreen> {
                               SizedBox(height: 57),
                               // Sử dụng walletAddress và amount nhận được
                               Text(
-                                "Recipient",  // Default value if null
+                                "Recipient wallet",  // Default value if null
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 24,
@@ -131,6 +133,28 @@ class _ConformationScreenState extends State<ConformationScreen> {
                               ),
                               Text(
                                 widget.walletAddress ?? 'No address provided',  // Default value if null
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: lightTextColor.value,
+                                  fontFamily: "dmsans",
+                                ),
+                              ),
+                              SizedBox(height: 57),
+                              // Sử dụng walletAddress và amount nhận được
+                              Text(
+                                "Network",  // Default value if null
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w700,
+                                  color: headingColor.value,
+                                  fontFamily: "dmsans",
+                                ),
+                              ),
+                              Text(
+                                widget.symbol ?? 'No network provided',  // Default value if null
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 16,
@@ -166,17 +190,28 @@ class _ConformationScreenState extends State<ConformationScreen> {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 10),
+                              SizedBox(height: 32),
                               Text(
-                                '\$ ${(double.tryParse(widget.amount) ?? 0.0) * (double.tryParse(widget.price) ?? 0.0)}',
+                                "Memo ",  // Default value if null
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  fontSize: 14,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w700,
+                                  color: headingColor.value,
+                                  fontFamily: "dmsans",
+                                ),
+                              ),
+                              Text(
+                                widget.memo ?? 'Not specified',  // Default value if null
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                   color: lightTextColor.value,
                                   fontFamily: "dmsans",
                                 ),
-                              )
+                              ),
+                              SizedBox(height: 12),
                             ],
                           ),
                         ),

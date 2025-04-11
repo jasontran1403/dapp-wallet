@@ -10,17 +10,17 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../codeScanner.dart';
+
 class SendScreen extends StatefulWidget {
   final String symbol;
   final String balance;
   final String price;
 
-  // Nhận walletAddress và amount từ SendScreen
   const SendScreen({
     required this.symbol,
     required this.balance,
     required this.price,
-    super.key
+    super.key,
   });
 
   @override
@@ -28,26 +28,19 @@ class SendScreen extends StatefulWidget {
 }
 
 class _SendScreenState extends State<SendScreen> {
-
-
-  TextEditingController nameAddreeC=TextEditingController();
-  TextEditingController amountC=TextEditingController();
-  var isOpen=true.obs;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
+  TextEditingController nameAddreeC = TextEditingController();
+  TextEditingController amountC = TextEditingController();
+  TextEditingController memoC = TextEditingController(); // Thêm controller memo
+  var isOpen = true.obs;
 
   @override
   Widget build(BuildContext context) {
     return Obx(
-      ()=> Scaffold(
+          () => Scaffold(
         backgroundColor: primaryBackgroundColor.value,
         body: SafeArea(
           child: ListView(
-            padding: EdgeInsets.symmetric(horizontal: 22,vertical: 20),
-
+            padding: EdgeInsets.symmetric(horizontal: 22, vertical: 20),
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -55,79 +48,71 @@ class _SendScreenState extends State<SendScreen> {
                   Row(
                     children: [
                       GestureDetector(
-
-                          onTap:(){
-                            Get.back();
-
-                          },
-                          child: Icon(
-
-                            Icons.arrow_back_ios,color: darkBlueColor.value,size: 16,)),
-                      SizedBox(width: 8,),
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: Icon(
+                          Icons.arrow_back_ios,
+                          color: darkBlueColor.value,
+                          size: 16,
+                        ),
+                      ),
+                      SizedBox(width: 8),
                       Text(
-                        "${getTranslated(context,"Send" )??"Send"}  ${widget.symbol}",
-                        textAlign: TextAlign.center,
+                        "${getTranslated(context, "Send") ?? "Send"} ${widget.symbol}",
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
                           color: darkBlueColor.value,
                           fontFamily: "dmsans",
-
                         ),
-
                       ),
                     ],
                   ),
-                  Row(
-                    children: [
-
-                      GestureDetector(
-                        onTap: (){
-                          Get.back();
-                        },
-                        child: Container(
-                          height: 32,
-                          width: 32,
-                          padding: EdgeInsets.all(6),
-                          decoration: BoxDecoration(
-                              color: inputFieldBackgroundColor.value,
-                              borderRadius: BorderRadius.circular(8)
-                          ),
-                          child: SvgPicture.asset("assets/svgs/mdi_contact-outline.svg",color: headingColor.value,)
-                        ),
-                      )
-                    ],
+                  GestureDetector(
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: Container(
+                      height: 32,
+                      width: 32,
+                      padding: EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: inputFieldBackgroundColor.value,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: SvgPicture.asset(
+                        "assets/svgs/mdi_contact-outline.svg",
+                        color: headingColor.value,
+                      ),
+                    ),
                   )
                 ],
               ),
-              SizedBox(height: 20,),
+              SizedBox(height: 20),
               InputFields2(
                 textController: nameAddreeC,
-                suffixIcon: Row
-                  (
+                suffixIcon: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                       height: 21,
                       width: 46,
                       decoration: BoxDecoration(
-
-
-                          gradient: LinearGradient(
-                              tileMode: TileMode.clamp,
-                              begin: Alignment.topCenter,
-
-                              end: Alignment.bottomCenter,
-
-                              colors:nameAddreeC.text==""?[lightTextColor.value,lightTextColor.value,]: [Color(0xff76CF56),Color(0xff55DDAF),]),
-                          borderRadius: BorderRadius.circular(5)
+                        gradient: LinearGradient(
+                          tileMode: TileMode.clamp,
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: nameAddreeC.text == ""
+                              ? [lightTextColor.value, lightTextColor.value]
+                              : [Color(0xff76CF56), Color(0xff55DDAF)],
+                        ),
+                        borderRadius: BorderRadius.circular(5),
                       ),
-                      child:  Center(
+                      child: Center(
                         child: Text(
-                          "${getTranslated(context,"Paste" )??"Paste"}",
-                          textAlign: TextAlign.center,
+                          "${getTranslated(context, "Paste") ?? "Paste"}",
                           style: TextStyle(
                             fontSize: 9,
                             fontWeight: FontWeight.w600,
@@ -137,31 +122,26 @@ class _SendScreenState extends State<SendScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 8,),
+                    SizedBox(width: 8),
                     GestureDetector(
-                        onTap: (){
-                          Get.to(CodeScanner1());
-                        },
-                        child: SvgPicture.asset("assets/svgs/qr.svg")),
-                    SizedBox(width: 10,),
-
+                      onTap: () {
+                        Get.to(CodeScanner1());
+                      },
+                      child: SvgPicture.asset("assets/svgs/qr.svg"),
+                    ),
+                    SizedBox(width: 10),
                   ],
                 ),
                 hasHeader: true,
                 headerText: "Address",
                 hintText: "Enter address",
-                onChange: (val){
-                  setState(() {
-
-                  });
+                onChange: (val) {
+                  setState(() {});
                 },
-
-
               ),
-              SizedBox(height: 18,),
+              SizedBox(height: 18),
               Text(
                 'Balance available: ${widget.balance} ${widget.symbol}',
-                textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -169,32 +149,44 @@ class _SendScreenState extends State<SendScreen> {
                   fontFamily: "dmsans",
                 ),
               ),
-              SizedBox(height: 16,),
+              if (widget.symbol == "XRP") ...[
+                SizedBox(height: 8),
+                Text(
+                  'Ripple requires a minimum reserve of 1 XRP to remain in the wallet.',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.redAccent,
+                    fontFamily: "dmsans",
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ],
+
+              SizedBox(height: 16),
               InputFields2(
                 textController: amountC,
-                suffixIcon: Row
-                  (
+                suffixIcon: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                       height: 21,
                       width: 46,
                       decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            tileMode: TileMode.clamp,
-                              begin: Alignment.topCenter,
-
-                             end: Alignment.bottomCenter,
-
-                              colors:amountC.text==""?[lightTextColor.value,lightTextColor.value,]: [Color(0xff76CF56),Color(0xff55DDAF),]),
-                        borderRadius: BorderRadius.circular(5)
+                        gradient: LinearGradient(
+                          tileMode: TileMode.clamp,
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: amountC.text == ""
+                              ? [lightTextColor.value, lightTextColor.value]
+                              : [Color(0xff76CF56), Color(0xff55DDAF)],
+                        ),
+                        borderRadius: BorderRadius.circular(5),
                       ),
-                      child:  Center(
+                      child: Center(
                         child: Text(
-                          "${getTranslated(context,"MAX" )??"MAX"}",
-                          textAlign: TextAlign.center,
+                          "${getTranslated(context, "MAX") ?? "MAX"}",
                           style: TextStyle(
                             fontSize: 9,
                             fontWeight: FontWeight.w600,
@@ -204,74 +196,187 @@ class _SendScreenState extends State<SendScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(width: 8,),
+                    SizedBox(width: 8),
                   ],
                 ),
                 inputType: TextInputType.number,
                 hasHeader: true,
                 headerText: "Amount",
                 hintText: "Enter amount",
-                onChange: (v){
-                  setState(() {
-                  });
+                onChange: (v) {
+                  setState(() {});
                 },
               ),
-              SizedBox(height: 24,),
-              BottomRectangularBtn(
-                  onTapFunc: () {
-                    String walletAddress = nameAddreeC.text; // Get the wallet address input by the user
-                    String amountText = amountC.text; // Get the amount input by the user
-
-                    // Check if wallet address is empty
-                    if (walletAddress.isEmpty) {
-                      // Show error if wallet address is empty
-                      Get.snackbar(
-                        "Error",
-                        "Recipient wallet address cannot be empty.",
-                        snackPosition: SnackPosition.BOTTOM,
-                        backgroundColor: Colors.red,
-                        colorText: Colors.white,
-                      );
-                      return;
-                    }
-
-                    // Convert amount to double for comparison
-                    double amount = double.tryParse(amountText) ?? 0;
-
-                    // Check if amount is valid and less than the balance
-                    if (amount <= 0) {
-                      // Show error if amount is not a valid number
-                      Get.snackbar(
-                        "Error",
-                        "Please enter a valid amount.",
-                        snackPosition: SnackPosition.BOTTOM,
-                        backgroundColor: Colors.red,
-                        colorText: Colors.white,
-                      );
-                      return;
-                    }
-
-                    double balance = double.tryParse(widget.balance.toString()) ?? 0;
-
-                    if (amount > balance) {
-                      // Show error if amount is greater than the available balance
-                      Get.snackbar(
-                        "Error",
-                        "Insufficient balance to transfer the amount.",
-                        snackPosition: SnackPosition.BOTTOM,
-                        backgroundColor: Colors.red,
-                        colorText: Colors.white,
-                      );
-                      return;
-                    }
-
-                    // If all checks pass, navigate to the confirmation screen
-                    Get.to(ConformationScreen(walletAddress: walletAddress, amount: amountText, symbol: widget.symbol, price: widget.price));
+              // Hiển thị ô nhập memo nếu là XRP hoặc TON
+              if (widget.symbol == "XRP" || widget.symbol == "TON") ...[
+                SizedBox(height: 18),
+                InputFields2(
+                  textController: memoC,
+                  hasHeader: true,
+                  headerText: "Memo",
+                  hintText: "Enter memo (if required)",
+                  onChange: (v) {
+                    setState(() {});
                   },
-                  btnTitle: "Next"
-              ),
+                ),
+              ],
+              SizedBox(height: 24),
+              BottomRectangularBtn(
+                onTapFunc: () {
+                  String walletAddress = nameAddreeC.text;
+                  String amountText = amountC.text;
 
-              SizedBox(height: 24,),
+                  if (walletAddress.isEmpty) {
+                    Get.snackbar(
+                      "Error",
+                      "Recipient wallet address cannot be empty.",
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white,
+                    );
+                    return;
+                  }
+
+                  double amount = double.tryParse(amountText) ?? 0;
+                  if (amount <= 0) {
+                    Get.snackbar(
+                      "Error",
+                      "Please enter a valid amount.",
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white,
+                    );
+                    return;
+                  }
+
+                  double balance =
+                      double.tryParse(widget.balance.toString()) ?? 0;
+                  if (amount >= balance) {
+                    Get.snackbar(
+                      "Error",
+                      "The transfer amount exceeds your available balance, excluding fees.",
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.red,
+                      colorText: Colors.white,
+                    );
+                    return;
+                  }
+
+                  if (widget.symbol == "BTC") {
+                    if (amount < 0.00007) {
+                      Get.snackbar(
+                        "Error",
+                        "Minimum transaction of Bitcoin is 0.00007 BTC.",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                      return;
+                    }
+                  }
+
+                  if (widget.symbol == "ETH") {
+                    if (amount < 0.001) {
+                      Get.snackbar(
+                        "Error",
+                        "Minimum transaction of Ethereum is 0.001 ETH.",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                      return;
+                    }
+                  }
+
+                  if (widget.symbol == "EFT") {
+                    if (amount < 1) {
+                      Get.snackbar(
+                        "Error",
+                        "Minimum transaction of Ecofusion Token is 1.00 EFT.",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                      return;
+                    }
+                  }
+
+                  if (widget.symbol == "USDT") {
+                    if (amount < 1) {
+                      Get.snackbar(
+                        "Error",
+                        "Minimum transaction of Tether USDT is 1.00 USDT.",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                      return;
+                    }
+                  }
+
+                  if (widget.symbol == "XRP") {
+                    if (amount < 1) {
+                      Get.snackbar(
+                        "Error",
+                        "Minimum transaction of Ripple is 1.00 XRP.",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                      return;
+                    }
+
+                    if (amount + 1 >= balance) {
+                      Get.snackbar(
+                        "Error",
+                        "The XRP wallet must maintain a minimum of 1 XRP after a successful transaction..",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                      return;
+                    }
+                  }
+
+                  if (widget.symbol == "TON") {
+                    if (amount < 1) {
+                      Get.snackbar(
+                        "Error",
+                        "Minimum transaction of TON Coin is 1.00 TON.",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                      return;
+                    }
+                  }
+
+                  if (widget.symbol == "BNB") {
+                    if (amount < 0.003) {
+                      Get.snackbar(
+                        "Error",
+                        "Minimum transaction of Binance Coin is 0.003 BNB.",
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.red,
+                        colorText: Colors.white,
+                      );
+                      return;
+                    }
+                  }
+
+                  Get.to(ConformationScreen(
+                    walletAddress: walletAddress,
+                    amount: amountText,
+                    symbol: widget.symbol,
+                    price: widget.price,
+                    memo: (widget.symbol == "XRP" || widget.symbol == "TON")
+                        ? memoC.text
+                        : '',
+                  ));
+                },
+                btnTitle: "Next",
+              ),
+              SizedBox(height: 24),
             ],
           ),
         ),
