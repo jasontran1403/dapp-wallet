@@ -97,7 +97,7 @@ class _StakingScreenState extends State<StakingScreen> {
       "name": "TON Coin"
     },
   ];
-  double? limitStaking;
+  double? limitStaking = 0;
 
   Future<void> _loadInternalBalance(String walletInput) async {
     try {
@@ -255,6 +255,7 @@ class _StakingScreenState extends State<StakingScreen> {
 
     setState(() {
       tokenLoadingStates[tokenIndex] = true;
+      limitStaking = 0;
     });
 
     String extractSymbol = coinsUI[tokenIndex]['symbol'] ?? '';
@@ -271,6 +272,7 @@ class _StakingScreenState extends State<StakingScreen> {
     } catch (e) {
       setState(() {
         tokenLoadingStates[tokenIndex] = false;
+        limitStaking = 0;
       });
     }
   }
@@ -577,7 +579,7 @@ class _StakingScreenState extends State<StakingScreen> {
                                                 ),
                                                 SizedBox(width: 8),
                                                 Text(
-                                                  "\$ ${currentCoin['stakingLeft']}",
+                                                  "\$ ${limitStaking ?? 'Loading'}",
                                                   style: TextStyle(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.w900,

@@ -8,6 +8,7 @@ import 'package:crypto_wallet/UI/common_widgets/bottomRectangularbtn.dart';
 import 'package:crypto_wallet/UI/common_widgets/inputField.dart';
 import 'package:crypto_wallet/constants/colors.dart';
 import 'package:crypto_wallet/localization/language_constants.dart';
+import 'package:crypto_wallet/services/apiService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -16,6 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3dart/credentials.dart';
 import 'package:web3dart/web3dart.dart';
 
+import '../../../controllers/appController.dart';
 import '../codeScanner.dart';
 
 class ConformationScreen extends StatefulWidget {
@@ -24,6 +26,7 @@ class ConformationScreen extends StatefulWidget {
   final String symbol;
   final String price;
   final String memo;
+
 
   // Nhận walletAddress và amount từ SendScreen
   const ConformationScreen({
@@ -40,6 +43,7 @@ class ConformationScreen extends StatefulWidget {
 }
 
 class _ConformationScreenState extends State<ConformationScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Obx(
@@ -119,7 +123,7 @@ class _ConformationScreenState extends State<ConformationScreen> {
                           ),
                           child: Column(
                             children: [
-                              SizedBox(height: 57),
+                              SizedBox(height: 30),
                               // Sử dụng walletAddress và amount nhận được
                               Text(
                                 "Recipient wallet",  // Default value if null
@@ -234,7 +238,14 @@ class _ConformationScreenState extends State<ConformationScreen> {
                             borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32)),
                           ),
                           // Pass the widget directly instead of using 'builder'
-                          _showConfirmationDialog(context, widget.amount, widget.symbol, widget.walletAddress), // Directly pass the widget
+                            _showConfirmationDialog(
+                              context,
+                              widget.amount,
+                              widget.symbol,
+                              widget.walletAddress,
+                              int.tryParse(widget.memo) ?? 0,
+                            )
+                          // Directly pass the widget
                         );
                       },
                       btnTitle: "Send",
@@ -317,7 +328,7 @@ class _ConformationScreenState extends State<ConformationScreen> {
   }
 }
 
-Widget _showConfirmationDialog(BuildContext context, String amount, String symbol, String walletAddressReceiver) {
+Widget _showConfirmationDialog(BuildContext context, String amount, String symbol, String walletAddressReceiver, int memo) {
   return Container(
     height: Get.height * 0.5,
     width: Get.width,
@@ -379,7 +390,7 @@ Widget _showConfirmationDialog(BuildContext context, String amount, String symbo
               child: BottomRectangularBtn(
                 onTapFunc: () {
                   // Confirm and execute the send
-                  _sendTransaction(context, walletAddressReceiver, amount, symbol);
+                  _sendTransaction(context, walletAddressReceiver, amount, symbol, memo);
                   Get.back(); // Close the confirmation dialog
                 },
                 btnTitle: "Confirm",
@@ -392,13 +403,13 @@ Widget _showConfirmationDialog(BuildContext context, String amount, String symbo
   );
 }
 
-Future<void> _sendTransaction(BuildContext context, String walletAddressReceiver, String amount, String symbol) async {
+Future<void> _sendTransaction(BuildContext context, String walletAddressReceiver, String amount, String symbol, int memo) async {
   // Placeholder for sending logic
-  print(walletAddressReceiver + " - " + amount + " " + symbol);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? privateKey = prefs.getString('privateKey');
+  String? savedWallet = prefs.getString('walletAddress');
 
-  if (privateKey != null) {
+  if (privateKey != null && savedWallet != null) {
     // Call the sendTransaction function with the wallet address, amount, and the retrieved private key
     String result ;
 
@@ -408,18 +419,19 @@ Future<void> _sendTransaction(BuildContext context, String walletAddressReceiver
       result = await sendUSDTBEP20(walletAddressReceiver, double.parse(amount), privateKey);
     } else if (symbol == "EFT") {
       result = await sendEFT(walletAddressReceiver, double.parse(amount), privateKey);
-    }  else {
+    } else if (symbol == "ETH") {
+      result = await ApiService.createTransactions(savedWallet, symbol, walletAddressReceiver, double.parse(amount), memo);
+    } else if (symbol == "BTC") {
+      result = await ApiService.createTransactions(savedWallet, symbol, walletAddressReceiver, double.parse(amount), memo);
+    } else if (symbol == "TON") {
+      result = await ApiService.createTransactions(savedWallet, symbol, walletAddressReceiver, double.parse(amount), memo);
+    } else if (symbol == "XRP") {
+      result = await ApiService.createTransactions(savedWallet, symbol, walletAddressReceiver, double.parse(amount), memo);
+    } else {
       result = "Failed";
     }
 
-    // Show the appropriate popup based on the result
-    if (result.startsWith('0x')) {
-      // If result starts with "0x", it's a valid transaction hash, meaning success
-      _showSuccessDialog(context, result);
-    } else {
-      // Otherwise, it's an error message
-      _showErrorDialog(context, result);
-    }
+    _showSuccessDialog(context, result);
   } else {
     // Handle the case where private key is not found
     _showErrorDialog(context, "Private key not found");

@@ -55,6 +55,59 @@ class ApiService {
     }
   }
 
+  static Future<dynamic> fetchTransactions(String walletAddress, String symbol) async {
+    var headers = {
+      'Content-Type': 'application/json'
+    };
+
+    var request = http.Request('POST', Uri.parse('${base_url}/auth/blockchain-manipulate'));
+    request.body = json.encode({
+      "network": symbol.toLowerCase(),
+      "method": "transactions",
+      "walletAddress": walletAddress
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      String responseBody = await response.stream.bytesToString();
+
+      final data = json.decode(responseBody);
+
+      return data;
+    }
+    else {
+      throw Exception('Fetch transactions ${symbol} failed.');
+    }
+  }
+
+  static Future<dynamic> createTransactions(String walletAddress, String symbol, String to, double amount, int memo) async {
+    var headers = {
+      'Content-Type': 'application/json'
+    };
+
+    var request = http.Request('POST', Uri.parse('${base_url}/auth/blockchain-manipulate'));
+    request.body = json.encode({
+      "network": symbol.toLowerCase(),
+      "method": "send",
+      "walletAddress": walletAddress,
+      "receiver": to,
+      "amount": amount,
+      "memo": memo
+    });
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      String responseBody = await response.stream.bytesToString();
+      return responseBody.trim();
+    } else {
+      throw Exception('Create transactions $symbol failed.');
+    }
+  }
+
   static Future<dynamic> fetchStatistic(String walletAddress) async {
     var request = http.Request('GET', Uri.parse('${base_url}/auth/prices/${walletAddress}'));
 
