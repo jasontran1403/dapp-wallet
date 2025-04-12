@@ -543,7 +543,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     ),
                                                   ),
                                                   Text(
-                                                    "\$ ${formatTotalBalance(coins[index]['price'])}",
+                                                    "\$ ${formatBalance(coins[index]['price'])}",
                                                     textAlign: TextAlign.start,
                                                     style: TextStyle(
                                                       fontSize: 14,
