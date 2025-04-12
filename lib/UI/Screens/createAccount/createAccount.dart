@@ -159,12 +159,19 @@ class _CreateAccountState extends State<CreateAccount> {
                     colorText: Colors.white,
                   );
 
+                  String responseBtcWalletAddress = json.decode(response)['btcWalletAddress'];
+                  String responseXrpWalletAddress = json.decode(response)['xrpWalletAddress'];
+                  String responseTonWalletAddress = json.decode(response)['tonWalletAddress'];
+
                   SharedPreferences prefs = await SharedPreferences.getInstance();
                   await prefs.setString('privateKey', widget.privateKey);
                   await prefs.setString('walletAddress', widget.walletAddress);
                   await prefs.setString('accountName', accountNameController.text);
                   await prefs.setString('pinCode', pinController.text);
                   await prefs.setString('mnemonics', widget.mnemonicWords);
+                  await prefs.setString('btcWalletAddress', responseBtcWalletAddress);
+                  await prefs.setString('xrpWalletAddress', responseXrpWalletAddress);
+                  await prefs.setString('tonWalletAddress', responseTonWalletAddress);
 
                   Future.delayed(Duration(seconds: 1), () {
                     Get.offAll(BottomBar());
@@ -255,7 +262,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: headingColor.value,
+                            color: Colors.white,
                             fontFamily: "dmsans",
                           ),
                         ),
@@ -263,11 +270,11 @@ class _CreateAccountState extends State<CreateAccount> {
 
                         TextField(
                           controller: accountNameController,
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: Colors.white),
                           maxLength: 12, // Giới hạn tối đa 12 ký tự
                           decoration: InputDecoration(
                             labelText: "Account Name",
-                            labelStyle: TextStyle(color: Colors.black),
+                            labelStyle: TextStyle(color: Colors.white),
                             hintText: "Enter account name",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -288,11 +295,11 @@ class _CreateAccountState extends State<CreateAccount> {
 
                         TextField(
                           controller: referralController,
-                          style: TextStyle(color: Colors.black), // ✅ Màu chữ đen khi nhập
+                          style: TextStyle(color: Colors.white), // ✅ Màu chữ đen khi nhập
                           readOnly: isReferralValid.value, // ✅ Không cho phép chỉnh sửa nếu valid
                           decoration: InputDecoration(
                             labelText: "Referral Code",
-                            labelStyle: TextStyle(color: Colors.black), // ✅ Màu label luôn đen
+                            labelStyle: TextStyle(color: Colors.white), // ✅ Màu label luôn đen
                             hintText: "Enter referral code",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -310,7 +317,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                 : GestureDetector(
                               onTap: checkReferralCode,
                               child: Icon(Icons.check_rounded,
-                                  color: headingColor.value, size: 16),
+                                  color: Colors.white, size: 24),
                             )),
                           ),
                           onChanged: (value) {
@@ -322,14 +329,14 @@ class _CreateAccountState extends State<CreateAccount> {
                         SizedBox(height: 24),
                         TextField(
                           controller: pinController,
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: Colors.white),
                           keyboardType: TextInputType.number,
                           maxLength: 4,
                           obscureText: !isPinVisible.value,
                           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                           decoration: InputDecoration(
                             labelText: "PIN Code",
-                            labelStyle: TextStyle(color: Colors.black),
+                            labelStyle: TextStyle(color: Colors.white),
                             hintText: "Enter 4-digit PIN",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -344,7 +351,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                 onTap: () => isPinVisible.value = !isPinVisible.value,
                                 child: Icon(
                                   isPinVisible.value ? Icons.visibility : Icons.visibility_off,
-                                  color: Colors.black,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
@@ -354,14 +361,14 @@ class _CreateAccountState extends State<CreateAccount> {
                         SizedBox(height: 24),
                         TextField(
                           controller: confirmPinController,
-                          style: TextStyle(color: Colors.black),
+                          style: TextStyle(color: Colors.white),
                           keyboardType: TextInputType.number,
                           maxLength: 4,
                           obscureText: !isPinVisible.value,
                           inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                           decoration: InputDecoration(
                             labelText: "Confirm PIN Code",
-                            labelStyle: TextStyle(color: Colors.black),
+                            labelStyle: TextStyle(color: Colors.white),
                             hintText: "Enter 4-digit PIN",
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12),
@@ -376,7 +383,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                 onTap: () => isPinVisible.value = !isPinVisible.value,
                                 child: Icon(
                                   isPinVisible.value ? Icons.visibility : Icons.visibility_off,
-                                  color: Colors.black,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),

@@ -58,7 +58,7 @@ class _CreateWalletState extends State<CreateWallet> {
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
-                                color: headingColor.value,
+                                color: Colors.white,
                                 fontFamily: "dmsans",
 
                               ),
@@ -89,7 +89,7 @@ class _CreateWalletState extends State<CreateWallet> {
                         width: Get.width,
                         padding: EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: inputFieldBackgroundColor2.value,
+                          color: Colors.grey.shade800.withOpacity(0.7),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(width: 1, color: inputFieldBackgroundColor.value),
                         ),
@@ -101,7 +101,7 @@ class _CreateWalletState extends State<CreateWallet> {
                               style: TextStyle(
                                 fontSize: 13.5,
                                 fontWeight: FontWeight.w600,
-                                color: headingColor.value,
+                                color: Colors.white,
                                 fontFamily: "dmsans",
                               ),
                             ),
@@ -121,53 +121,45 @@ class _CreateWalletState extends State<CreateWallet> {
                                   shrinkWrap: true,
                                   physics: NeverScrollableScrollPhysics(),
                                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3, // 3 ô mỗi hàng
-                                    childAspectRatio: 1, // Tỉ lệ chiều rộng và chiều cao của ô
+                                    crossAxisCount: 3,
+                                    childAspectRatio: 1.3, // Tăng tỉ lệ chiều cao để chứa text wrap
                                     crossAxisSpacing: 8,
                                     mainAxisSpacing: 4,
                                   ),
                                   itemCount: 12,
                                   itemBuilder: (context, index) {
-                                    return Row(
-                                      children: [
-                                        // Số thứ tự nằm ngoài ô
-                                        Text(
-                                          "${index + 1}.",
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w600,
-                                            color: headingColor.value,
-                                          ),
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey.shade800.withOpacity(1),
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                            width: 1,
+                                            color: inputFieldBackgroundColor.value
                                         ),
-                                        SizedBox(width: 4), // Khoảng cách giữa số và ô
-
-                                        // Ô chứa từ thực tế trong danh sách mnemonicWords
-                                        Expanded(
-                                          child: Container(
-                                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
-                                            decoration: BoxDecoration(
-                                              color: appController.isDark.value ? Color(0xff1A2B56) : inputFieldBackgroundColor.value,
-                                              borderRadius: BorderRadius.circular(12),
-                                              border: Border.all(width: 1, color: inputFieldBackgroundColor.value),
-                                            ),
-                                            child: Center(
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          // Nội dung từ khoá
+                                          Center(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(0),
                                               child: Text(
-                                                mnemonicWords[index], // Hiển thị từ thực tế
-                                                overflow: TextOverflow.ellipsis,
-                                                textAlign: TextAlign.center,
+                                                "${index + 1}. ${mnemonicWords[index]}",
+                                                textAlign: TextAlign.left,
                                                 style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: headingColor.value,
+                                                  fontSize: 12, // Giảm kích thước chữ
+                                                  fontWeight: FontWeight.w300,
+                                                  color: Colors.white,
                                                 ),
+                                                softWrap: true, // Cho phép xuống dòng
+                                                maxLines: 2, // Giới hạn tối đa 2 dòng
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     );
                                   },
-
                                 ),
                                 SizedBox(height: 16), // Khoảng cách giữa GridView và Button
 
@@ -177,7 +169,7 @@ class _CreateWalletState extends State<CreateWallet> {
                                     Get.to(() => VerifyMnemonic(mnemonicWords: mnemonicWords)); // Truyền danh sách mnemonic
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white, // Màu nền nút
+                                    backgroundColor: Colors.grey.shade800.withOpacity(0.7), // Màu nền nút
                                     padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -188,7 +180,7 @@ class _CreateWalletState extends State<CreateWallet> {
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
-                                      color: Colors.black,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),

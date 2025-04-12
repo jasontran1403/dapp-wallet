@@ -53,18 +53,14 @@ final  String? svgName;
         height: 50,
         decoration: onlyBorder == true
             ? BoxDecoration(
-                border: Border.all(color: primaryColor.value),
-                borderRadius: BorderRadius.circular(66))
+            border: Border.all(color: primaryColor.value),
+            borderRadius: BorderRadius.circular(66))
             : BoxDecoration(
-                color: color != null
-                    ? color
-                    : isDisabled
-                        ? color != null
-                            ? color
-                            : primaryColor.value
-                        : primaryColor.value,
-                borderRadius: const BorderRadius.all(Radius.circular(66)),
-              ),
+          color: isDisabled
+              ? Color(0xFF9E9B9B)
+              : (color ?? primaryColor.value),
+          borderRadius: const BorderRadius.all(Radius.circular(66)),
+        ),
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -91,7 +87,7 @@ final  String? svgName;
                     isLoading ? loadingText : "${getTranslated(context,"$btnTitle" )??"$btnTitle"}",
                     style: TextStyle(
                       color: isDisabled
-                          ? isLoading ? lightColor : Color(0xff9E9B9B)
+                          ? isLoading ? Colors.black : Color(0xff9E9B9B)
                           : buttonTextColor != null
                               ? buttonTextColor
                               : onlyBorder == true
@@ -101,9 +97,9 @@ final  String? svgName;
                                           ? btnTxtColor
                                           : color == primaryColor.value ||
                           color == null
-                                              ? btnTxtColor
-                                              : primaryColor.value
-                                      : btnTxtColor,
+                                              ? Colors.white
+                                              : Colors.white
+                                      : Colors.white,
                       fontSize: 16,
                       fontFamily: 'dmsans',
                     ),

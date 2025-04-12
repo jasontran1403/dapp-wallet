@@ -27,85 +27,80 @@ class _PinScreenState extends State<PinScreen> {
   @override
   Widget build(BuildContext context) {
     return Obx(
-          ()=> Scaffold(
+          () => Scaffold(
         backgroundColor: primaryBackgroundColor.value,
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 22.0,vertical: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
+        body: Stack(
+          children: [
+            // Background Image
+            Positioned.fill(
+              child: Image.asset(
+                "assets/background/bg7.png",
+                fit: BoxFit.cover,
+              ),
+            ),
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 22.0,vertical: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    Column(
                       children: [
-                        Text(
-                          "${getTranslated(context,"Enter PIN" )??"Enter PIN"}",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: headingColor.value,
-                            fontFamily: "dmsans",
+                        SizedBox(height: 64,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "${getTranslated(context,"Enter PIN" )??"Enter PIN"}",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                                fontFamily: "dmsans",
 
-                          ),)
+                              ),)
 
-                        ,
+                            ,
+                          ],
+                        ),
+                        SizedBox(height: 24,),
+
+                        PinDot(
+                          size: 17,
+                          length: 4,
+                          controller: _pinController,
+                          inactiveColor: primaryBackgroundColor.value,
+                          activeColor: primaryColor.value,
+                          borderColor: primaryColor.value,
+                        ),
                       ],
                     ),
-                    SizedBox(height: 64,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+
+
+                    Column(
                       children: [
-                        Text(
-                          "${getTranslated(context,"Enter PIN" )??"Enter PIN"}",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontWeight: FontWeight.w700,
-                            color: headingColor.value,
-                            fontFamily: "dmsans",
+                        CustomNumPad(
+                          buttonSize: Get.width / 5,
+                          delete: () {
+                            if (_pinController.text.isNotEmpty) {
+                              _pinController.text = _pinController.text.substring(0, _pinController.text.length - 1);
+                            }
+                          },
+                          onSubmit: () {
 
-                          ),)
-
-                        ,
+                          },
+                          controller: _pinController,
+                        ),
+                        SizedBox(height: 16),
                       ],
-                    ),
-                    SizedBox(height: 24,),
-
-                    PinDot(
-                      size: 17,
-                      length: 4,
-                      controller: _pinController,
-                      inactiveColor: primaryBackgroundColor.value,
-                      activeColor: primaryColor.value,
-                      borderColor: primaryColor.value,
-                    ),
+                    )
                   ],
                 ),
-
-
-                Column(
-                  children: [
-                    CustomNumPad(
-                      buttonSize: Get.width / 5,
-                      delete: () {
-                        if (_pinController.text.isNotEmpty) {
-                          _pinController.text = _pinController.text.substring(0, _pinController.text.length - 1);
-                        }
-                      },
-                      onSubmit: () {
-
-                      },
-                      controller: _pinController,
-                    ),
-                    SizedBox(height: 16),
-                  ],
-                )
-              ],
+              ),
             ),
-          ),
+
+          ],
         ),
       ),
     );

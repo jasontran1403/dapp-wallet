@@ -50,8 +50,6 @@ class _InputFields2State extends State<InputFields2> {
   @override
   Widget build(BuildContext context) {
     var selected = false;
-
-
     return Obx(() => Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -61,7 +59,7 @@ class _InputFields2State extends State<InputFields2> {
           child: Text(
             "${getTranslated(context,"${widget.headerText??""}" )??"${widget.headerText??""}"}",
             style: TextStyle(
-              color: headingColor.value,
+              color: Colors.white,
               fontSize: 14,
               fontWeight: FontWeight.w600,
               fontFamily: 'dmsans',
@@ -70,7 +68,6 @@ class _InputFields2State extends State<InputFields2> {
         ),
         // SizedBox(height: 12,),
         TextFormField(
-
           focusNode: widget.focusNode,
           cursorColor: primaryColor.value,
           cursorHeight: 20,
@@ -87,8 +84,7 @@ class _InputFields2State extends State<InputFields2> {
           style: TextStyle(
             fontSize: 16,
             fontFamily: 'dmsans',
-
-            color: headingColor.value,
+            color: Colors.white,
           ),
           decoration: InputDecoration(
 
@@ -113,11 +109,11 @@ class _InputFields2State extends State<InputFields2> {
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
                 fontFamily: 'dmsans',
-                  color:lightTextColor.value
+                  color:Colors.grey.shade800.withOpacity(0.7)
                 // color: appController.isDark.value ? labelColor.value : placeholderColor
               ),
               filled: true,
-              fillColor:   inputFieldBackgroundColor2.value,
+              fillColor:   Colors.grey.shade800.withOpacity(0.7),
 
               contentPadding:
               EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -198,7 +194,7 @@ class _InputFieldsState extends State<InputFields> {
             child: Text(
               "${getTranslated(context,"${widget.headerText}" )??"${widget.headerText}"}",
               style: TextStyle(
-                color: headingColor.value,
+                color: Colors.white,
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 fontFamily: 'dmsans',
@@ -207,7 +203,6 @@ class _InputFieldsState extends State<InputFields> {
           ),
         // SizedBox(height: 12,),
         TextFormField(
-
           focusNode: widget.focusNode,
           cursorColor: primaryColor.value,
           cursorHeight: 20,
@@ -223,8 +218,7 @@ class _InputFieldsState extends State<InputFields> {
           style: TextStyle(
             fontSize: 16,
             fontFamily: 'dmsans',
-
-            color: inputFieldBackgroundColor.value,
+            color: Colors.grey,
           ),
           decoration: InputDecoration(
 
@@ -249,7 +243,7 @@ class _InputFieldsState extends State<InputFields> {
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                   fontFamily: 'dmsans',
-                  color:lightTextColor.value
+                  color: Colors.black12,
                 // color: appController.isDark.value ? labelColor.value : placeholderColor
               ),
               filled: true,

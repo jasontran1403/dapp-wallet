@@ -249,17 +249,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                           SizedBox(width: 8,),
-                          Container(
-                            height: 32,
-                            width: 32,
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: appController.isDark.value ? Color(0xff1A2B56) : inputFieldBackgroundColor.value,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: SvgPicture.asset("assets/svgs/ion_qr-code.svg", color: appController.isDark.value ? Color(0xffA2BBFF) : headingColor.value),
-                          ),
-                          SizedBox(width: 8,), // Thêm khoảng cách trước icon logout
+                          // Container(
+                          //   height: 32,
+                          //   width: 32,
+                          //   padding: EdgeInsets.all(8),
+                          //   decoration: BoxDecoration(
+                          //     color: appController.isDark.value ? Color(0xff1A2B56) : inputFieldBackgroundColor.value,
+                          //     borderRadius: BorderRadius.circular(8),
+                          //   ),
+                          //   child: SvgPicture.asset("assets/svgs/ion_qr-code.svg", color: appController.isDark.value ? Color(0xffA2BBFF) : headingColor.value),
+                          // ),
+                          // SizedBox(width: 8,), // Thêm khoảng cách trước icon logout
                           GestureDetector(
                             onTap: () {
                               _loadWalletData();
@@ -411,13 +411,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       GestureDetector(
                         onTap: (){
-                          Get.bottomSheet(
-                              clipBehavior: Clip.antiAlias,
-                              isScrollControlled: true,
-                              backgroundColor: primaryBackgroundColor.value,
-                              shape: OutlineInputBorder(
-                                  borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
-                              selectTokenForBuy());
+                          // Get.bottomSheet(
+                          //     clipBehavior: Clip.antiAlias,
+                          //     isScrollControlled: true,
+                          //     backgroundColor: primaryBackgroundColor.value,
+                          //     shape: OutlineInputBorder(
+                          //         borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
+                          //     selectTokenForBuy());
                         },
                         child: Column(
                           children: [
@@ -460,7 +460,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             () => GestureDetector(
                           onTap: () {
                             // Navigate to TransactionScreen and pass the symbol as an argument
-                            print("Navigating to TransactionScreen");
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -473,7 +472,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: Get.width,
                             padding: EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: inputFieldBackgroundColor2.value,
+                              color: Colors.grey.shade800.withOpacity(0.7),
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(width: 1, color: inputFieldBackgroundColor.value),
                             ),
@@ -505,9 +504,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight: FontWeight.w600,
-                                                      color: appController.isDark.value == true
-                                                          ? Color(0xffFDFCFD)
-                                                          : primaryColor.value,
+                                                      color: Colors.white,
                                                       fontFamily: "dmsans",
                                                     ),
                                                   ),
@@ -521,9 +518,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     style: TextStyle(
                                                       fontSize: 15,
                                                       fontWeight: FontWeight.w600,
-                                                      color: appController.isDark.value
-                                                          ? Color(0xffFDFCFD)
-                                                          : primaryColor.value,
+                                                      color: Colors.white,
                                                       fontFamily: "dmsans",
                                                     ),
                                                   ),
@@ -543,7 +538,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     style: TextStyle(
                                                       fontSize: 15,
                                                       fontWeight: FontWeight.w400,
-                                                      color: lightTextColor.value,
+                                                      color: Colors.white,
                                                       fontFamily: "dmsans",
                                                     ),
                                                   ),
@@ -583,162 +578,151 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 
-  Widget selectToken(){
+  Widget selectToken() {
     return Container(
-      height: Get.height*0.95,
+      height: Get.height * 0.95,
       width: Get.width,
-      padding: EdgeInsets.symmetric(horizontal: 22,vertical: 22),
-      color: inputFieldBackgroundColor.value,
+      padding: EdgeInsets.symmetric(horizontal: 22, vertical: 22),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/background/bg7.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "${getTranslated(context,"Choose Token" )??"Choose Token"}",
+                "${getTranslated(context, "Choose Token") ?? "Choose Token"}",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
-                  color: headingColor.value,
+                  color: Colors.white,
                   fontFamily: "dmsans",
-
                 ),
               ),
               GestureDetector(
-                  onTap: (){
-                    Get.back();
-                  },
-                  child: Icon(Icons.clear,color: headingColor.value,))
+                onTap: () {
+                  Get.back();
+                },
+                child: Icon(Icons.clear, color: Colors.white),
+              )
             ],
           ),
-          SizedBox(height: 16,),
+          SizedBox(height: 16),
 
+          /// Ô tìm kiếm
           InputFields(
-            hintText: "",
-            icon:Image.asset("assets/images/Search.png"),
+            hintText: "Search...",
+            icon: Image.asset("assets/images/Search.png"),
           ),
-          SizedBox(height: 24,),
+          SizedBox(height: 24),
+
           Expanded(
             child: ListView.separated(
-
               itemCount: coins.length,
               separatorBuilder: (BuildContext context, int index) {
-                return SizedBox(height: 12,);
+                return SizedBox(height: 12);
               },
               itemBuilder: (BuildContext context, int index) {
-                return  GestureDetector(
-                  onTap: (){
-                    Get.to(ReceiveScreen(symbol: coins[index]['symbol'], image: coins[index]['image'], walletAddress: coins[index]['walletAddress']));
+                return GestureDetector(
+                  onTap: () {
+                    Get.to(ReceiveScreen(
+                      symbol: coins[index]['symbol'],
+                      image: coins[index]['image'],
+                      walletAddress: coins[index]['walletAddress'],
+                    ));
                   },
                   child: Container(
-                    height:72,
+                    height: 72,
                     width: Get.width,
                     padding: EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color:appController.isDark.value==true?Colors.transparent: inputFieldBackgroundColor.value,
+                      color: Colors.grey.shade800.withOpacity(0.7),
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(width: 1,color:appController.isDark.value==true?inputFieldBackgroundColor2.value :inputFieldBackgroundColor.value),
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.white24,
+                      ),
                     ),
                     child: Row(
                       children: [
                         Container(
-                            height:40,
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                          child: Image.asset(
+                            "${coins[index]['image']}",
+                            height: 40,
                             width: 40,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color:inputFieldBackgroundColor.value
-                            ),
-                            child: Image.asset("${coins[index]['image']}",height: 40,width: 40,)),
-
-                        SizedBox(width: 12,),
+                          ),
+                        ),
+                        SizedBox(width: 12),
                         Expanded(
-                          child: Row(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
                                   children: [
-
-                                    Expanded(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-
-                                          Text(
-                                            "${coins[index]['symbol']}",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600,
-                                              color: appController.isDark.value==true?headingColor.value:primaryColor.value,
-                                              fontFamily: "dmsans",
-
-                                            ),
-
-                                          ),
-
-                                          Text(
-                                            "${formatBalance(coins[index]['amount'])}",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w600,
-                                              color:appController.isDark.value==true?headingColor.value: primaryColor.value,
-                                              fontFamily: "dmsans",
-
-                                            ),
-
-                                          ),
-
-                                        ],
+                                    Text(
+                                      "${coins[index]['symbol']}",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                        fontFamily: "dmsans",
                                       ),
                                     ),
-                                    Expanded(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "${coins[index]['des']}",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w400,
-                                              color: lightTextColor.value,
-                                              fontFamily: "dmsans",
-
-                                            ),
-
-                                          ),
-
-                                          Text(
-                                            "\$ ${formatBalance(
-                                                ((double.tryParse(coins[index]['amount'].toString()) ?? 0.0) *
-                                                    (double.tryParse(coins[index]['price'].toString()) ?? 0.0)).toString()
-                                            )}",
-                                            textAlign: TextAlign.start,
-                                            style: TextStyle(
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                              color:
-                                              headingColor.value,
-                                              fontFamily: "dmsans",
-
-                                            ),
-
-                                          ),
-
-                                        ],
+                                    Text(
+                                      "${formatBalance(coins[index]['amount'])}",
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                        fontFamily: "dmsans",
                                       ),
-                                    )
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "${coins[index]['des']}",
+                                      style: TextStyle(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.white70,
+                                        fontFamily: "dmsans",
+                                      ),
+                                    ),
+                                    Text(
+                                      "\$ ${formatBalance(((double.tryParse(coins[index]['amount'].toString()) ?? 0.0) * (double.tryParse(coins[index]['price'].toString()) ?? 0.0)).toString())}",
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.white70,
+                                        fontFamily: "dmsans",
+                                      ),
+                                    ),
                                   ],
                                 ),
                               )
-
                             ],
                           ),
                         )
-
                       ],
                     ),
                   ),
@@ -750,6 +734,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
   Widget selectTokenForBuy(){
     return Container(
       height: Get.height*0.95,

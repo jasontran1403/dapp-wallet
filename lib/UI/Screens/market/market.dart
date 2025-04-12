@@ -60,7 +60,6 @@ class _MarketScreenState extends State<MarketScreen> {
     'LTCUSDT': 'Litecoin',
     'BCHUSDT': 'Bitcoin Cash',
     'OMUSDT': 'Mantra',
-    'DAIUSDT': 'Dai',
     'NEARUSDT': 'Near Protocol',
     'UNIUSDT': 'Uniswap'
   };
@@ -225,7 +224,7 @@ class _MarketScreenState extends State<MarketScreen> {
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
-                        color: Colors.black,
+                        color: Colors.white,
                         fontFamily: "dmsans",
                       ),
                     ),

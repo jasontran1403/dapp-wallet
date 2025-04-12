@@ -52,365 +52,376 @@ class _ShowPrivateKeyState extends State<ShowPrivateKey> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: primaryBackgroundColor.value,
-      body: Obx(
-            () => SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 22.0,vertical: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+    return Obx(
+          () => Scaffold(
+        backgroundColor: primaryBackgroundColor.value,
+        body: Stack(
+          children: [
+            // Background Image
+            Positioned.fill(
+              child: Image.asset(
+                "assets/background/bg7.png",
+                fit: BoxFit.cover,
+              ),
+            ),
 
-                Column(
+            SafeArea(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 22.0,vertical: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+
+                    Column(
                       children: [
-                        GestureDetector(
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            GestureDetector(
 
-                            onTap:(){
-                              Get.back();
+                                onTap:(){
+                                  Get.back();
 
-                            },
-                            child: Icon(Icons.arrow_back_ios,color: headingColor.value,size: 18,)),
-                        SizedBox(width: 8,),
-                        Text(
-                          "${getTranslated(context,"Show Private Key" )??"Show Private Key"}",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: headingColor.value,
-                            fontFamily: "dmsans",
+                                },
+                                child: Icon(Icons.arrow_back_ios,color: Colors.white,size: 18,)),
+                            SizedBox(width: 8,),
+                            Text(
+                              "${getTranslated(context,"Show Private Key" )??"Show Private Key"}",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                fontFamily: "dmsans",
 
-                          ),
+                              ),
 
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 50,),
-
-                    Container(
-                      width: 120,
-                      height: 120,
-                      padding: EdgeInsets.all(30),
-                      decoration: ShapeDecoration(
-                        color: Color(0x33FF5C5C),
-                        shape: OvalBorder(),
-                      ),
-                      child: Image.asset("assets/images/mingcute_warning-line.png"),
-                    ),
-                    SizedBox(
-                      height: 24,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '${getTranslated(context,"Show Private Key" )??"Show Private Key"}',
-                          style: TextStyle(
-                            color: headingColor.value,
-                            fontSize: 20,
-                            fontFamily: 'dmsans',
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 16,
-                    ),
-                    Container(
-                      height: 66,
-                      padding: EdgeInsets.all(12),
-                      clipBehavior: Clip.antiAlias,
-                      decoration: ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(8),
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: ShapeDecoration(
-                                    color: Color(0x19FF5C5C),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 16,
-                                        height: 16,
-                                        clipBehavior: Clip.antiAlias,
-                                        decoration: BoxDecoration(),
-                                        child: SvgPicture.asset("assets/svgs/fluent-mdl2_key-phrase-extraction.svg"),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                Expanded(
-                                  child: Container(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: double.infinity,
-                                          child: Text(
-                                            '${getTranslated(context,"Your private key is the only way to recover your wallet" )??"Your private key is the only way to recover your wallet"}',
-                                            style: TextStyle(
-                                              color: headingColor.value,
-                                              fontSize: 14,
-                                              fontFamily: 'dmsans',
-                                              fontWeight: FontWeight.w400,
-                                              height: 0,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: 66,
-                      padding: EdgeInsets.all(12),
-                      clipBehavior: Clip.antiAlias,
-                      decoration: ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                          ],
                         ),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(8),
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: ShapeDecoration(
-                                    color: Color(0x19FF5C5C),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 16,
-                                        height: 16,
-                                        clipBehavior: Clip.antiAlias,
-                                        decoration: BoxDecoration(),
-                                        child: SvgPicture.asset("assets/svgs/mdi_eye-lock.svg"),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                Expanded(
-                                  child: Container(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: double.infinity,
-                                          child: Text(
-                                            '${getTranslated(context,"Do not let anyone see your private key" )??"Do not let anyone see your private key"}',
-                                            style: TextStyle(
-                                              color: headingColor.value,
-                                              fontSize: 14,
-                                              fontFamily: 'dmsans',
-                                              fontWeight: FontWeight.w400,
-                                              height: 0,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                        SizedBox(height: 50,),
+
+                        Container(
+                          width: 120,
+                          height: 120,
+                          padding: EdgeInsets.all(30),
+                          decoration: ShapeDecoration(
+                            color: Color(0x33FF5C5C),
+                            shape: OvalBorder(),
                           ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      height: 66,
-                      padding: EdgeInsets.all(12),
-                      clipBehavior: Clip.antiAlias,
-                      decoration: ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
+                          child: Image.asset("assets/images/mingcute_warning-line.png"),
                         ),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(8),
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: ShapeDecoration(
-                                    color: Color(0x19FF5C5C),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                                  ),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        width: 16,
-                                        height: 16,
-                                        clipBehavior: Clip.antiAlias,
-                                        decoration: BoxDecoration(),
-                                        child: SvgPicture.asset("assets/svgs/Frame 34209.svg"),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                Expanded(
-                                  child: Container(
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: double.infinity,
-                                          child: Text(
-                                            '${getTranslated(context,"Never share your private key with anyone" )??"Never share your private key with anyone"}',
-                                            style: TextStyle(
-                                              color: headingColor.value,
-                                              fontSize: 14,
-                                              fontFamily: 'dmsans',
-                                              fontWeight: FontWeight.w400,
-                                              height: 0,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-
-
-                  ],
-                ),
-                Column(
-                  children: [
-                    SizedBox(height: 16),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
                         SizedBox(
                           height: 24,
-                          width: 24,
-
-                          child: Theme(
-                            data: ThemeData(
-
-                                checkboxTheme: CheckboxThemeData(
-                                  side: BorderSide(width: 2,color: lightTextColor.value),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.0), // Adjust the radius as needed
-                                  ),
-
-                                )
-                            ),
-                            child: Checkbox(
-                                activeColor: primaryColor.value,
-                                value: isCheckBox.value, onChanged: (val){
-                              isCheckBox.value=val!;
-
-                            }),
-                          ),
                         ),
-                        SizedBox(width: 10,),
-                        Expanded(
-                          child: Text(
-                            '${getTranslated(context,"I will not share my private key with anyone." )??"I will not share my private key with anyone."}',
-                            style: TextStyle(
-                              color: lightTextColor.value,
-                              fontSize: 14,
-                              fontFamily: 'dmsans',
-                              fontWeight: FontWeight.w400,
-                              height: 0,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '${getTranslated(context,"Show Private Key" )??"Show Private Key"}',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontFamily: 'dmsans',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 16,
+                        ),
+                        Container(
+                          height: 66,
+                          padding: EdgeInsets.all(12),
+                          clipBehavior: Clip.antiAlias,
+                          decoration: ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
                             ),
                           ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(8),
+                                      clipBehavior: Clip.antiAlias,
+                                      decoration: ShapeDecoration(
+                                        color: Color(0x19FF5C5C),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 16,
+                                            height: 16,
+                                            clipBehavior: Clip.antiAlias,
+                                            decoration: BoxDecoration(),
+                                            child: SvgPicture.asset("assets/svgs/fluent-mdl2_key-phrase-extraction.svg"),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Expanded(
+                                      child: Container(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              width: double.infinity,
+                                              child: Text(
+                                                '${getTranslated(context,"Your private key is the only way to recover your wallet" )??"Your private key is the only way to recover your wallet"}',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14,
+                                                  fontFamily: 'dmsans',
+                                                  fontWeight: FontWeight.w400,
+                                                  height: 0,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
+                        Container(
+                          height: 66,
+                          padding: EdgeInsets.all(12),
+                          clipBehavior: Clip.antiAlias,
+                          decoration: ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(8),
+                                      clipBehavior: Clip.antiAlias,
+                                      decoration: ShapeDecoration(
+                                        color: Color(0x19FF5C5C),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 16,
+                                            height: 16,
+                                            clipBehavior: Clip.antiAlias,
+                                            decoration: BoxDecoration(),
+                                            child: SvgPicture.asset("assets/svgs/mdi_eye-lock.svg"),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Expanded(
+                                      child: Container(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              width: double.infinity,
+                                              child: Text(
+                                                '${getTranslated(context,"Do not let anyone see your private key" )??"Do not let anyone see your private key"}',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14,
+                                                  fontFamily: 'dmsans',
+                                                  fontWeight: FontWeight.w400,
+                                                  height: 0,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 66,
+                          padding: EdgeInsets.all(12),
+                          clipBehavior: Clip.antiAlias,
+                          decoration: ShapeDecoration(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.all(8),
+                                      clipBehavior: Clip.antiAlias,
+                                      decoration: ShapeDecoration(
+                                        color: Color(0x19FF5C5C),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          Container(
+                                            width: 16,
+                                            height: 16,
+                                            clipBehavior: Clip.antiAlias,
+                                            decoration: BoxDecoration(),
+                                            child: SvgPicture.asset("assets/svgs/Frame 34209.svg"),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(width: 8),
+                                    Expanded(
+                                      child: Container(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              width: double.infinity,
+                                              child: Text(
+                                                '${getTranslated(context,"Never share your private key with anyone" )??"Never share your private key with anyone"}',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14,
+                                                  fontFamily: 'dmsans',
+                                                  fontWeight: FontWeight.w400,
+                                                  height: 0,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+
+
                       ],
                     ),
-                    SizedBox(height: 24),
+                    Column(
+                      children: [
+                        SizedBox(height: 16),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 24,
+                              width: 24,
 
-                    BottomRectangularBtn(
-                        color: isCheckBox.value==true?primaryColor.value:inputFieldBackgroundColor2.value,
-                        isDisabled: isCheckBox==false?true:false,
-                        onTapFunc: () {
-                          // Get.to(ChooseAccountForPrivateKey());
-                          Get.to(PrivateKey(privateKey: privateKey!));
-                        },
-                        btnTitle: "Continue"),
-                    SizedBox(height: 16),
+                              child: Theme(
+                                data: ThemeData(
+
+                                    checkboxTheme: CheckboxThemeData(
+                                      side: BorderSide(width: 2,color: lightTextColor.value),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5.0), // Adjust the radius as needed
+                                      ),
+
+                                    )
+                                ),
+                                child: Checkbox(
+                                    activeColor: primaryColor.value,
+                                    value: isCheckBox.value, onChanged: (val){
+                                  isCheckBox.value=val!;
+
+                                }),
+                              ),
+                            ),
+                            SizedBox(width: 10,),
+                            Expanded(
+                              child: Text(
+                                '${getTranslated(context,"I will not share my private key with anyone." )??"I will not share my private key with anyone."}',
+                                style: TextStyle(
+                                  color: lightTextColor.value,
+                                  fontSize: 14,
+                                  fontFamily: 'dmsans',
+                                  fontWeight: FontWeight.w400,
+                                  height: 0,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 24),
+
+                        BottomRectangularBtn(
+                            color: isCheckBox.value==true?Colors.greenAccent:Colors.black,
+                            isDisabled: isCheckBox==false?true:false,
+                            onTapFunc: () {
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>PrivateKey(privateKey: privateKey!)));
+                            },
+                            btnTitle: "Continue"),
+                        SizedBox(height: 16),
+                      ],
+                    ),
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
+
+          ],
         ),
       ),
     );

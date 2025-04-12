@@ -113,459 +113,460 @@ class _SwapScreenState extends State<SwapScreen> {
   ];
   AppController appController = Get.find<AppController>();
 
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: primaryBackgroundColor.value,
-      body: SafeArea(
-        child:
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 22,vertical: 20),
-          child: Column(
-            children: [
-              Row(
-                children: [
-
-                  Text(
-                    "${getTranslated(context,"Swap Tokens" )??"Swap Tokens"}",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                      color: darkBlueColor.value,
-                      fontFamily: "dmsans",
-
-                    ),
-
-                  ),
-                ],
+    return Obx(
+          () => Scaffold(
+        backgroundColor: primaryBackgroundColor.value,
+        body: Stack(
+          children: [
+            // Background Image
+            Positioned.fill(
+              child: Image.asset(
+                "assets/background/bg7.png",
+                fit: BoxFit.cover,
               ),
-              SizedBox(height: 16,),
-            Expanded(
-              child: ListView(children: [
-
-
-
-
-
-
-
-
-                Stack(
+            ),
+            SafeArea(
+              child:
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 22,vertical: 20),
+                child: Column(
                   children: [
-                    Container(
-                      height: 320,
-                      width: Get.width,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            height: 148,
-                            width: Get.width,
-                            padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                color: inputFieldBackgroundColor2.value,
-                                border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
-                            ),
-                            child:Column(
-                              children: [
-                                InkWell(
-                                  onTap:(){
-                                    // Get.bottomSheet(
-                                    //     clipBehavior: Clip.antiAlias,
-                                    //     isScrollControlled: true,
-                                    //     backgroundColor: primaryBackgroundColor.value,
-                                    //     shape: OutlineInputBorder(
-                                    //         borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
-                                    //     selectToken()
-                                    // );
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Container(
-                                            height: 40,
-                                            width: 40,
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: primaryBackgroundColor.value
-                                            ),
-                                            child: Image.asset("assets/images/eth.png"),
-                                          ),
-                                          SizedBox(width: 10,),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "ETH",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: headingColor.value,
-                                                  fontFamily: "dmsans",
+                    Row(
+                      children: [
 
-                                                ),
+                        Text(
+                          "${getTranslated(context,"Swap Tokens" )??"Swap Tokens"}",
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                            fontFamily: "dmsans",
 
-                                              ),
-                                              Text(
-                                                "${getTranslated(context,"Available" )??"Available"}: 12",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: lightTextColor.value,
-                                                  fontFamily: "dmsans",
-
-                                                ),
-
-                                              ),
-
-                                            ],
-                                          )
-                                        ],
-                                      ),
-
-                                      Icon(Icons.keyboard_arrow_down_outlined,color: headingColor.value,size: 25,)
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 15,),
-                                Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "0",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 36,
-                                        fontWeight: FontWeight.w700,
-                                        color: headingColor.value,
-                                        fontFamily: "dmsans",
-
-                                      ),
-
-                                    ),
-                                    Container(
-                                      height: 24,
-                                      width: 50,
-                                      decoration: BoxDecoration(
-                                          color: lightTextColor.value,
-                                          borderRadius: BorderRadius.circular(8)
-                                      ),
-                                      child:  Center(
-                                        child: Text(
-                                          "MAX",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 11,
-                                            fontWeight: FontWeight.w600,
-                                            color: Color(0xffFFFFFF),
-                                            fontFamily: "dmsans",
-
-                                          ),
-
-                                        ),
-                                      ),
-                                    )
-
-                                  ],
-                                ),
-
-
-                              ],
-                            ),
                           ),
-                          Container(
-                            height: 148,
-                            width: Get.width,
-                            padding: EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16),
-                                color: inputFieldBackgroundColor2.value,
-                                border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
-                            ),
-                            child:Column(
-                              children: [
-                                InkWell(
-                                  onTap:(){
-                                    Get.bottomSheet(
-                                        clipBehavior: Clip.antiAlias,
-                                        isScrollControlled: true,
-                                        backgroundColor: primaryBackgroundColor.value,
-                                        shape: OutlineInputBorder(
-                                            borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
-                                        selectToken());
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Container(
-                                            height: 40,
-                                            width: 40,
-                                            decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: primaryBackgroundColor.value
-                                            ),
-                                            child: Image.asset("assets/images/btc.png"),
-                                          ),
-                                          SizedBox(width: 10,),
-                                          Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "BTC",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontSize: 17,
-                                                  fontWeight: FontWeight.w600,
-                                                  color: headingColor.value,
-                                                  fontFamily: "dmsans",
-                                                ),
-                                              ),
-                                              Text(
-                                                "${getTranslated(context,"Available" )??"Available"}: 12",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: lightTextColor.value,
-                                                  fontFamily: "dmsans",
-
-                                                ),
-
-                                              ),
-
-                                            ],
-                                          )
-                                        ],
-                                      ),
-
-                                      Icon(Icons.keyboard_arrow_down_outlined,color: headingColor.value,size: 25,)
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 15,),
-                                Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "0",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 36,
-                                        fontWeight: FontWeight.w700,
-                                        color: headingColor.value,
-                                        fontFamily: "dmsans",
-
-                                      ),
-
-                                    ),
-                                    Text(
-                                      "\$0.00",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w400,
-                                        color: lightTextColor.value,
-                                        fontFamily: "dmsans",
-
-                                      ),
-
-                                    )
-
-                                  ],
-                                ),
-
-
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Positioned.fill(child: Center(
-                      child: Container(
-                        height: 42,
-                        width: 42,
-                        padding: EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: LinearGradient(
-                                colors: [
-                                  Color(0xff55DDAF),
-                                  Color(0xff76CF56),
-
-
-                                ]
-                            )
 
                         ),
-                        child: SvgPicture.asset("assets/svgs/convert.svg"),
-                      ),
-                    ))
+                      ],
+                    ),
+                    SizedBox(height: 16,),
+                    Expanded(
+                      child: ListView(children: [
+                        Stack(
+                          children: [
+                            Container(
+                              height: 320,
+                              width: Get.width,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    height: 148,
+                                    width: Get.width,
+                                    padding: EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        color: Colors.grey.shade800.withOpacity(0.7),
+                                        border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
+                                    ),
+                                    child:Column(
+                                      children: [
+                                        InkWell(
+                                          onTap:(){
+                                            // Get.bottomSheet(
+                                            //     clipBehavior: Clip.antiAlias,
+                                            //     isScrollControlled: true,
+                                            //     backgroundColor: primaryBackgroundColor.value,
+                                            //     shape: OutlineInputBorder(
+                                            //         borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
+                                            //     selectToken()
+                                            // );
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    height: 40,
+                                                    width: 40,
+                                                    decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color: primaryBackgroundColor.value
+                                                    ),
+                                                    child: Image.asset("assets/images/eth.png"),
+                                                  ),
+                                                  SizedBox(width: 10,),
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        "ETH",
+                                                        textAlign: TextAlign.center,
+                                                        style: TextStyle(
+                                                          fontSize: 17,
+                                                          fontWeight: FontWeight.w600,
+                                                          color: Colors.white,
+                                                          fontFamily: "dmsans",
+
+                                                        ),
+
+                                                      ),
+                                                      Text(
+                                                        "${getTranslated(context,"Available" )??"Available"}: 12",
+                                                        textAlign: TextAlign.center,
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight.w400,
+                                                          color: Colors.white,
+                                                          fontFamily: "dmsans",
+
+                                                        ),
+
+                                                      ),
+
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+
+                                              Icon(Icons.keyboard_arrow_down_outlined,color: Colors.white,size: 25,)
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(height: 15,),
+                                        Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "0",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 36,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.white,
+                                                fontFamily: "dmsans",
+
+                                              ),
+
+                                            ),
+                                            Container(
+                                              height: 24,
+                                              width: 50,
+                                              decoration: BoxDecoration(
+                                                  color: lightTextColor.value,
+                                                  borderRadius: BorderRadius.circular(8)
+                                              ),
+                                              child:  Center(
+                                                child: Text(
+                                                  "MAX",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontSize: 11,
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Color(0xffFFFFFF),
+                                                    fontFamily: "dmsans",
+
+                                                  ),
+
+                                                ),
+                                              ),
+                                            )
+
+                                          ],
+                                        ),
+
+
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 148,
+                                    width: Get.width,
+                                    padding: EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        color: Colors.grey.shade800.withOpacity(0.7),
+                                        border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
+                                    ),
+                                    child:Column(
+                                      children: [
+                                        InkWell(
+                                          onTap:(){
+                                            Get.bottomSheet(
+                                                clipBehavior: Clip.antiAlias,
+                                                isScrollControlled: true,
+                                                backgroundColor: primaryBackgroundColor.value,
+                                                shape: OutlineInputBorder(
+                                                    borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
+                                                selectToken());
+                                          },
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    height: 40,
+                                                    width: 40,
+                                                    decoration: BoxDecoration(
+                                                        shape: BoxShape.circle,
+                                                        color: primaryBackgroundColor.value
+                                                    ),
+                                                    child: Image.asset("assets/images/btc.png"),
+                                                  ),
+                                                  SizedBox(width: 10,),
+                                                  Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                        "BTC",
+                                                        textAlign: TextAlign.center,
+                                                        style: TextStyle(
+                                                          fontSize: 17,
+                                                          fontWeight: FontWeight.w600,
+                                                          color: Colors.white,
+                                                          fontFamily: "dmsans",
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        "${getTranslated(context,"Available" )??"Available"}: 12",
+                                                        textAlign: TextAlign.center,
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight.w400,
+                                                          color: Colors.white,
+                                                          fontFamily: "dmsans",
+
+                                                        ),
+
+                                                      ),
+
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+
+                                              Icon(Icons.keyboard_arrow_down_outlined,color: Colors.white,size: 25,)
+                                            ],
+                                          ),
+                                        ),
+                                        SizedBox(height: 15,),
+                                        Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "0",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 36,
+                                                fontWeight: FontWeight.w700,
+                                                color: Colors.white,
+                                                fontFamily: "dmsans",
+
+                                              ),
+
+                                            ),
+                                            Text(
+                                              "\$0.00",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w400,
+                                                color: Colors.white,
+                                                fontFamily: "dmsans",
+
+                                              ),
+
+                                            )
+
+                                          ],
+                                        ),
+
+
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Positioned.fill(child: Center(
+                              child: Container(
+                                height: 42,
+                                width: 42,
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    gradient: LinearGradient(
+                                        colors: [
+                                          Color(0xff55DDAF),
+                                          Color(0xff76CF56),
+
+
+                                        ]
+                                    )
+
+                                ),
+                                child: SvgPicture.asset("assets/svgs/convert.svg"),
+                              ),
+                            ))
+                          ],
+                        ),
+                        SizedBox(height: 32,),
+
+
+                        Container(
+                          // height: 148,
+                          width: Get.width,
+                          padding: EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Colors.grey.shade800.withOpacity(0.7),
+                              border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
+                          ),
+                          child:Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+
+
+                                      Text(
+                                        "${getTranslated(context,"Swap Details" )??"Swap Details"}",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                          fontFamily: "dmsans",
+
+                                        ),
+
+                                      )
+                                    ],
+                                  ),
+
+                                  Icon(Icons.keyboard_arrow_up_outlined,color: Colors.white,size: 25,)
+                                ],
+                              ),
+                              SizedBox(height: 15,),
+                              Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
+                              SizedBox(height: 15,),
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "${getTranslated(context,"Routing Fee" )??"Routing Fee"} ",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                          fontFamily: "dmsans",
+
+                                        ),
+
+                                      ),
+                                      SvgPicture.asset("assets/svgs/Question.svg")
+                                    ],
+                                  ),
+                                  Text(
+                                    "0",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                      fontFamily: "dmsans",
+
+                                    ),
+
+                                  )
+
+                                ],
+                              ),
+                              SizedBox(height: 15,),
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "${getTranslated(context,"Slippage Tolerance" )??"Slippage Tolerance"}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                      fontFamily: "dmsans",
+
+                                    ),
+
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "0.1%",
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                          fontFamily: "dmsans",
+
+                                        ),
+
+                                      ),
+                                      SizedBox(width:7,),
+                                      SvgPicture.asset("assets/svgs/mingcute_settings-6-line.svg")
+                                    ],
+                                  )
+
+                                ],
+                              ),
+
+
+                            ],
+                          ),
+                        ),
+                      ],),
+                    ),
+                    Column(
+                      children: [
+                        SizedBox(height: 24,),
+                        BottomRectangularBtn(
+                            onTapFunc: (){
+                              Get.bottomSheet(
+                                  clipBehavior: Clip.antiAlias,
+                                  isScrollControlled: true,
+
+                                  backgroundColor: primaryBackgroundColor.value,
+                                  shape: OutlineInputBorder(
+                                      borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
+                                  commingSoon()
+                              );
+                            }, btnTitle: "Swap",
+                          color: Colors.green), // 💚 Thêm dòng này),
+                      ],
+                    )
+
+
+
+
+
+
                   ],
                 ),
-                SizedBox(height: 32,),
-
-
-                Container(
-                  // height: 148,
-                  width: Get.width,
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      color: inputFieldBackgroundColor2.value,
-                      border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
-                  ),
-                  child:Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-
-
-                              Text(
-                                "${getTranslated(context,"Swap Details" )??"Swap Details"}",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  color: headingColor.value,
-                                  fontFamily: "dmsans",
-
-                                ),
-
-                              )
-                            ],
-                          ),
-
-                          Icon(Icons.keyboard_arrow_up_outlined,color: headingColor.value,size: 25,)
-                        ],
-                      ),
-                      SizedBox(height: 15,),
-                      Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
-                      SizedBox(height: 15,),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                "${getTranslated(context,"Routing Fee" )??"Routing Fee"} ",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w600,
-                                  color: headingColor.value,
-                                  fontFamily: "dmsans",
-
-                                ),
-
-                              ),
-                              SvgPicture.asset("assets/svgs/Question.svg")
-                            ],
-                          ),
-                          Text(
-                            "0",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: headingColor.value,
-                              fontFamily: "dmsans",
-
-                            ),
-
-                          )
-
-                        ],
-                      ),
-                      SizedBox(height: 15,),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "${getTranslated(context,"Slippage Tolerance" )??"Slippage Tolerance"}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: headingColor.value,
-                              fontFamily: "dmsans",
-
-                            ),
-
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "0.1%",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  color: headingColor.value,
-                                  fontFamily: "dmsans",
-
-                                ),
-
-                              ),
-                              SizedBox(width:7,),
-                              SvgPicture.asset("assets/svgs/mingcute_settings-6-line.svg")
-                            ],
-                          )
-
-                        ],
-                      ),
-
-
-                    ],
-                  ),
-                ),
-              ],),
+              ),
             ),
-              Column(
-                children: [
-                  SizedBox(height: 24,),
-                  BottomRectangularBtn(
-                      onTapFunc: (){
-                      Get.bottomSheet(
-                        clipBehavior: Clip.antiAlias,
-                        isScrollControlled: true,
-
-                        backgroundColor: primaryBackgroundColor.value,
-                        shape: OutlineInputBorder(
-                            borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
-                        commingSoon()
-                    );
-                  }, btnTitle: "Swap"),
-                ],
-              )
-
-
-
-
-
-
-
-
-
-
-            ],
-          ),
+          ],
         ),
       ),
     );

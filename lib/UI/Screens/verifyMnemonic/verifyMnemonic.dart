@@ -69,7 +69,7 @@ class _VerifyMnemonicState extends State<VerifyMnemonic> {
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: headingColor.value,
+                            color: Colors.white,
                             fontFamily: "dmsans",
                           ),
                         ),
@@ -122,22 +122,11 @@ class _VerifyMnemonicState extends State<VerifyMnemonic> {
                         }
                         return Row(
                           children: [
-                            Text(
-                              "${index + 1}.",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                color: headingColor.value,
-                              ),
-                            ),
-                            SizedBox(width: 4),
                             Expanded(
                               child: Container(
                                 padding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
                                 decoration: BoxDecoration(
-                                  color: appController.isDark.value
-                                      ? Color(0xff1A2B56)
-                                      : inputFieldBackgroundColor.value,
+                                  color: Colors.grey.shade800.withOpacity(0.7),
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(width: 1, color: inputFieldBackgroundColor.value),
                                 ),
@@ -145,7 +134,7 @@ class _VerifyMnemonicState extends State<VerifyMnemonic> {
                                     ? TextField(
                                   controller: controllers[index],
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: headingColor.value),
+                                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: Colors.white),
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText: "____",
@@ -157,9 +146,9 @@ class _VerifyMnemonicState extends State<VerifyMnemonic> {
                                     widget.mnemonicWords[index],
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 12,
                                       fontWeight: FontWeight.w500,
-                                      color: headingColor.value,
+                                      color: Colors.white,
                                     ),
                                   ),
                                 ),
@@ -173,7 +162,7 @@ class _VerifyMnemonicState extends State<VerifyMnemonic> {
                     ElevatedButton(
                       onPressed: _validateMnemonics,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
+                        backgroundColor: Colors.grey.shade800.withOpacity(0.7),
                         padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -184,7 +173,7 @@ class _VerifyMnemonicState extends State<VerifyMnemonic> {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: Colors.black,
+                          color: Colors.white,
                         ),
                       ),
                     ),

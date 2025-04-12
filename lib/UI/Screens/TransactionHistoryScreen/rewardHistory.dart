@@ -150,7 +150,7 @@ class _RewardHistoryScreenState extends State<RewardHistoryScreen> {
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: FontWeight.w600,
-                              color: darkBlueColor.value,
+                              color: Colors.white,
                               fontFamily: "dmsans",
 
                             ),
@@ -170,14 +170,14 @@ class _RewardHistoryScreenState extends State<RewardHistoryScreen> {
                           itemBuilder: (BuildContext context, int index) {
                             return   GestureDetector(
                               onTap: (){
-                                Get.to(TransactionHistoryDetails(type:   "${transaction[index]['type']}",));
+                                // Get.to(TransactionHistoryDetails(type:   "${transaction[index]['type']}",));
                               },
                               child: Container(
                                 // height: 100,
                                 width: Get.width,
                                 padding: EdgeInsets.all(16),
                                 decoration: BoxDecoration(
-                                    color: inputFieldBackgroundColor2.value,
+                                    color: Colors.grey.shade800.withOpacity(0.7),
                                     borderRadius: BorderRadius.circular(16),
                                     border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
                                 ),
@@ -294,7 +294,7 @@ class _RewardHistoryScreenState extends State<RewardHistoryScreen> {
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.w400,
-                                                color: lightTextColor.value,
+                                                color: Colors.white,
                                                 fontFamily: "dmsans",
                                               ),
                                             ),
@@ -304,7 +304,7 @@ class _RewardHistoryScreenState extends State<RewardHistoryScreen> {
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.w400,
-                                                color: lightTextColor.value,
+                                                color: Colors.white,
                                                 fontFamily: "dmsans",
                                               ),
                                             ),
@@ -322,7 +322,7 @@ class _RewardHistoryScreenState extends State<RewardHistoryScreen> {
                                                   style: TextStyle(
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.w700,
-                                                    color: headingColor.value,
+                                                    color: Colors.white,
                                                     fontFamily: "dmsans",
                                                   ),
                                                 ),
@@ -332,7 +332,7 @@ class _RewardHistoryScreenState extends State<RewardHistoryScreen> {
                                                   style: TextStyle(
                                                     fontSize: 10,
                                                     fontWeight: FontWeight.w700,
-                                                    color: lightTextColor.value,
+                                                    color: Colors.white,
                                                     fontFamily: "dmsans",
                                                   ),
                                                 ),
@@ -344,7 +344,7 @@ class _RewardHistoryScreenState extends State<RewardHistoryScreen> {
                                               style: TextStyle(
                                                 fontSize: 12,
                                                 fontWeight: FontWeight.w400,
-                                                color: headingColor.value,
+                                                color: Colors.white,
                                                 fontFamily: "dmsans",
                                               ),
                                             ),

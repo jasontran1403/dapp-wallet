@@ -28,178 +28,162 @@ class _ReceiveScreenState extends State<ReceiveScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryBackgroundColor.value,
-      body: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: 22,vertical: 20),
-          children: [
-           Row(
-             children: [
-               GestureDetector(
-                   onTap:(){
-                     Get.back();
-                   },
-                   child: Icon(Icons.arrow_back_ios,color: headingColor.value,size: 18,)),
-               SizedBox(width: 8,),
-               Text(
-                 "${getTranslated(context,"Receive" )??"Receive"}",
-                 textAlign: TextAlign.start,
-                 style: TextStyle(
-                   fontSize: 15,
-                   fontWeight: FontWeight.w600,
-                   color: headingColor.value,
-                   fontFamily: "dmsans",
-
-                 ),
-
-               ),
-             ],
-           ),
-            SizedBox(height: 32,),
-
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/background/bg7.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: SafeArea(
+          child: ListView(
+            padding: EdgeInsets.symmetric(horizontal: 22, vertical: 20),
+            children: [
+              Row(
+                children: [
+                  GestureDetector(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Icon(Icons.arrow_back_ios, color: Colors.white, size: 18)),
+                  SizedBox(width: 8),
+                  Text(
+                    "${getTranslated(context, "Receive") ?? "Receive"}",
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      fontFamily: "dmsans",
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 32),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
                     height: 28,
                     width: 28,
+                    decoration: BoxDecoration(shape: BoxShape.circle),
+                    child: Image.asset(widget.image ?? "assets/images/bnb.png"),
+                  ),
+                  SizedBox(width: 10),
+                  Text(
+                    widget.symbol ?? "BNB",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.white,
+                      fontFamily: "dmsans",
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 32),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 227,
+                    width: 227,
+                    padding: EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle
+                      borderRadius: BorderRadius.circular(18),
+                      color: Colors.white,
+                      border: Border.all(width: 1, color: Colors.white),
                     ),
-                    child: Image.asset(widget.image ?? "assets/images/bnb.png")),
-                SizedBox(width: 10,),
-                Text(
-                  widget.symbol ?? "BNB",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w700,
-                    color: headingColor.value,
-                    fontFamily: "dmsans",
+                    child: QrImageView(
+                      data: widget.walletAddress ?? "",
+                      version: QrVersions.auto,
+                      size: 200,
+                      backgroundColor: Colors.white,
+                    ),
                   ),
+                ],
+              ),
+              SizedBox(height: 32),
+              Text(
+                "${getTranslated(context, "Send only the specified coins to this deposit address. This address does NOT support deposit of non-fungible token.") ?? "Send only the specified coins to this deposit address. This address does NOT support deposit of non-fungible token."}",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.redAccent,
+                  fontStyle: FontStyle.italic,
+                  fontFamily: "dmsans",
                 ),
-              ],
-            ),
-            SizedBox(height: 32,),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  height: 227,
-                  width: 227,
-                  padding: EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(18),
-                    color: inputFieldBackgroundColor.value,
-                    border: Border.all(width: 1, color: inputFieldBackgroundColor2.value),
-                  ),
-                  child: QrImageView(
-                    data: widget.walletAddress ?? "",
-                    version: QrVersions.auto,
-                    size: 200,
-                    backgroundColor: Colors.white, // Giúp QR dễ quét hơn
-                  ),
+              ),
+              SizedBox(height: 32),
+              Divider(height: 1, color: Colors.white54),
+              SizedBox(height: 24),
+              Text(
+                "${getTranslated(context, "Deposit Address") ?? "Deposit Address"}",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white,
+                  fontFamily: "dmsans",
                 ),
-              ],
-            ),
-            SizedBox(height: 32,),
-            Text(
-              "${getTranslated(context,"Send only the specified coins to this deposit address. This address does NOT support deposit of non-fungible token." )??"Send only the specified coins to this deposit address. This address does NOT support deposit of non-fungible token."}",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: Colors.red,
-                fontFamily: "dmsans",
-                fontStyle: FontStyle.italic, // Thêm chữ nghiêng
               ),
-            ),
-            SizedBox(height: 32,),
-            Divider(height: 1,color: inputFieldBackgroundColor2.value,),
-            SizedBox(height: 24,),
-            Text(
-              "${getTranslated(context,"Deposit Address" )??"Deposit Address"}",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: headingColor.value,
-                fontFamily: "dmsans",
-
+              SizedBox(height: 16),
+              Text(
+                widget.walletAddress ?? "Loading...",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                  fontFamily: "dmsans",
+                ),
               ),
-
-            ),
-            SizedBox(height: 16,),
-            Text(
-              widget.walletAddress ?? "Loading...",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
-                color: headingColor.value,
-                fontFamily: "dmsans",
-
-              ),
-
-            ),
-
-            SizedBox(height: 44,),
-
-
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {
-                      Clipboard.setData(ClipboardData(text: widget.walletAddress ?? "null"));
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("Copied wallet address to clipboard!"),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
-                        color: primaryColor.value,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset("assets/svgs/Test.svg"),
-                          SizedBox(width: 10),
-                          Text(
-                            "${getTranslated(context, "Copy") ?? "Copy"}",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w700,
-                              color: Color(0xffFFFFFF),
-                              fontFamily: "dmsans",
-                            ),
+              SizedBox(height: 44),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        Clipboard.setData(
+                            ClipboardData(text: widget.walletAddress ?? "null"));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content:
+                            Text("Copied wallet address to clipboard!"),
+                            duration: Duration(seconds: 2),
                           ),
-                        ],
+                        );
+                      },
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100),
+                          color: primaryColor.value,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset("assets/svgs/Test.svg"),
+                            SizedBox(width: 10),
+                            Text(
+                              "${getTranslated(context, "Copy") ?? "Copy"}",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                                fontFamily: "dmsans",
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ],
-            )
-
-
-
-
-
-
-
-
-
-
-          ],
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

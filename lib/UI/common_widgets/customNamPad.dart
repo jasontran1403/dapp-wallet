@@ -26,7 +26,7 @@ class CustomNumPad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var iconColor =Colors.transparent.value;
+    var iconColor = Colors.white;
     var buttonColor = Colors.transparent;
     return Container(
       margin: const EdgeInsets.only(left: 20, right: 20),
@@ -157,7 +157,7 @@ class CustomNumPad extends StatelessWidget {
                     //   ),
                     // ),
                     // onPressed: delete,
-                    child: Center(child: SvgPicture.asset("assets/svgs/jvcc.svg",color: headingColor.value,)),
+                    child: Center(child: SvgPicture.asset("assets/svgs/jvcc.svg",color: Colors.white,)),
                   ),
                 ),
               ),
@@ -242,7 +242,7 @@ class _NumberButtonState extends State<NumberButton> {
             style:TextStyle(
               fontWeight: FontWeight.w700,
               fontSize: 20,
-              color: headingColor.value,
+              color: Colors.white,
             ),
           ),
         ),

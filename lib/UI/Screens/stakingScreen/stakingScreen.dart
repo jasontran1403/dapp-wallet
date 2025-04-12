@@ -317,11 +317,10 @@ class _StakingScreenState extends State<StakingScreen> {
                       children: [
                         Text(
                           "${getTranslated(context, "Staking") ?? "Staking"}",
-                          textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.w600,
-                            color: Colors.black,
+                            color: Colors.white,
                             fontFamily: "dmsans",
                           ),
                         ),
@@ -331,6 +330,7 @@ class _StakingScreenState extends State<StakingScreen> {
                     Expanded(
                       child: ListView(
                         children: [
+                          // Phần Staking
                           Stack(
                             children: [
                               Container(
@@ -340,12 +340,12 @@ class _StakingScreenState extends State<StakingScreen> {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Container(
-                                      height: 370,
+                                      height: 380,
                                       width: Get.width,
                                       padding: EdgeInsets.all(16),
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(16),
-                                        color: inputFieldBackgroundColor2.value,
+                                        color: Colors.grey.shade800.withOpacity(0.7),
                                         border: Border.all(width: 1, color: inputFieldBackgroundColor.value),
                                       ),
                                       child: Column(
@@ -374,7 +374,7 @@ class _StakingScreenState extends State<StakingScreen> {
                                                       width: 40,
                                                       decoration: BoxDecoration(
                                                           shape: BoxShape.circle,
-                                                          color: primaryBackgroundColor.value),
+                                                          color: Colors.grey.shade800.withOpacity(0.7),),
                                                       child: currentCoin.containsKey("symbol")
                                                           ? Image.asset(currentCoin['image'])
                                                           : SizedBox(),
@@ -391,7 +391,7 @@ class _StakingScreenState extends State<StakingScreen> {
                                                           style: TextStyle(
                                                             fontSize: 17,
                                                             fontWeight: FontWeight.w600,
-                                                            color: headingColor.value,
+                                                            color: Colors.white,
                                                             fontFamily: "dmsans",
                                                           ),
                                                         ),
@@ -401,7 +401,7 @@ class _StakingScreenState extends State<StakingScreen> {
                                                           width: 14,
                                                           child: CircularProgressIndicator(
                                                             strokeWidth: 2,
-                                                            color: primaryColor.value,
+                                                            color: Colors.white,
                                                           ),
                                                         )
                                                             : Text(
@@ -419,11 +419,11 @@ class _StakingScreenState extends State<StakingScreen> {
                                                   ],
                                                 ),
                                                 Icon(Icons.keyboard_arrow_down_outlined,
-                                                    color: headingColor.value, size: 25),
+                                                    color: Colors.white, size: 25),
                                               ],
                                             ),
                                           ),
-                                          SizedBox(height: 15),
+                                          SizedBox(height: 8),
                                           Divider(
                                               color: inputFieldBackgroundColor.value,
                                               height: 1,
@@ -437,16 +437,13 @@ class _StakingScreenState extends State<StakingScreen> {
                                                   keyboardType:
                                                   TextInputType.numberWithOptions(decimal: true),
                                                   inputFormatters: [
-                                                    if (indexSelected == 0)
-                                                      FilteringTextInputFormatter.allow(
-                                                          RegExp(r'^\d*\.?\d{0,3}'))
-                                                    else
-                                                      FilteringTextInputFormatter.digitsOnly
+                                                    FilteringTextInputFormatter.allow(
+                                                        RegExp(r'^\d*\.?\d{0,8}'))
                                                   ],
                                                   style: TextStyle(
                                                     fontSize: 36,
                                                     fontWeight: FontWeight.w700,
-                                                    color: headingColor.value,
+                                                    color: Colors.white,
                                                     fontFamily: "dmsans",
                                                   ),
                                                   decoration: InputDecoration(
@@ -466,17 +463,18 @@ class _StakingScreenState extends State<StakingScreen> {
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w400,
-                                                  color: lightTextColor.value,
+                                                  color: Colors.greenAccent,
                                                   fontFamily: "dmsans",
                                                 ),
                                               ),
                                             ],
                                           ),
-                                          SizedBox(height: 15),
+                                          SizedBox(height: 8),
                                           Divider(
                                               color: inputFieldBackgroundColor.value,
                                               height: 1,
                                               thickness: 1),
+                                          SizedBox(height: 8),
                                           Row(
                                             children: [
                                               Text(
@@ -484,7 +482,7 @@ class _StakingScreenState extends State<StakingScreen> {
                                                 style: TextStyle(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w500,
-                                                  color: Colors.black,
+                                                  color: Colors.white,
                                                   fontFamily: "dmsans",
                                                 ),
                                               ),
@@ -494,7 +492,7 @@ class _StakingScreenState extends State<StakingScreen> {
                                                   controller: cycleController,
                                                   enabled: false,
                                                   style: TextStyle(
-                                                    color: Colors.black,
+                                                    color: Colors.white,
                                                     fontSize: 16,
                                                     fontFamily: "dmsans",
                                                   ),
@@ -512,6 +510,12 @@ class _StakingScreenState extends State<StakingScreen> {
                                               )
                                             ],
                                           ),
+                                          SizedBox(height: 8),
+                                          Divider(
+                                              color: inputFieldBackgroundColor.value,
+                                              height: 1,
+                                              thickness: 1),
+                                          SizedBox(height: 8),
                                           Row(
                                             crossAxisAlignment: CrossAxisAlignment.center,
                                             children: [
@@ -524,7 +528,7 @@ class _StakingScreenState extends State<StakingScreen> {
                                                     style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight: FontWeight.w500,
-                                                      color: Colors.black,
+                                                      color: Colors.white,
                                                       fontFamily: "dmsans",
                                                     ),
                                                   ),
@@ -542,7 +546,7 @@ class _StakingScreenState extends State<StakingScreen> {
                                                         enabled: false,
                                                         maxLines: indexSelected == 2 ? 1 : 2,
                                                         style: TextStyle(
-                                                          color: Colors.black,
+                                                          color: Colors.white,
                                                           fontSize: 16,
                                                           fontFamily: "dmsans",
                                                         ),
@@ -563,7 +567,7 @@ class _StakingScreenState extends State<StakingScreen> {
                                               ),
                                             ],
                                           ),
-                                          SizedBox(width: 32),
+                                          SizedBox(width: 20),
                                           if (currentCoin['symbol'] != "EFT")
                                             Row(
                                               children: [
@@ -588,22 +592,19 @@ class _StakingScreenState extends State<StakingScreen> {
                                                     fontFamily: "dmsans",
                                                   ),
                                                 ),
+                                                SizedBox(width: 8),
                                               ],
                                             ),
 
-                                          SizedBox(width: 32),
-                                          Column(
-                                            children: [
-                                              SizedBox(height: 24),
-                                              BottomRectangularBtn(
-                                                  onTapFunc: () {
-                                                    if (!isAnyClaimLoading) {
-                                                      showConfirmDialog();
-                                                    }
-                                                  },
-                                                  btnTitle: "Staking"),
-                                            ],
-                                          )
+                                          BottomRectangularBtn(
+                                            onTapFunc: () {
+                                              if (!isAnyClaimLoading) {
+                                                showConfirmDialog();
+                                              }
+                                            },
+                                            btnTitle: "Staking",
+                                            color: Colors.green, // 💚 Thêm dòng này
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -612,65 +613,58 @@ class _StakingScreenState extends State<StakingScreen> {
                               ),
                             ],
                           ),
-                        ],
-                      ),
-                    ),
+                          SizedBox(height: 16), // Khoảng cách giữa hai phần
 
-                    // Trong phần build, thay thế phần hiển thị internalBalances trước đó bằng:
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: inputFieldBackgroundColor2.value,
-                        border: Border.all(color: inputFieldBackgroundColor.value),
-                      ),
-                      constraints: BoxConstraints(maxHeight: 340), // Giới hạn chiều cao tối đa
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.all(16),
-                            child: Text(
-                              "Staking Rewards",
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: headingColor.value,
-                              ),
+                          // Phần Internal Balances
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Colors.grey.shade800.withOpacity(0.7),
+                              border: Border.all(color: inputFieldBackgroundColor.value),
                             ),
-                          ),
-                          Divider(height: 1, color: inputFieldBackgroundColor.value),
-                          Expanded(
-                            child: ListView.separated(
-                              itemCount: internalBalances.length,
-                              separatorBuilder: (_, __) => Divider(
-                                height: 1,
-                                color: inputFieldBackgroundColor.value,
-                              ),
-                              itemBuilder: (context, index) {
-                                final token = internalBalances[index];
-
-                                return KeyedSubtree(
-                                  key: ValueKey(token['symbol']), // hoặc ValueKey(index)
-                                  child: _buildBalanceItem(
-                                    image: token['image']!,
-                                    symbol: token['symbol']!,
-                                    name: token['name']!,
-                                    balance: token['amount'].toString(),
-                                    index: index,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.all(16),
+                                  child: Text(
+                                    "Staking Rewards",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                    ),
                                   ),
-                                );
-                              },
+                                ),
+                                Divider(height: 1, color: inputFieldBackgroundColor.value),
+                                ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: internalBalances.length,
+                                  separatorBuilder: (_, __) => Divider(
+                                    height: 1,
+                                    color: inputFieldBackgroundColor.value,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    final token = internalBalances[index];
+                                    return _buildBalanceItem(
+                                      image: token['image']!,
+                                      symbol: token['symbol']!,
+                                      name: token['name']!,
+                                      balance: token['amount'].toString(),
+                                      index: index,
+                                    );
+                                  },
+                                ),
+                              ],
                             ),
                           ),
-
-
                         ],
                       ),
                     ),
                   ],
                 ),
               ),
-
               if (isLoading)
                 Center(
                   child: CircularProgressIndicator(
@@ -689,9 +683,12 @@ class _StakingScreenState extends State<StakingScreen> {
       height: Get.height * 0.9,
       width: Get.width,
       padding: EdgeInsets.symmetric(horizontal: 22, vertical: 22),
-      color: appController.isDark.value == true
-          ? Color(0xff1A1930)
-          : inputFieldBackgroundColor.value,
+      decoration: BoxDecoration(  // Changed from color to decoration
+        image: DecorationImage(
+          image: AssetImage('assets/background/bg7.png'),
+          fit: BoxFit.cover,
+        ),
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -704,7 +701,7 @@ class _StakingScreenState extends State<StakingScreen> {
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
-                  color: headingColor.value,
+                  color: Colors.white,
                   fontFamily: "dmsans",
                 ),
               ),
@@ -714,7 +711,7 @@ class _StakingScreenState extends State<StakingScreen> {
                 },
                 child: Icon(
                   Icons.clear,
-                  color: headingColor.value,
+                  color: Colors.white,
                 ),
               )
             ],
@@ -723,31 +720,6 @@ class _StakingScreenState extends State<StakingScreen> {
           Expanded(
             child: ListView(
               children: [
-                SizedBox(height: 16),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 23,
-                      width: 113,
-                      decoration: BoxDecoration(
-                        color: appController.isDark.value == true
-                            ? Color(0xff1A2B56)
-                            : inputFieldBackgroundColor2.value,
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(
-                          width: 1,
-                          color: inputFieldBackgroundColor.value,
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      color: inputFieldBackgroundColor.value,
-                      height: 1,
-                      thickness: 2,
-                    ),
-                  ],
-                ),
                 SizedBox(height: 24),
                 ListView.separated(
                   shrinkWrap: true,
@@ -785,7 +757,7 @@ class _StakingScreenState extends State<StakingScreen> {
                         width: Get.width,
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: inputFieldBackgroundColor2.value,
+                          color: Colors.grey.shade800.withOpacity(0.7),
                           borderRadius: BorderRadius.circular(16),
                           border: Border.all(
                             width: 1,
@@ -824,9 +796,7 @@ class _StakingScreenState extends State<StakingScreen> {
                                                 style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.w600,
-                                                  color: appController.isDark.value == true
-                                                      ? Color(0xffFDFCFD)
-                                                      : primaryColor.value,
+                                                  color: Colors.white,
                                                   fontFamily: "dmsans",
                                                 ),
                                               ),
@@ -855,7 +825,7 @@ class _StakingScreenState extends State<StakingScreen> {
                                                 style: TextStyle(
                                                   fontSize: 13,
                                                   fontWeight: FontWeight.w400,
-                                                  color: lightTextColor.value,
+                                                  color: Colors.white,
                                                   fontFamily: "dmsans",
                                                 ),
                                               ),
@@ -865,7 +835,7 @@ class _StakingScreenState extends State<StakingScreen> {
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w400,
-                                                  color: lightTextColor.value,
+                                                  color: Colors.white,
                                                   fontFamily: "dmsans",
                                                 ),
                                               ),
@@ -894,6 +864,7 @@ class _StakingScreenState extends State<StakingScreen> {
 
   Widget confirmSwap() {
     return AlertDialog(
+      backgroundColor: Colors.grey.shade800.withOpacity(1), // Nền dialog
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -904,7 +875,7 @@ class _StakingScreenState extends State<StakingScreen> {
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: Colors.white, // Chữ trắng
             ),
           ),
           SizedBox(height: 10),
@@ -917,15 +888,32 @@ class _StakingScreenState extends State<StakingScreen> {
             'Are you sure you want to confirm the staking?',
             style: TextStyle(
               fontSize: 16,
-              color: Colors.white,
+              color: Colors.white, // Chữ trắng
             ),
           ),
           SizedBox(height: 20),
-          BottomRectangularBtn(
-            onTapFunc: () {
-              stakingExecute();
-            },
-            btnTitle: "Confirm Staking",
+          // Nút xác nhận màu xanh lá
+          Container(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                stakingExecute();
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green, // Màu xanh lá
+                padding: EdgeInsets.symmetric(vertical: 12),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text(
+                "Confirm Staking",
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white, // Chữ trắng
+                ),
+              ),
+            ),
           ),
           SizedBox(height: 10),
           TextButton(
@@ -945,6 +933,7 @@ class _StakingScreenState extends State<StakingScreen> {
       actions: [],
     );
   }
+
 
   void showConfirmDialog() {
     showDialog(
@@ -1035,13 +1024,7 @@ class _StakingScreenState extends State<StakingScreen> {
     );
   }
 
-  Widget _buildBalanceItem({
-    required String image,
-    required String symbol,
-    required String name,
-    required String balance,
-    required int index, // Thêm index vào tham số
-  }) {
+  Widget _buildBalanceItem({required String image, required String symbol, required String name, required String balance, required int index }) {
     return Padding(
       padding: EdgeInsets.all(16),
       child: Row(
@@ -1066,7 +1049,7 @@ class _StakingScreenState extends State<StakingScreen> {
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
-                    color: headingColor.value,
+                    color: Colors.white,
                   ),
                 ),
                 SizedBox(height: 4),
@@ -1074,7 +1057,7 @@ class _StakingScreenState extends State<StakingScreen> {
                   name,
                   style: TextStyle(
                     fontSize: 12,
-                    color: lightTextColor.value,
+                    color: Colors.white,
                   ),
                 ),
               ],
@@ -1104,7 +1087,7 @@ class _StakingScreenState extends State<StakingScreen> {
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
               textStyle: TextStyle(fontSize: 12),
-              backgroundColor: Colors.white,
+              backgroundColor: Colors.grey,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -1124,7 +1107,7 @@ class _StakingScreenState extends State<StakingScreen> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
-                color: headingColor.value,
+                color: Colors.white,
               ),
             ),
           ),

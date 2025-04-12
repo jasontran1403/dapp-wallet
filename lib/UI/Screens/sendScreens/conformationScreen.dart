@@ -49,213 +49,224 @@ class _ConformationScreenState extends State<ConformationScreen> {
     return Obx(
           () => Scaffold(
         backgroundColor: primaryBackgroundColor.value,
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 22, vertical: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
+        body: Stack(
+          children: [
+            // Background Image
+            Positioned.fill(
+              child: Image.asset(
+                "assets/background/bg7.png",
+                fit: BoxFit.cover,
+              ),
+            ),
+            SafeArea(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 22, vertical: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Column(
                       children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Confirmation",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                                fontFamily: "dmsans",
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Get.back();
+                              },
+                              child: Container(
+                                height: 32,
+                                width: 32,
+                                padding: EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                    color: inputFieldBackgroundColor.value,
+                                    borderRadius: BorderRadius.circular(8)
+                                ),
+                                child: Icon(Icons.clear, size: 18, color: headingColor.value),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 32),
                         Text(
-                          "Confirmation",
+                          "Confirm Transfer",
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: headingColor.value,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
                             fontFamily: "dmsans",
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.back();
-                          },
-                          child: Container(
-                            height: 32,
-                            width: 32,
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                                color: inputFieldBackgroundColor.value,
-                                borderRadius: BorderRadius.circular(8)
-                            ),
-                            child: Icon(Icons.clear, size: 18, color: headingColor.value),
+                        SizedBox(height: 12),
+                        Text(
+                          "We care about your privacy. Please make sure that you want to transfer money.",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w400,
+                            color: lightTextColor.value,
+                            fontFamily: "dmsans",
                           ),
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 32),
-                    Text(
-                      "Confirm Transfer",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        color: headingColor.value,
-                        fontFamily: "dmsans",
-                      ),
-                    ),
-                    SizedBox(height: 12),
-                    Text(
-                      "We care about your privacy. Please make sure that you want to transfer money.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: lightTextColor.value,
-                        fontFamily: "dmsans",
-                      ),
-                    ),
-                    SizedBox(height: 60),
-                    Stack(
-                      clipBehavior: Clip.none,
-                      children: [
-                        Container(
-                          height: 420,
-                          width: Get.width,
-                          padding: EdgeInsets.symmetric(horizontal: 16),
-                          decoration: BoxDecoration(
-                              color: inputFieldBackgroundColor2.value,
-                              borderRadius: BorderRadius.circular(20)
-                          ),
-                          child: Column(
-                            children: [
-                              SizedBox(height: 30),
-                              // Sử dụng walletAddress và amount nhận được
-                              Text(
-                                "Recipient wallet",  // Default value if null
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w700,
-                                  color: headingColor.value,
-                                  fontFamily: "dmsans",
-                                ),
+                        SizedBox(height: 20),
+                        Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            Container(
+                              height: 350,
+                              width: Get.width,
+                              padding: EdgeInsets.symmetric(horizontal: 16),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.shade800.withOpacity(0.7),
+                                  borderRadius: BorderRadius.circular(20)
                               ),
-                              Text(
-                                widget.walletAddress ?? 'No address provided',  // Default value if null
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: lightTextColor.value,
-                                  fontFamily: "dmsans",
-                                ),
-                              ),
-                              SizedBox(height: 57),
-                              // Sử dụng walletAddress và amount nhận được
-                              Text(
-                                "Network",  // Default value if null
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w700,
-                                  color: headingColor.value,
-                                  fontFamily: "dmsans",
-                                ),
-                              ),
-                              Text(
-                                widget.symbol ?? 'No network provided',  // Default value if null
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: lightTextColor.value,
-                                  fontFamily: "dmsans",
-                                ),
-                              ),
-                              SizedBox(height: 32),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
+                              child: Column(
                                 children: [
+                                  SizedBox(height: 20),
+                                  // Sử dụng walletAddress và amount nhận được
                                   Text(
-                                    widget.amount,  // Hiển thị số ETH
+                                    "Recipient wallet",  // Default value if null
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      fontSize: 36,
+                                      fontSize: 24,
                                       fontWeight: FontWeight.w700,
-                                      color: headingColor.value,
+                                      color: Colors.white,
                                       fontFamily: "dmsans",
                                     ),
                                   ),
                                   Text(
-                                    ' ${widget.symbol}',
+                                    widget.walletAddress ?? 'No address provided',  // Default value if null
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.w700,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
                                       color: lightTextColor.value,
+                                      fontFamily: "dmsans",
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  // Sử dụng walletAddress và amount nhận được
+                                  Text(
+                                    "Network",  // Default value if null
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                      fontFamily: "dmsans",
+                                    ),
+                                  ),
+                                  Text(
+                                    widget.symbol ?? 'No network provided',  // Default value if null
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white,
+                                      fontFamily: "dmsans",
+                                    ),
+                                  ),
+                                  SizedBox(height: 20),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        widget.amount,  // Hiển thị số ETH
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 36,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                          fontFamily: "dmsans",
+                                        ),
+                                      ),
+                                      Text(
+                                        ' ${widget.symbol}',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.white,
+                                          fontFamily: "dmsans",
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 20),
+                                  Text(
+                                    "Memo ",  // Default value if null
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.white,
+                                      fontFamily: "dmsans",
+                                    ),
+                                  ),
+                                  Text(
+                                    widget.memo ?? 'Not specified',  // Default value if null
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.white,
                                       fontFamily: "dmsans",
                                     ),
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 32),
-                              Text(
-                                "Memo ",  // Default value if null
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w700,
-                                  color: headingColor.value,
-                                  fontFamily: "dmsans",
-                                ),
-                              ),
-                              Text(
-                                widget.memo ?? 'Not specified',  // Default value if null
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: lightTextColor.value,
-                                  fontFamily: "dmsans",
-                                ),
-                              ),
-                              SizedBox(height: 12),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    SizedBox(height: 60),
+                    Column(
+                      children: [
+                        BottomRectangularBtn(
+                          onTapFunc: () {
+                            // Show the bottom sheet with the confirmation dialog
+                            Get.bottomSheet(
+                                clipBehavior: Clip.antiAlias,
+                                isScrollControlled: true,
+                                backgroundColor: primaryBackgroundColor.value,
+                                shape: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32)),
+                                ),
+                                // Pass the widget directly instead of using 'builder'
+                                _showConfirmationDialog(
+                                  context,
+                                  widget.amount,
+                                  widget.symbol,
+                                  widget.walletAddress,
+                                  int.tryParse(widget.memo) ?? 0,
+                                )
+                              // Directly pass the widget
+                            );
+                          },
+                          btnTitle: "Send",
+                          color: Colors.green, // 💚 Thêm dòng này
+                        ),
+                        SizedBox(height: 150),
+                      ],
+                    )
                   ],
                 ),
-                Column(
-                  children: [
-                    BottomRectangularBtn(
-                      onTapFunc: () {
-                        // Show the bottom sheet with the confirmation dialog
-                        Get.bottomSheet(
-                          clipBehavior: Clip.antiAlias,
-                          isScrollControlled: true,
-                          backgroundColor: primaryBackgroundColor.value,
-                          shape: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32)),
-                          ),
-                          // Pass the widget directly instead of using 'builder'
-                            _showConfirmationDialog(
-                              context,
-                              widget.amount,
-                              widget.symbol,
-                              widget.walletAddress,
-                              int.tryParse(widget.memo) ?? 0,
-                            )
-                          // Directly pass the widget
-                        );
-                      },
-                      btnTitle: "Send",
-                    ),
-                    SizedBox(height: 24),
-                  ],
-                )
-              ],
+              ),
             ),
-          ),
+
+          ],
         ),
       ),
     );

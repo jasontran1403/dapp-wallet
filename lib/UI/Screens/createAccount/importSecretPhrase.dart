@@ -64,7 +64,7 @@ class _ImportSecretPhraseState extends State<ImportSecretPhrase> {
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w600,
-                                color: headingColor.value,
+                                color: Colors.white,
                                 fontFamily: "dmsans",
                               ),
                             ),
@@ -100,7 +100,7 @@ class _ImportSecretPhraseState extends State<ImportSecretPhrase> {
                                   '${getTranslated(context, "Secret Recovery Phrase") ?? "Secret Recovery Phrase"}',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                    color: headingColor.value,
+                                    color: Colors.white,
                                     fontSize: 20,
                                     fontFamily: 'dmsans',
                                     fontWeight: FontWeight.w700,
@@ -138,7 +138,7 @@ class _ImportSecretPhraseState extends State<ImportSecretPhrase> {
                               '${getTranslated(context, "Secret Phrase") ?? "Secret Phrase"}',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                color: headingColor.value,
+                                color: Colors.white,
                                 fontSize: 15,
                                 fontFamily: 'dmsans',
                                 fontWeight: FontWeight.w600,
@@ -161,7 +161,7 @@ class _ImportSecretPhraseState extends State<ImportSecretPhrase> {
                       children: [
                         SizedBox(height: 20),
                         BottomRectangularBtn(
-                          color: secretPhraseController.text.trim() != "" ? primaryColor.value : inputFieldBackgroundColor2.value,
+                          color: secretPhraseController.text.trim() != "" ? Colors.green : Colors.grey,
                           isDisabled: secretPhraseController.text.trim() == "" ? true : false,
                           onTapFunc: () {
                             // Lấy mnemonicWords từ secretPhraseController.text và kiểm tra số lượng từ
@@ -220,8 +220,6 @@ class _ImportSecretPhraseState extends State<ImportSecretPhrase> {
         String responseBtcWalletAddress = json.decode(response)['btcWalletAddress'];
         String responseXrpWalletAddress = json.decode(response)['xrpWalletAddress'];
         String responseTonWalletAddress = json.decode(response)['tonWalletAddress'];
-
-        print(responseBtcWalletAddress + " " + responseXrpWalletAddress + " " + responseTonWalletAddress);
 
         if (responseWalletAddress == walletAddress) {
           Get.snackbar(

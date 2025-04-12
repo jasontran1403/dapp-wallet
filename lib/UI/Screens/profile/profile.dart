@@ -119,7 +119,7 @@ class _ProfileState extends State<Profile> {
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: headingColor.value,
+                            color: Colors.white,
                             fontFamily: "dmsans",
                           ),
                         ),
@@ -139,7 +139,7 @@ class _ProfileState extends State<Profile> {
                               width: Get.width,
                               padding: EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                  color: inputFieldBackgroundColor2.value,
+                                  color: Colors.grey.shade800.withOpacity(0.7),
                                   borderRadius: BorderRadius.circular(16),
                                   border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
                               ),
@@ -161,7 +161,7 @@ class _ProfileState extends State<Profile> {
                                         style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w700,
-                                          color: headingColor.value,
+                                          color: Colors.white,
                                           fontFamily: "dmsans",
 
                                         ),
@@ -180,19 +180,19 @@ class _ProfileState extends State<Profile> {
                                           style: TextStyle(
                                             fontSize: 16.5,
                                             fontWeight: FontWeight.w600,
-                                            color: headingColor.value,
+                                            color: Colors.white,
                                             fontFamily: "dmsans",
 
                                           ),
 
                                         ),
                                         Text(
-                                          "${formatBalance((reward ?? 0).toString())} Rewards",
+                                          "${formatBalance((reward ?? 0).toString())} EFT",
                                           textAlign: TextAlign.start,
                                           style: TextStyle(
                                             fontSize: 16.5,
                                             fontWeight: FontWeight.w600,
-                                            color: lightTextColor.value,
+                                            color: Colors.white,
                                             fontFamily: "dmsans",
                                           ),
                                         ),
@@ -201,7 +201,7 @@ class _ProfileState extends State<Profile> {
                                   ),
 
                                   SizedBox(width: 12,),
-                                  Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
+                                  Icon(Icons.arrow_forward_ios,color: Colors.white,size: 18,)
                                 ],
                               ),
                             ),
@@ -209,12 +209,13 @@ class _ProfileState extends State<Profile> {
                           SizedBox(height: 20,),
 
                           SizedBox(height: 20,),
+                          
                           Container(
                             // height: 80,
                               width: Get.width,
                               padding: EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                  color: inputFieldBackgroundColor2.value,
+                                  color: Colors.grey.shade800.withOpacity(0.7),
                                   borderRadius: BorderRadius.circular(16),
                                   border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
                               ),
@@ -316,7 +317,7 @@ class _ProfileState extends State<Profile> {
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w400,
-                                                  color: headingColor.value,
+                                                  color: Colors.white,
                                                   fontFamily: "dmsans",
 
                                                 ),
@@ -330,13 +331,14 @@ class _ProfileState extends State<Profile> {
                                         ),
 
                                         SizedBox(width: 12,),
-                                        Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
+                                        Icon(Icons.arrow_forward_ios,color: Colors.white,size: 18,)
                                       ],
                                     ),
                                   ),
                                   SizedBox(height: 8,),
 
                                   Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
+                                  SizedBox(height: 8,),
                                   InkWell(
                                     onTap: () async {
                                       if (isClaiming) return;
@@ -404,6 +406,7 @@ class _ProfileState extends State<Profile> {
                                       }
                                     },
                                     splashColor: Colors.transparent,
+
                                     child: Row
                                       (
                                       children: [
@@ -432,7 +435,7 @@ class _ProfileState extends State<Profile> {
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w400,
-                                                  color: headingColor.value,
+                                                  color: Colors.white,
                                                   fontFamily: "dmsans",
 
                                                 ),
@@ -446,7 +449,7 @@ class _ProfileState extends State<Profile> {
                                         ),
 
                                         SizedBox(width: 12,),
-                                        Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
+                                        Icon(Icons.arrow_forward_ios,color: Colors.white,size: 18,)
                                       ],
                                     ),
                                   ),
@@ -487,7 +490,7 @@ class _ProfileState extends State<Profile> {
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w400,
-                                                  color: headingColor.value,
+                                                  color: Colors.white,
                                                   fontFamily: "dmsans",
 
                                                 ),
@@ -501,7 +504,7 @@ class _ProfileState extends State<Profile> {
                                         ),
 
                                         SizedBox(width: 12,),
-                                        Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
+                                        Icon(Icons.arrow_forward_ios,color: Colors.white,size: 18,)
                                       ],
                                     ),
                                   ),
@@ -541,7 +544,7 @@ class _ProfileState extends State<Profile> {
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w400,
-                                                  color: headingColor.value,
+                                                  color: Colors.white,
                                                   fontFamily: "dmsans",
 
                                                 ),
@@ -555,7 +558,7 @@ class _ProfileState extends State<Profile> {
                                         ),
 
                                         SizedBox(width: 12,),
-                                        Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
+                                        Icon(Icons.arrow_forward_ios,color: Colors.white,size: 18,)
                                       ],
                                     ),
                                   ),
@@ -596,7 +599,7 @@ class _ProfileState extends State<Profile> {
                                                 style: TextStyle(
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w400,
-                                                  color: headingColor.value,
+                                                  color: Colors.white,
                                                   fontFamily: "dmsans",
 
                                                 ),
@@ -610,13 +613,10 @@ class _ProfileState extends State<Profile> {
                                         ),
 
                                         SizedBox(width: 12,),
-                                        Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
+                                        Icon(Icons.arrow_forward_ios,color: Colors.white,size: 18,)
                                       ],
                                     ),
                                   ),
-                                  SizedBox(height: 8,),
-
-                                  Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
                                   SizedBox(height: 8,),
                                   // InkWell(
                                   //   splashColor: Colors.transparent,
@@ -698,7 +698,7 @@ class _ProfileState extends State<Profile> {
                               width: Get.width,
                               padding: EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                  color: inputFieldBackgroundColor2.value,
+                                  color: Colors.grey.shade800.withOpacity(0.7),
                                   borderRadius: BorderRadius.circular(16),
                                   border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
                               ),
@@ -733,7 +733,7 @@ class _ProfileState extends State<Profile> {
                                               style: TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w400,
-                                                color: headingColor.value,
+                                                color: Colors.white,
                                                 fontFamily: "dmsans",
 
                                               ),
@@ -747,7 +747,7 @@ class _ProfileState extends State<Profile> {
                                       ),
 
                                       SizedBox(width: 12,),
-                                      Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
+                                      Icon(Icons.arrow_forward_ios,color: Colors.white,size: 18,)
                                     ],
                                   ),
                                   SizedBox(height: 8,),
@@ -783,7 +783,7 @@ class _ProfileState extends State<Profile> {
                                               style: TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w400,
-                                                color: headingColor.value,
+                                                color: Colors.white,
                                                 fontFamily: "dmsans",
 
                                               ),
@@ -797,7 +797,7 @@ class _ProfileState extends State<Profile> {
                                       ),
 
                                       SizedBox(width: 12,),
-                                      Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
+                                      Icon(Icons.arrow_forward_ios,color: Colors.white,size: 18,)
                                     ],
                                   ),
 
@@ -811,7 +811,7 @@ class _ProfileState extends State<Profile> {
                               width: Get.width,
                               padding: EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                  color: inputFieldBackgroundColor2.value,
+                                  color: Colors.grey.shade800.withOpacity(0.7),
                                   borderRadius: BorderRadius.circular(16),
                                   border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
                               ),
@@ -858,11 +858,7 @@ class _ProfileState extends State<Profile> {
                                     child: Container(
                                       width: Get.width,
                                       padding: EdgeInsets.all(0),
-                                      decoration: BoxDecoration(
-                                          color: inputFieldBackgroundColor2.value,
-                                          borderRadius: BorderRadius.circular(16),
-                                          border: Border.all(width: 1, color: inputFieldBackgroundColor.value)
-                                      ),
+
                                       child: Row(
                                         children: [
                                           Container(
@@ -892,14 +888,14 @@ class _ProfileState extends State<Profile> {
                                                   style: TextStyle(
                                                     fontSize: 14,
                                                     fontWeight: FontWeight.w400,
-                                                    color: headingColor.value,
+                                                    color: Colors.white,
                                                     fontFamily: "dmsans",
                                                   ),
                                                 ),
                                               ],
                                             ),
                                           ),
-                                          Icon(Icons.arrow_forward_ios, color: headingColor.value, size: 18)
+                                          Icon(Icons.arrow_forward_ios, color: Colors.white, size: 18)
                                         ],
                                       ),
                                     ),
