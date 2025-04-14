@@ -65,7 +65,6 @@ class _RewardHistoryScreenState extends State<RewardHistoryScreen> {
 
       // Sử dụng symbolConverted thay vì symbol
       dynamic dataTransactions = await ApiService.getRewardHistory(savedWalletAddress);
-      print(dataTransactions);
 
       // Cập nhật danh sách coins với dữ liệu thực
       setState(() {

@@ -134,22 +134,27 @@ class _SwapScreenState extends State<SwapScreen> {
                 child: Column(
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-
                         Text(
-                          "${getTranslated(context,"Swap Tokens" )??"Swap Tokens"}",
+                          "${getTranslated(context, "Swap Tokens") ?? "Swap Tokens"}",
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                             fontFamily: "dmsans",
-
                           ),
-
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.close, color: Colors.white),
+                          onPressed: () {
+                            Get.back();
+                          },
                         ),
                       ],
                     ),
+
                     SizedBox(height: 16,),
                     Expanded(
                       child: ListView(children: [

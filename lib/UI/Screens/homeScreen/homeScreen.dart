@@ -43,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = true;
 
   List coins=[];
+  List packages = [];
 
   List fiat=[
     {
@@ -85,6 +86,20 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _loadWalletData();
+  }
+
+  Future<void> _loadPackages() async {
+    try {
+      setState(() => isLoading = true);
+
+      dynamic response = await ApiService.getPackages(walletAddress!);
+      setState(() {
+        packages = response;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
+    }
   }
 
   Future<void> _loadWalletData() async {
@@ -411,13 +426,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       GestureDetector(
                         onTap: (){
-                          // Get.bottomSheet(
-                          //     clipBehavior: Clip.antiAlias,
-                          //     isScrollControlled: true,
-                          //     backgroundColor: primaryBackgroundColor.value,
-                          //     shape: OutlineInputBorder(
-                          //         borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
-                          //     selectTokenForBuy());
+                          _loadPackages();
+                          Get.bottomSheet(
+                              clipBehavior: Clip.antiAlias,
+                              isScrollControlled: true,
+                              backgroundColor: primaryBackgroundColor.value,
+                              shape: OutlineInputBorder(
+                                  borderSide: BorderSide.none, borderRadius: BorderRadius.only(topRight: Radius.circular(32), topLeft: Radius.circular(32))),
+                              selectTokenForBuy());
                         },
                         child: Column(
                           children: [
@@ -433,7 +449,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             SizedBox(height: 12,),
                             Text(
-                              "${getTranslated(context,"Staking" )??"Staking"}",
+                              "${getTranslated(context,"Packages" )??"Packages"}",
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 fontSize: 16,
@@ -577,10 +593,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
   Widget selectToken() {
     return Container(
-      height: Get.height * 0.95,
+      height: Get.height * 0.90,
       width: Get.width,
       padding: EdgeInsets.symmetric(horizontal: 22, vertical: 22),
       decoration: BoxDecoration(
@@ -735,441 +750,173 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget selectTokenForBuy(){
+  Widget selectTokenForBuy() {
     return Container(
-      height: Get.height*0.95,
+      height: Get.height * 0.9,
       width: Get.width,
-      padding: EdgeInsets.symmetric(horizontal: 22,vertical: 22),
-      color:appController.isDark.value==true?Color(0xff1A1930): inputFieldBackgroundColor.value,
+      padding: EdgeInsets.symmetric(horizontal: 22, vertical: 22),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/background/bg7.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "${getTranslated(context,"Choose Staking Token" )??"Choose Staking Token"}",
+                "${getTranslated(context, "List Packages") ?? "List Packages"}",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
-                  color: headingColor.value,
+                  color: Colors.white,
                   fontFamily: "dmsans",
-
                 ),
               ),
               GestureDetector(
-                  onTap: (){
-                    Get.back();
-                  },
-                  child: Icon(Icons.clear,color: headingColor.value,))
-
-
-
+                onTap: () {
+                  Get.back();
+                },
+                child: Icon(Icons.clear, color: Colors.white),
+              )
             ],
           ),
-          SizedBox(height: 16,),
+          SizedBox(height: 16),
+
           Expanded(
-            child: ListView(
-              children: [
-
-                InputFields(
-
-
-                  icon:Image.asset("assets/images/Search.png"),
-                  hintText: "",
-
-
-                ),
-                SizedBox(height: 16,),
-
-
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 23,
-                      width: 113,
-                      decoration: BoxDecoration(
-                          color:appController.isDark.value==true?Color(0xff1A2B56): inputFieldBackgroundColor2.value,
-                          borderRadius: BorderRadius.circular(24),
-                          border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
-
-                      ),
-                      child:   Center(
-                        child: Text(
-                          "${getTranslated(context,"Popular" )??"Popular"}",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w400,
-                            color: headingColor.value,
-                            fontFamily: "dmsans",
-
-                          ),
-
-                        ),
-                      ),
-                    ),
-                    Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 2,),
-
-                  ],
-                ),
-                SizedBox(height: 16,),
-                Row(
-                  children: [
-                    Expanded(
-                      child: InkWell(
-                        onTap: (){Get.to(StakingScreen());},
-
-                        child: Container(
-                          height:72,
-                          width: Get.width,
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                              color: inputFieldBackgroundColor2.value,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                  height:40,
-                                  width: 40,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle
-                                  ),
-                                  child: Image.asset("assets/images/bnb.png",height: 40,width: 40,)),
-
-                              SizedBox(width: 12,),
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-
-                                          Expanded(
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-
-                                                Text(
-                                                  "BNB",
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.w600,
-                                                    color:appController.isDark.value==true?Color(0xffFDFCFD): primaryColor.value,
-                                                    fontFamily: "dmsans",
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(width: 10,),
-                                          Expanded(
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Text(
-                                                  "Binance Coin",
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: lightTextColor.value,
-                                                    fontFamily: "dmsans",
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    )
-
-                                  ],
-                                ),
-                              )
-
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(width: 16,),
-                    Expanded(
-                      child: InkWell(
-                        onTap: (){Get.to(StakingScreen());},
-                        child: Container(
-                          height:72,
-                          width: Get.width,
-                          padding: EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                              color: inputFieldBackgroundColor2.value,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
-                          ),
-                          child: Row(
-                            children: [
-                              Container(
-                                  height:32,
-                                  width: 32,
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle
-                                  ),
-                                  child: Image.asset("assets/images/eft.png",height: 40,width: 40,)),
-
-                              SizedBox(width: 12,),
-                              Expanded(
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-
-                                          Expanded(
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-
-                                                Text(
-                                                  "EFT",
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.w600,
-                                                    color:appController.isDark.value==true?Color(0xffFDFCFD):  primaryColor.value,
-                                                    fontFamily: "dmsans",
-
-                                                  ),
-
-                                                ),
-
-
-
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(width: 20,),
-                                          Expanded(
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-
-                                                Text(
-                                                  "Ecofusion Token",
-                                                  textAlign: TextAlign.start,
-                                                  style: TextStyle(
-                                                    fontSize: 12,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: lightTextColor.value,
-                                                    fontFamily: "dmsans",
-
-                                                  ),
-
-                                                ),
-
-
-
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    )
-
-                                  ],
-                                ),
-                              )
-
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16,),
-
-
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: 23,
-                      width: 113,
-                      decoration: BoxDecoration(
-                          color:appController.isDark.value==true?Color(0xff1A2B56):  inputFieldBackgroundColor2.value,
-                          borderRadius: BorderRadius.circular(24),
-                          border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
-
-                      ),
-                      child:   Center(
-                        child: Text(
-                          "${getTranslated(context,"All" )??"All"}",
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w400,
-                            color: headingColor.value,
-                            fontFamily: "dmsans",
-
-                          ),
-
-                        ),
-                      ),
-                    ),
-                    Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 2,),
-
-                  ],
-                ),
-                SizedBox(height: 24,),
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-
-                  itemCount: coins.length,
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(height: 12,);
+            child: ListView.separated(
+              itemCount: packages.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(height: 12);
+              },
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () {
+                    // Xử lý khi chọn gói
                   },
-                  itemBuilder: (BuildContext context, int index) {
-                    return  GestureDetector(
-                      onTap: (){Get.to(StakingScreen( ));},
-
-
-                      child: Container(
-                        height:72,
-                        width: Get.width,
-                        padding: EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                            color: inputFieldBackgroundColor2.value,
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(width: 1,color: inputFieldBackgroundColor.value)
-                        ),
-                        child: Row(
+                  child: Container(
+                    height: 120, // Tăng chiều cao để chứa thêm thông tin
+                    width: Get.width,
+                    padding: EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade800.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.white24,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        // Hàng đầu tiên: Biểu tượng và thông tin chính
+                        Row(
                           children: [
                             Container(
-                                height:32,
-                                width: 32,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle
-                                ),
-                                child: Image.asset("${coins[index]['image']}",height: 40,width: 40,)),
-
-                            SizedBox(width: 12,),
+                              height: 40,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                              ),
+                              child: Image.asset(
+                                "assets/images/${packages[index]['symbol'].toLowerCase()}.png",
+                                height: 40,
+                                width: 40,
+                              ),
+                            ),
+                            SizedBox(width: 12),
                             Expanded(
-                              child: Row(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-
-                                        Expanded(
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    "${coins[index]['symbol']}",
-                                                    textAlign: TextAlign.start,
-                                                    style: TextStyle(
-                                                      fontSize: 15,
-                                                      fontWeight: FontWeight.w600,
-                                                      color:appController.isDark.value==true?Color(0xffFDFCFD):  primaryColor.value,
-                                                      fontFamily: "dmsans",
-
-                                                    ),
-
-
-                                                  ),
-
-                                                ],
-                                              ),
-
-                                              Text(
-                                                "21",
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w600,
-                                                  color:appController.isDark.value==true?Color(0xffFDFCFD):  primaryColor.value,
-                                                  fontFamily: "dmsans",
-
-                                                ),
-
-                                              ),
-
-                                            ],
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-
-                                              Text(
-                                                "",
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: lightTextColor.value,
-                                                  fontFamily: "dmsans",
-
-                                                ),
-
-                                              ),
-
-                                              Text(
-                                                "\$46448.00",
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontSize: 12,
-                                                  fontWeight: FontWeight.w400,
-                                                  color:
-                                                  lightTextColor.value,
-                                                  fontFamily: "dmsans",
-
-                                                ),
-
-                                              ),
-
-                                            ],
-                                          ),
-                                        )
-                                      ],
+                                  Text(
+                                    "Staking ${packages[index]['amountInToken']} ${packages[index]['symbol']}",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                      fontFamily: "dmsans",
                                     ),
-                                  )
-
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    "~ ${packages[index]['amountInUSDT']} USDT",
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      color: Colors.white70,
+                                      fontFamily: "dmsans",
+                                    ),
+                                  ),
                                 ],
                               ),
-                            )
-
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  "${packages[index]['cycleLeft']} / ${packages[index]['cycles']}",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                    fontFamily: "dmsans",
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  packages[index]['date'] ?? '',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.white70,
+                                    fontFamily: "dmsans",
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
-                      ),
-                    );
-                  },
-                ),
-              ],
+                        // Divider
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                          child: Divider(
+                            color: Colors.white24,
+                            height: 1,
+                          ),
+                        ),
+                        // Hàng thứ hai: Thông tin bổ sung
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "${packages[index]['status'] == false ? "Running" : "Completed"}",
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.white70,
+                                fontFamily: "dmsans",
+                              ),
+                            ),
+                            Text(
+                              "",
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: Colors.white70,
+                                fontFamily: "dmsans",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
-          )
-
-
-
-
-
-
-
+          ),
         ],
       ),
     );
   }
-
 }
