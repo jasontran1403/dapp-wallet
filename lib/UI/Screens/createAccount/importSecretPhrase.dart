@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:bip39/bip39.dart' as bip39;
+import 'package:crypto_wallet/UI/Screens/createAccount/createAccount.dart';
 import 'package:crypto_wallet/UI/Screens/profile/privateKey.dart';
 import 'package:crypto_wallet/UI/Screens/socialLogin/socialLogin.dart';
 import 'package:crypto_wallet/UI/common_widgets/bottomNavBar.dart';
@@ -198,6 +200,11 @@ class _ImportSecretPhraseState extends State<ImportSecretPhrase> {
 
   // Hàm lưu thông tin ví sau khi kiểm tra mnemonic
   void _saveWalletInformation(List<String> mnemonicWords) async {
+    if (!bip39.validateMnemonic(mnemonicWords.join(" "))) {
+      Get.snackbar("Error", "Invalid mnemonics! Please check spelling.", backgroundColor: Colors.red, colorText: Colors.white);
+      return;
+    }
+
     final walletProvider = Provider.of<WalletProvider>(context, listen: false);
 
     try {
@@ -242,17 +249,13 @@ class _ImportSecretPhraseState extends State<ImportSecretPhrase> {
           Future.delayed(Duration(seconds: 1), () {
             Get.offAll(BottomBar());
           });
-        } else {
-          Get.snackbar(
-            "Error",
-            "Sign in failed.",
-            backgroundColor: Colors.red,
-            colorText: Colors.white,
-          );
-          return;
+        } else if (responseWalletAddress == "Failed") {
+          Get.to(() => CreateAccount(
+            walletAddress: walletAddress,
+            privateKey: privateKey,
+            mnemonicWords: mnemonicWords.join(" "),
+          ));
         }
-
-
       } else {
         Get.snackbar("Error", "Mnemonics is invalid, please try again!", backgroundColor: Colors.red, colorText: Colors.white);
       }

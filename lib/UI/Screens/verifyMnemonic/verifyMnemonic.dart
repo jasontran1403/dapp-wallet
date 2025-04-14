@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bip39/bip39.dart' as bip39;
 import 'package:crypto_wallet/UI/Screens/createAccount/createAccount.dart';
 import 'package:crypto_wallet/UI/Screens/homeScreen/homeScreen.dart';
 import 'package:crypto_wallet/constants/colors.dart';
@@ -190,12 +191,15 @@ class _VerifyMnemonicState extends State<VerifyMnemonic> {
 
   void _validateMnemonics() {
     bool isCorrect = true;
+
     for (int index in hiddenIndexes) {
       if (controllers[index]!.text.trim() != widget.mnemonicWords[index]) {
         isCorrect = false;
         break;
       }
     }
+
+
 
     if (isCorrect) {
       _saveWalletInformation();
