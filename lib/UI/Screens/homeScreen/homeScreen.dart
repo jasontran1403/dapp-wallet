@@ -114,13 +114,12 @@ class _HomeScreenState extends State<HomeScreen> {
         throw Exception("Can't get the wallet address");
       }
 
-      String? savedAccountName = await walletProvider.getAccountName();
       dynamic response = await ApiService.fetchStatistic(savedWalletAddress);
+
       setState(() {
         coins = response;
         walletAddress = savedWalletAddress;
         isLoading = false;
-        accountName = savedAccountName;
       });
     } catch (e) {
       setState(() => isLoading = false);
@@ -230,7 +229,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Row(
                           children: [
                             Text(
-                              '${accountName!}',
+                              // '${accountName!}',
+                              "",
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 fontSize: 18,

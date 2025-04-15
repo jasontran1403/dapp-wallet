@@ -1,14 +1,12 @@
-import 'package:crypto_wallet/UI/Screens/notifications/notifications.dart';
-import 'package:crypto_wallet/UI/Screens/profile/accountAddresses.dart';
-import 'package:crypto_wallet/UI/Screens/profile/accountName.dart';
 import 'package:crypto_wallet/UI/Screens/profile/secretRecoveryPhrase.dart';
 import 'package:crypto_wallet/UI/Screens/profile/showPrivateKey.dart';
-import 'package:crypto_wallet/UI/Screens/twoFa/twoFaScreen.dart';
+import 'package:crypto_wallet/UI/Screens/profile/secretRecoveryPhraseTon.dart';
+import 'package:crypto_wallet/UI/Screens/profile/showPrivateKeyRipple.dart';
+import 'package:crypto_wallet/UI/Screens/profile/showPrivateKeyBitcoin.dart';
 import 'package:crypto_wallet/constants/colors.dart';
 import 'package:crypto_wallet/controllers/appController.dart';
 import 'package:crypto_wallet/localization/language_constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/get.dart';
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -96,7 +94,8 @@ class _EditProfileState extends State<EditProfile> {
 
 
                     Expanded(
-                      child: ListView(
+                      child:
+                      ListView(
                         children: [
                           SizedBox(height: 20,),
                           SizedBox(height: 20,),
@@ -121,14 +120,13 @@ class _EditProfileState extends State<EditProfile> {
                                     child: Row
                                       (
                                       children: [
-
                                         Expanded(
                                           child: Column(
                                             mainAxisAlignment: MainAxisAlignment.center,
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                "${getTranslated(context,"Show Secret Recovery Phrase" )??"Show Secret Recovery Phrase"}",
+                                                "${getTranslated(context,"Show Mnemonics Phrase BSC" )??"Show Mnemonics Phrase BSC"}",
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
                                                   fontSize: 14,
@@ -171,7 +169,50 @@ class _EditProfileState extends State<EditProfile> {
                                             crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                "${getTranslated(context,"Show Private Key" )??"Show Private Key"}",
+                                                "${getTranslated(context,"Show Private Key BSC" )??"Show Private Key BSC"}",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Colors.white,
+                                                  fontFamily: "dmsans",
+
+                                                ),
+
+                                              ),
+
+
+
+                                            ],
+                                          ),
+                                        ),
+
+                                        SizedBox(width: 12,),
+                                        Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 8,),
+
+                                  Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
+                                  SizedBox(height: 8,),
+                                  InkWell(
+
+                                    onTap:(){
+                                      Get.to(ShowPrivateKeyBitcoin());
+                                    },
+                                    splashColor: Colors.transparent,
+                                    child: Row
+                                      (
+                                      children: [
+
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "${getTranslated(context,"Show Private Key Bitcoin" )??"Show Private Key Bitcoin"}",
                                                 textAlign: TextAlign.start,
                                                 style: TextStyle(
                                                   fontSize: 14,
@@ -195,15 +236,106 @@ class _EditProfileState extends State<EditProfile> {
                                     ),
                                   ),
 
+                                  SizedBox(height: 8,),
+
+                                  Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
+                                  SizedBox(height: 8,),
+                                  InkWell(
+
+                                    onTap:(){
+                                      Get.to(ShowPrivateKeyRipple());
+                                    },
+                                    splashColor: Colors.transparent,
+                                    child: Row
+                                      (
+                                      children: [
+
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "${getTranslated(context,"Show Private Key Ripple" )??"Show Private Key Ripple"}",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Colors.white,
+                                                  fontFamily: "dmsans",
+
+                                                ),
+
+                                              ),
+
+
+
+                                            ],
+                                          ),
+                                        ),
+
+                                        SizedBox(width: 12,),
+                                        Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
+                                      ],
+                                    ),
+                                  ),
+
+                                  SizedBox(height: 8,),
+
+                                  Divider(color: inputFieldBackgroundColor.value,height: 1,thickness: 1,),
+                                  SizedBox(height: 8,),
+                                  InkWell(
+
+                                    onTap:(){
+                                      Get.to(SecretRecoveryPharaseTon());
+                                    },
+                                    splashColor: Colors.transparent,
+                                    child: Row
+                                      (
+                                      children: [
+
+                                        Expanded(
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "${getTranslated(context,"Show Mnemonics TON Network" )??"Show Mnemonics TON Network"}",
+                                                textAlign: TextAlign.start,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Colors.white,
+                                                  fontFamily: "dmsans",
+
+                                                ),
+
+                                              ),
+
+
+
+                                            ],
+                                          ),
+                                        ),
+
+                                        SizedBox(width: 12,),
+                                        Icon(Icons.arrow_forward_ios,color: headingColor.value,size: 18,)
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               )
+                              ,
                           ),
 
                           SizedBox(height: 20,),
 
                         ],
                       ),
+
                     ),
+
+
                   ],
                 ),
               ),

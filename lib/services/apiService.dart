@@ -250,6 +250,32 @@ class ApiService {
 
   }
 
+  static Future<String> getSecret(String walletAddress, String symbol) async {
+    var request = http.Request('GET', Uri.parse('${base_url}/auth/export-secret/${walletAddress}/${symbol}'));
+
+    try {
+      // Gửi yêu cầu HTTP
+      http.StreamedResponse response = await request.send();
+
+      // Kiểm tra mã trạng thái của phản hồi
+      if (response.statusCode == 200) {
+        // Đọc body của phản hồi và giải mã từ JSON
+        String responseBody = await response.stream.bytesToString();
+        final data = responseBody;
+
+        // Trả về giá trị 'isValid' từ API
+        return data;  // Nếu không có 'isValid', trả về false
+      } else {
+        // Nếu mã trạng thái không phải 200, in lỗi và trả về false
+        return 'Error: ${response.reasonPhrase}';
+      }
+    } catch (e) {
+      // Nếu có lỗi xảy ra trong quá trình gửi yêu cầu, in lỗi và trả về false
+      return 'Exception: $e';
+    }
+
+  }
+
   static Future<dynamic> getInternalBalance(String walletAddress) async {
     var request = http.Request('GET', Uri.parse('${base_url}/auth/get-internals-balance/${walletAddress}'));
 
