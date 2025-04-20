@@ -289,10 +289,10 @@ class _SendScreenState extends State<SendScreen> {
                       }
 
                       if (widget.symbol == "BTC") {
-                        if (amount < 0.00007) {
+                        if (amount < 0.00002) {
                           Get.snackbar(
                             "Error",
-                            "Minimum transaction of Bitcoin is 0.00007 BTC.",
+                            "Minimum transaction of Bitcoin is 0.00002 BTC.",
                             snackPosition: SnackPosition.BOTTOM,
                             backgroundColor: Colors.red,
                             colorText: Colors.white,
