@@ -221,7 +221,6 @@ class ApiService {
     else {
       throw Exception('Create account failed.');
     }
-
   }
 
   static Future<String> staking(String walletAddress, String symbol, double amount, double price, int duration) async {

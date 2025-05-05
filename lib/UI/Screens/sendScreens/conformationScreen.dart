@@ -9,6 +9,7 @@ import 'package:crypto_wallet/UI/common_widgets/inputField.dart';
 import 'package:crypto_wallet/constants/colors.dart';
 import 'package:crypto_wallet/localization/language_constants.dart';
 import 'package:crypto_wallet/services/apiService.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -645,7 +646,8 @@ Future<String> sendEFT(String receiver, double amount, String privateKey) async 
     final credentials = EthPrivateKey.fromHex('0x' + privateKey);
 
     // Convert amount to token's base unit (USDT has 18 decimals, so multiply by 10^6)
-    final tokenAmount = BigInt.parse((amount * 1e18).toStringAsFixed(0));
+    final Decimal decimalAmount = Decimal.parse(amount.toString()) * Decimal.parse('1e18');
+    final BigInt tokenAmount = BigInt.parse(decimalAmount.toStringAsFixed(0));
 
     // Define the ABI for the ERC-20 contract methods we will call
     String abi = '''
@@ -718,6 +720,7 @@ Future<String> sendEFT(String receiver, double amount, String privateKey) async 
       chainId: 56, // BSC Chain ID
     );
 
+    print(transactionHash);
     return transactionHash; // Return the transaction hash
   } catch (e) {
     return "Transaction failed: $e"; // Return the error message if something goes wrong

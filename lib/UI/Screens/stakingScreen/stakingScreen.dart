@@ -328,203 +328,167 @@ class _StakingScreenState extends State<StakingScreen> {
                     ),
                     SizedBox(height: 16),
                     Expanded(
-                      child: ListView(
-                        children: [
-                          // Phần Staking
-                          Stack(
+                      child:
+                      SafeArea(
+                        child: GestureDetector(
+                          onTap: () {
+                            // Dismiss keyboard when tapping outside
+                            FocusScope.of(context).unfocus();
+                          },
+                          child: ListView(
                             children: [
-                              Container(
-                                height: 380,
-                                width: Get.width,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Container(
-                                      height: 380,
-                                      width: Get.width,
-                                      padding: EdgeInsets.all(16),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(16),
-                                        color: Colors.grey.shade800.withOpacity(0.7),
-                                        border: Border.all(width: 1, color: inputFieldBackgroundColor.value),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              Get.bottomSheet(
-                                                clipBehavior: Clip.antiAlias,
-                                                isScrollControlled: true,
-                                                backgroundColor: primaryBackgroundColor.value,
-                                                shape: OutlineInputBorder(
-                                                    borderSide: BorderSide.none,
-                                                    borderRadius: BorderRadius.only(
-                                                        topRight: Radius.circular(32),
-                                                        topLeft: Radius.circular(32))),
-                                                selectToken(),
-                                              );
-                                            },
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Row(
+                              // Phần Staking
+                              Stack(
+                                children: [
+                                  Container(
+                                    height: 380,
+                                    width: Get.width,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          height: 380,
+                                          width: Get.width,
+                                          padding: EdgeInsets.all(16),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(16),
+                                            color: Colors.grey.shade800.withOpacity(0.7),
+                                            border: Border.all(width: 1, color: inputFieldBackgroundColor.value),
+                                          ),
+                                          child: Column(
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  Get.bottomSheet(
+                                                    clipBehavior: Clip.antiAlias,
+                                                    isScrollControlled: true,
+                                                    backgroundColor: primaryBackgroundColor.value,
+                                                    shape: OutlineInputBorder(
+                                                        borderSide: BorderSide.none,
+                                                        borderRadius: BorderRadius.only(
+                                                            topRight: Radius.circular(32),
+                                                            topLeft: Radius.circular(32))),
+                                                    selectToken(),
+                                                  );
+                                                },
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                   children: [
-                                                    Container(
-                                                      height: 40,
-                                                      width: 40,
-                                                      decoration: BoxDecoration(
-                                                          shape: BoxShape.circle,
-                                                          color: Colors.grey.shade800.withOpacity(0.7),),
-                                                      child: currentCoin.containsKey("symbol")
-                                                          ? Image.asset(currentCoin['image'])
-                                                          : SizedBox(),
-                                                    ),
-                                                    SizedBox(width: 10),
-                                                    Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                    Row(
                                                       children: [
-                                                        Text(
-                                                          currentCoin.containsKey("symbol")
-                                                              ? "${currentCoin['symbol']}"
-                                                              : "",
-                                                          textAlign: TextAlign.center,
-                                                          style: TextStyle(
-                                                            fontSize: 17,
-                                                            fontWeight: FontWeight.w600,
-                                                            color: Colors.white,
-                                                            fontFamily: "dmsans",
-                                                          ),
+                                                        Container(
+                                                          height: 40,
+                                                          width: 40,
+                                                          decoration: BoxDecoration(
+                                                            shape: BoxShape.circle,
+                                                            color: Colors.grey.shade800.withOpacity(0.7),),
+                                                          child: currentCoin.containsKey("symbol")
+                                                              ? Image.asset(currentCoin['image'])
+                                                              : SizedBox(),
                                                         ),
-                                                        tokenLoadingStates[indexSelected]
-                                                            ? SizedBox(
-                                                          height: 14,
-                                                          width: 14,
-                                                          child: CircularProgressIndicator(
-                                                            strokeWidth: 2,
-                                                            color: Colors.white,
-                                                          ),
+                                                        SizedBox(width: 10),
+                                                        Column(
+                                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                                          children: [
+                                                            Text(
+                                                              currentCoin.containsKey("symbol")
+                                                                  ? "${currentCoin['symbol']}"
+                                                                  : "",
+                                                              textAlign: TextAlign.center,
+                                                              style: TextStyle(
+                                                                fontSize: 17,
+                                                                fontWeight: FontWeight.w600,
+                                                                color: Colors.white,
+                                                                fontFamily: "dmsans",
+                                                              ),
+                                                            ),
+                                                            tokenLoadingStates[indexSelected]
+                                                                ? SizedBox(
+                                                              height: 14,
+                                                              width: 14,
+                                                              child: CircularProgressIndicator(
+                                                                strokeWidth: 2,
+                                                                color: Colors.white,
+                                                              ),
+                                                            )
+                                                                : Text(
+                                                              "${getTranslated(context, "Available") ?? "Available"}: ${currentCoin.containsKey("symbol") ? currentCoin['amount'] : '0'} ${currentCoin.containsKey("symbol") ? currentCoin['symbol'] : ''}",
+                                                              textAlign: TextAlign.center,
+                                                              style: TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight: FontWeight.w400,
+                                                                color: lightTextColor.value,
+                                                                fontFamily: "dmsans",
+                                                              ),
+                                                            ),
+                                                          ],
                                                         )
-                                                            : Text(
-                                                          "${getTranslated(context, "Available") ?? "Available"}: ${currentCoin.containsKey("symbol") ? currentCoin['amount'] : '0'} ${currentCoin.containsKey("symbol") ? currentCoin['symbol'] : ''}",
-                                                          textAlign: TextAlign.center,
-                                                          style: TextStyle(
-                                                            fontSize: 14,
-                                                            fontWeight: FontWeight.w400,
-                                                            color: lightTextColor.value,
-                                                            fontFamily: "dmsans",
-                                                          ),
-                                                        ),
                                                       ],
-                                                    )
+                                                    ),
+                                                    Icon(Icons.keyboard_arrow_down_outlined,
+                                                        color: Colors.white, size: 25),
                                                   ],
                                                 ),
-                                                Icon(Icons.keyboard_arrow_down_outlined,
-                                                    color: Colors.white, size: 25),
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(height: 8),
-                                          Divider(
-                                              color: inputFieldBackgroundColor.value,
-                                              height: 1,
-                                              thickness: 1),
-                                          Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Expanded(
-                                                child: TextFormField(
-                                                  controller: amountContoller,
-                                                  keyboardType:
-                                                  TextInputType.numberWithOptions(decimal: true),
-                                                  inputFormatters: [
-                                                    FilteringTextInputFormatter.allow(
-                                                        RegExp(r'^\d*\.?\d{0,8}'))
-                                                  ],
-                                                  style: TextStyle(
-                                                    fontSize: 36,
-                                                    fontWeight: FontWeight.w700,
-                                                    color: Colors.white,
-                                                    fontFamily: "dmsans",
-                                                  ),
-                                                  decoration: InputDecoration(
-                                                    hintText: "Enter staking amount",
-                                                    hintStyle:
-                                                    TextStyle(color: Colors.grey, fontSize: 14),
-                                                    isDense: true,
-                                                    border: InputBorder.none,
-                                                    contentPadding: EdgeInsets.zero,
-                                                  ),
-                                                ),
                                               ),
-                                              SizedBox(width: 10),
-                                              Text(
-                                                "\$ ${_getTotalBalance()}",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: Colors.greenAccent,
-                                                  fontFamily: "dmsans",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 8),
-                                          Divider(
-                                              color: inputFieldBackgroundColor.value,
-                                              height: 1,
-                                              thickness: 1),
-                                          SizedBox(height: 8),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                "Cycle:",
-                                                style: TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w500,
-                                                  color: Colors.white,
-                                                  fontFamily: "dmsans",
-                                                ),
-                                              ),
-                                              SizedBox(width: 8),
-                                              Expanded(
-                                                child: TextFormField(
-                                                  controller: cycleController,
-                                                  enabled: false,
-                                                  style: TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16,
-                                                    fontFamily: "dmsans",
+                                              SizedBox(height: 8),
+                                              Divider(
+                                                  color: inputFieldBackgroundColor.value,
+                                                  height: 1,
+                                                  thickness: 1),
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                      child:
+                                                      TextFormField(
+                                                        controller: amountContoller,
+                                                        keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                                        inputFormatters: [
+                                                          FilteringTextInputFormatter.allow(RegExp(r'^\d*[,\.]?\d{0,8}')),
+                                                          TextInputFormatter.withFunction((oldValue, newValue) {
+                                                            // Thay thế dấu ',' thành dấu '.'
+                                                            final newText = newValue.text.replaceAll(',', '.');
+                                                            return newValue.copyWith(text: newText);
+                                                          }),
+                                                        ],
+                                                        style: TextStyle(
+                                                          fontSize: 36,
+                                                          fontWeight: FontWeight.w700,
+                                                          color: Colors.white,
+                                                          fontFamily: "dmsans",
+                                                        ),
+                                                        decoration: InputDecoration(
+                                                          hintText: "Enter staking amount",
+                                                          hintStyle: TextStyle(color: Colors.grey, fontSize: 14),
+                                                          isDense: true,
+                                                          border: InputBorder.none,
+                                                          contentPadding: EdgeInsets.zero,
+                                                        ),
+                                                      )
                                                   ),
-                                                  decoration: InputDecoration(
-                                                    isDense: true,
-                                                    contentPadding:
-                                                    EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                                    disabledBorder: OutlineInputBorder(
-                                                      borderSide:
-                                                      BorderSide(color: inputFieldBackgroundColor.value),
-                                                      borderRadius: BorderRadius.circular(8),
+                                                  SizedBox(width: 10),
+                                                  Text(
+                                                    "\$ ${_getTotalBalance()}",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w400,
+                                                      color: Colors.greenAccent,
+                                                      fontFamily: "dmsans",
                                                     ),
                                                   ),
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                          SizedBox(height: 8),
-                                          Divider(
-                                              color: inputFieldBackgroundColor.value,
-                                              height: 1,
-                                              thickness: 1),
-                                          SizedBox(height: 8),
-                                          Row(
-                                            crossAxisAlignment: CrossAxisAlignment.center,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.only(top: 0),
-                                                child: Align(
-                                                  alignment: Alignment.centerLeft,
-                                                  child: Text(
-                                                    "Interest:",
+                                                ],
+                                              ),
+                                              SizedBox(height: 8),
+                                              Divider(
+                                                  color: inputFieldBackgroundColor.value,
+                                                  height: 1,
+                                                  thickness: 1),
+                                              SizedBox(height: 8),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    "Cycle:",
                                                     style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight: FontWeight.w500,
@@ -532,134 +496,182 @@ class _StakingScreenState extends State<StakingScreen> {
                                                       fontFamily: "dmsans",
                                                     ),
                                                   ),
-                                                ),
-                                              ),
-                                              SizedBox(width: 8),
-                                              Expanded(
-                                                child: Align(
-                                                  alignment: Alignment.centerLeft,
-                                                  child: Column(
-                                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                                    children: [
-                                                      TextFormField(
-                                                        controller: interestController,
-                                                        enabled: false,
-                                                        maxLines: indexSelected == 2 ? 1 : 2,
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 16,
-                                                          fontFamily: "dmsans",
-                                                        ),
-                                                        decoration: InputDecoration(
-                                                          isDense: true,
-                                                          contentPadding: EdgeInsets.symmetric(
-                                                              horizontal: 12, vertical: 8),
-                                                          disabledBorder: OutlineInputBorder(
-                                                            borderSide: BorderSide(
-                                                                color: inputFieldBackgroundColor.value),
-                                                            borderRadius: BorderRadius.circular(8),
-                                                          ),
+                                                  SizedBox(width: 8),
+                                                  Expanded(
+                                                    child: TextFormField(
+                                                      controller: cycleController,
+                                                      enabled: false,
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 16,
+                                                        fontFamily: "dmsans",
+                                                      ),
+                                                      decoration: InputDecoration(
+                                                        isDense: true,
+                                                        contentPadding:
+                                                        EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                                        disabledBorder: OutlineInputBorder(
+                                                          borderSide:
+                                                          BorderSide(color: inputFieldBackgroundColor.value),
+                                                          borderRadius: BorderRadius.circular(8),
                                                         ),
                                                       ),
-                                                    ],
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                              SizedBox(height: 8),
+                                              Divider(
+                                                  color: inputFieldBackgroundColor.value,
+                                                  height: 1,
+                                                  thickness: 1),
+                                              SizedBox(height: 8),
+                                              Row(
+                                                crossAxisAlignment: CrossAxisAlignment.center,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(top: 0),
+                                                    child: Align(
+                                                      alignment: Alignment.centerLeft,
+                                                      child: Text(
+                                                        "Interest:",
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight: FontWeight.w500,
+                                                          color: Colors.white,
+                                                          fontFamily: "dmsans",
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ),
+                                                  SizedBox(width: 8),
+                                                  Expanded(
+                                                    child: Align(
+                                                      alignment: Alignment.centerLeft,
+                                                      child: Column(
+                                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                                        children: [
+                                                          TextFormField(
+                                                            controller: interestController,
+                                                            enabled: false,
+                                                            maxLines: indexSelected == 2 ? 1 : 2,
+                                                            style: TextStyle(
+                                                              color: Colors.white,
+                                                              fontSize: 16,
+                                                              fontFamily: "dmsans",
+                                                            ),
+                                                            decoration: InputDecoration(
+                                                              isDense: true,
+                                                              contentPadding: EdgeInsets.symmetric(
+                                                                  horizontal: 12, vertical: 8),
+                                                              disabledBorder: OutlineInputBorder(
+                                                                borderSide: BorderSide(
+                                                                    color: inputFieldBackgroundColor.value),
+                                                                borderRadius: BorderRadius.circular(8),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(width: 20),
+                                              if (currentCoin['symbol'] != "EFT")
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      "Limit staking left: ",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w900,
+                                                        color: Colors.redAccent,
+                                                        fontStyle: FontStyle.italic,
+                                                        fontFamily: "dmsans",
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: 8),
+                                                    Text(
+                                                      "\$ ${limitStaking ?? 'Loading'}",
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w900,
+                                                        color: Colors.redAccent,
+                                                        fontStyle: FontStyle.italic,
+                                                        fontFamily: "dmsans",
+                                                      ),
+                                                    ),
+                                                    SizedBox(width: 8),
+                                                  ],
                                                 ),
+
+                                              BottomRectangularBtn(
+                                                onTapFunc: () {
+                                                  if (!isAnyClaimLoading) {
+                                                    showConfirmDialog();
+                                                  }
+                                                },
+                                                btnTitle: "Staking",
+                                                color: Colors.green, // 💚 Thêm dòng này
                                               ),
                                             ],
                                           ),
-                                          SizedBox(width: 20),
-                                          if (currentCoin['symbol'] != "EFT")
-                                            Row(
-                                              children: [
-                                                Text(
-                                                  "Limit staking left: ",
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w900,
-                                                    color: Colors.redAccent,
-                                                    fontStyle: FontStyle.italic,
-                                                    fontFamily: "dmsans",
-                                                  ),
-                                                ),
-                                                SizedBox(width: 8),
-                                                Text(
-                                                  "\$ ${limitStaking ?? 'Loading'}",
-                                                  style: TextStyle(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.w900,
-                                                    color: Colors.redAccent,
-                                                    fontStyle: FontStyle.italic,
-                                                    fontFamily: "dmsans",
-                                                  ),
-                                                ),
-                                                SizedBox(width: 8),
-                                              ],
-                                            ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 16), // Khoảng cách giữa hai phần
 
-                                          BottomRectangularBtn(
-                                            onTapFunc: () {
-                                              if (!isAnyClaimLoading) {
-                                                showConfirmDialog();
-                                              }
-                                            },
-                                            btnTitle: "Staking",
-                                            color: Colors.green, // 💚 Thêm dòng này
-                                          ),
-                                        ],
+                              // Phần Internal Balances
+                              Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  color: Colors.grey.shade800.withOpacity(0.7),
+                                  border: Border.all(color: inputFieldBackgroundColor.value),
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(16),
+                                      child: Text(
+                                        "Staking Rewards",
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.white,
+                                        ),
                                       ),
+                                    ),
+                                    Divider(height: 1, color: inputFieldBackgroundColor.value),
+                                    ListView.separated(
+                                      shrinkWrap: true,
+                                      physics: NeverScrollableScrollPhysics(),
+                                      itemCount: internalBalances.length,
+                                      separatorBuilder: (_, __) => Divider(
+                                        height: 1,
+                                        color: inputFieldBackgroundColor.value,
+                                      ),
+                                      itemBuilder: (context, index) {
+                                        final token = internalBalances[index];
+                                        return _buildBalanceItem(
+                                          image: token['image']!,
+                                          symbol: token['symbol']!,
+                                          name: token['name']!,
+                                          balance: token['amount'].toString(),
+                                          index: index,
+                                        );
+                                      },
                                     ),
                                   ],
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 16), // Khoảng cách giữa hai phần
-
-                          // Phần Internal Balances
-                          Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              color: Colors.grey.shade800.withOpacity(0.7),
-                              border: Border.all(color: inputFieldBackgroundColor.value),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.all(16),
-                                  child: Text(
-                                    "Staking Rewards",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ),
-                                Divider(height: 1, color: inputFieldBackgroundColor.value),
-                                ListView.separated(
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  itemCount: internalBalances.length,
-                                  separatorBuilder: (_, __) => Divider(
-                                    height: 1,
-                                    color: inputFieldBackgroundColor.value,
-                                  ),
-                                  itemBuilder: (context, index) {
-                                    final token = internalBalances[index];
-                                    return _buildBalanceItem(
-                                      image: token['image']!,
-                                      symbol: token['symbol']!,
-                                      name: token['name']!,
-                                      balance: token['amount'].toString(),
-                                      index: index,
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ],

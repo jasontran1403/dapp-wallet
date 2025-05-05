@@ -112,18 +112,14 @@ class _SelectTokenScreenState extends State<SelectTokenScreen> {
                         ),
                         child: Row(
                           children: [
-                            Container(
-                              height: 40,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: primaryBackgroundColor.value,
-                              ),
-                              child: Image.asset(
-                                "${coin['image']}",
-                                height: 40,
-                                width: 40,
-                                fit: BoxFit.fitHeight,
+                            SizedBox(
+                              height: 45,
+                              width: 45,
+                              child: ClipOval(
+                                child: Image.asset(
+                                  "${coin['image']}",
+                                  fit: BoxFit.cover, // Quan trọng
+                                ),
                               ),
                             ),
                             const SizedBox(width: 12),

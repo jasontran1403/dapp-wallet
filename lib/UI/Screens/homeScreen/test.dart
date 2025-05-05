@@ -85,6 +85,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _loadPackages() async {
     try {
       setState(() => isLoading = true);
+
       dynamic response = await ApiService.getPackages(walletAddress!);
       setState(() {
         packages = response;
@@ -447,7 +448,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Text(
                           "${coins[index]['symbol']}",
                           style: TextStyle(
-                            fontSize: dimensions.getFont(14),
+                            fontSize: dimensions.getFont(16),
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                             fontFamily: "dmsans",
@@ -460,7 +461,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .toString(),
                           ),
                           style: TextStyle(
-                            fontSize: dimensions.getFont(13),
+                            fontSize: dimensions.getFont(15),
                             fontWeight: FontWeight.w600,
                             color: Colors.white,
                             fontFamily: "dmsans",
@@ -482,7 +483,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .toString(),
                           ),
                           style: TextStyle(
-                            fontSize: dimensions.getFont(13),
+                            fontSize: dimensions.getFont(15),
                             fontWeight: FontWeight.w400,
                             color: Colors.white,
                             fontFamily: "dmsans",
@@ -491,7 +492,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Text(
                           "\$ ${formatBalance(coins[index]['price'])}",
                           style: TextStyle(
-                            fontSize: dimensions.getFont(12),
+                            fontSize: dimensions.getFont(14),
                             fontWeight: FontWeight.w600,
                             color: Color(0xff56CDAD),
                             fontFamily: "dmsans",
@@ -510,346 +511,360 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget selectToken() {
-    Dimensions dimensions = Dimensions(context);
+    // Get screen dimensions
+    final screenWidth = Get.width;
+    final screenHeight = Get.height;
+    // Reference dimensions (Pixel 9 Pro XL: 1344x2992 logical pixels)
+    const referenceWidth = 1344.0;
+    const referenceHeight = 2992.0;
+    // Scaling factors
+    final widthScale = screenWidth / referenceWidth;
+    final heightScale = screenHeight / referenceHeight;
+    final textScale = (widthScale + heightScale) / 2;
 
-    return SafeArea(
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.9,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(dimensions.getWidth(20))),
-          image: DecorationImage(
-            image: AssetImage("assets/background/bg7.png"),
-            fit: BoxFit.cover,
-          ),
+    return Container(
+      height: Get.height * 0.90,
+      width: Get.width,
+      padding: EdgeInsets.symmetric(
+        horizontal: 22 * widthScale,
+        vertical: 22 * heightScale,
+      ),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/background/bg7.png"),
+          fit: BoxFit.cover,
         ),
-        child: Column(
-          children: [
-            // Header
-            Container(
-              padding: EdgeInsets.all(dimensions.getWidth(16)),
-              decoration: BoxDecoration(
-                color: Colors.grey[900]!.withOpacity(0.9),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(dimensions.getWidth(20))),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Choose Token",
-                    style: TextStyle(
-                      fontSize: dimensions.getFont(20),
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.close, color: Colors.white, size: dimensions.getFont(24)),
-                    onPressed: () => Get.back(),
-                  ),
-                ],
-              ),
-            ),
-
-            // Search
-            // Padding(
-            //   padding: EdgeInsets.all(dimensions.getWidth(16)),
-            //   child: TextField(
-            //     decoration: InputDecoration(
-            //       filled: true,
-            //       fillColor: Colors.grey[800]!.withOpacity(0.7),
-            //       hintText: "Search...",
-            //       hintStyle: TextStyle(
-            //         fontSize: dimensions.getFont(16),
-            //         color: Colors.grey,
-            //       ),
-            //       prefixIcon: Icon(Icons.search, color: Colors.grey, size: dimensions.getFont(20)),
-            //       border: OutlineInputBorder(
-            //         borderRadius: BorderRadius.circular(dimensions.getWidth(15)),
-            //         borderSide: BorderSide.none,
-            //       ),
-            //       contentPadding: EdgeInsets.symmetric(vertical: dimensions.getHeight(10)),
-            //     ),
-            //     style: TextStyle(
-            //       fontSize: dimensions.getFont(16),
-            //       color: Colors.white,
-            //     ),
-            //   ),
-            // ),
-
-            // Token List
-            Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.symmetric(
-                  horizontal: dimensions.getWidth(16),
-                  vertical: dimensions.getHeight(8),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "${getTranslated(context, "Choose Token") ?? "Choose Token"}",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20 * textScale,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                  fontFamily: "dmsans",
                 ),
-                itemCount: coins.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Get.to(ReceiveScreen(
-                        symbol: coins[index]['symbol'],
-                        image: coins[index]['image'],
-                        walletAddress: coins[index]['walletAddress'],
-                      ));
-                    },
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: dimensions.getHeight(12)),
-                      padding: EdgeInsets.all(dimensions.getWidth(12)),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[800]!.withOpacity(0.7),
-                        borderRadius: BorderRadius.circular(dimensions.getWidth(15)),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Get.back();
+                },
+                child: Icon(
+                  Icons.clear,
+                  color: Colors.white,
+                  size: 24 * textScale,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16 * heightScale),
+          InputFields(
+            hintText: "Search...",
+            icon: Image.asset(
+              "assets/images/Search.png",
+              height: 24 * heightScale,
+              width: 24 * widthScale,
+            ),
+          ),
+          SizedBox(height: 24 * heightScale),
+          Expanded(
+            child: ListView.separated(
+              itemCount: coins.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(height: 12 * heightScale);
+              },
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () {
+                    Get.to(ReceiveScreen(
+                      symbol: coins[index]['symbol'],
+                      image: coins[index]['image'],
+                      walletAddress: coins[index]['walletAddress'],
+                    ));
+                  },
+                  child: Container(
+                    height: 72 * heightScale,
+                    width: Get.width,
+                    padding: EdgeInsets.all(12 * widthScale),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade800.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(16 * widthScale),
+                      border: Border.all(
+                        width: 1 * widthScale,
+                        color: Colors.white24,
                       ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: dimensions.getWidth(40),
-                            height: dimensions.getHeight(40),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: AssetImage(coins[index]['image']),
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                    ),
+                    child: Row(
+                      children: [
+                        Container(
+                          height: 40 * heightScale,
+                          width: 40 * widthScale,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
                           ),
-                          SizedBox(width: dimensions.getWidth(12)),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  coins[index]['symbol'],
-                                  style: TextStyle(
-                                    fontSize: dimensions.getFont(16),
-                                    fontWeight: FontWeight.w600,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                SizedBox(height: dimensions.getHeight(4)),
-                                Text(
-                                  coins[index]['des'] ?? '',
-                                  style: TextStyle(
-                                    fontSize: dimensions.getFont(12),
-                                    color: Colors.grey[300],
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
+                          child: Image.asset(
+                            "${coins[index]['image']}",
+                            height: 40 * heightScale,
+                            width: 40 * widthScale,
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
+                        ),
+                        SizedBox(width: 12 * widthScale),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                formatBalance(coins[index]['amount']),
-                                style: TextStyle(
-                                  fontSize: dimensions.getFont(14),
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.white,
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "${coins[index]['symbol']}",
+                                      style: TextStyle(
+                                        fontSize: 18 * textScale,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                        fontFamily: "dmsans",
+                                      ),
+                                    ),
+                                    Text(
+                                      "${formatBalance(coins[index]['amount'])}",
+                                      style: TextStyle(
+                                        fontSize: 18 * textScale,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                        fontFamily: "dmsans",
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
-                              SizedBox(height: dimensions.getHeight(4)),
-                              Text(
-                                "\$${(double.parse(coins[index]['amount']) * double.parse(coins[index]['price'])).toStringAsFixed(2)}",
-                                style: TextStyle(
-                                  fontSize: dimensions.getFont(12),
-                                  color: Colors.greenAccent,
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "${coins[index]['des']}",
+                                      style: TextStyle(
+                                        fontSize: 13 * textScale,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.white70,
+                                        fontFamily: "dmsans",
+                                      ),
+                                    ),
+                                    Text(
+                                      "\$ ${formatBalance(((double.tryParse(coins[index]['amount'].toString()) ?? 0.0) * (double.tryParse(coins[index]['price'].toString()) ?? 0.0)).toString())}",
+                                      style: TextStyle(
+                                        fontSize: 12 * textScale,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.white70,
+                                        fontFamily: "dmsans",
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget selectTokenForBuy() {
-    Dimensions dimensions = Dimensions(context);
+    // Get screen dimensions
+    final screenWidth = Get.width;
+    final screenHeight = Get.height;
+    // Reference dimensions (Pixel 9 Pro XL: 1344x2992 logical pixels)
+    const referenceWidth = 1344.0;
+    const referenceHeight = 2992.0;
+    // Scaling factors
+    final widthScale = screenWidth / referenceWidth;
+    final heightScale = screenHeight / referenceHeight;
+    final textScale = (widthScale + heightScale) / 2;
 
-    return SafeArea(
-      child: Container(
-        height: MediaQuery.of(context).size.height * 0.9,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(dimensions.getWidth(20)),
-          ),
-          image: DecorationImage(
-            image: AssetImage("assets/background/bg7.png"),
-            fit: BoxFit.cover,
-          ),
+    return Container(
+      height: Get.height * 0.9,
+      width: Get.width,
+      padding: EdgeInsets.symmetric(
+        horizontal: 22 * widthScale,
+        vertical: 22 * heightScale,
+      ),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/background/bg7.png"),
+          fit: BoxFit.cover,
         ),
-        child: FutureBuilder(
-          future: _loadPackages(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-
-            return Column(
-              children: [
-                // Header
-                Container(
-                  padding: EdgeInsets.all(dimensions.getWidth(16)),
-                  decoration: BoxDecoration(
-                    color: Colors.grey[900]!.withOpacity(0.9),
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(dimensions.getWidth(20)),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Packages",
-                        style: TextStyle(
-                          fontSize: dimensions.getFont(20),
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(
-                          Icons.close,
-                          color: Colors.white,
-                          size: dimensions.getFont(24),
-                        ),
-                        onPressed: () => Get.back(),
-                      ),
-                    ],
-                  ),
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "${getTranslated(context, "List Packages") ?? "List Packages"}",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 20 * textScale,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                  fontFamily: "dmsans",
                 ),
-
-                // Package List
-                Expanded(
-                  child: packages.isEmpty
-                      ? Center(
-                    child: Text(
-                      "No packages available",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: dimensions.getFont(16),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Get.back();
+                },
+                child: Icon(
+                  Icons.clear,
+                  color: Colors.white,
+                  size: 24 * textScale,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16 * heightScale),
+          Expanded(
+            child: ListView.separated(
+              itemCount: packages.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(height: 12 * heightScale);
+              },
+              itemBuilder: (BuildContext context, int index) {
+                return GestureDetector(
+                  onTap: () {
+                    // Handle package selection
+                  },
+                  child: Container(
+                    height: 120 * heightScale,
+                    width: Get.width,
+                    padding: EdgeInsets.all(12 * widthScale),
+                    decoration: BoxDecoration(
+                      color: Colors.grey.shade800.withOpacity(0.7),
+                      borderRadius: BorderRadius.circular(16 * widthScale),
+                      border: Border.all(
+                        width: 1 * widthScale,
+                        color: Colors.white24,
                       ),
                     ),
-                  )
-                      : ListView.builder(
-                    padding: EdgeInsets.all(dimensions.getWidth(16)),
-                    itemCount: packages.length,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: EdgeInsets.only(
-                          bottom: dimensions.getHeight(12),
-                        ),
-                        padding: EdgeInsets.all(dimensions.getWidth(12)),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[800]!.withOpacity(0.7),
-                          borderRadius: BorderRadius.circular(
-                            dimensions.getWidth(15),
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Column(
+                      children: [
+                        Row(
                           children: [
-                            Row(
+                            Container(
+                              height: 40 * heightScale,
+                              width: 40 * widthScale,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                              ),
+                              child: Image.asset(
+                                "assets/images/${packages[index]['symbol'].toLowerCase()}.png",
+                                height: 40 * heightScale,
+                                width: 40 * widthScale,
+                              ),
+                            ),
+                            SizedBox(width: 12 * widthScale),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Staking ${packages[index]['amountInToken']} ${packages[index]['symbol']}",
+                                    style: TextStyle(
+                                      fontSize: 16 * textScale,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white,
+                                      fontFamily: "dmsans",
+                                    ),
+                                  ),
+                                  SizedBox(height: 4 * heightScale),
+                                  Text(
+                                    "~ ${packages[index]['amountInUSDT']} USDT",
+                                    style: TextStyle(
+                                      fontSize: 13 * textScale,
+                                      color: Colors.white70,
+                                      fontFamily: "dmsans",
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                Container(
-                                  width: dimensions.getWidth(40),
-                                  height: dimensions.getHeight(40),
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                        "assets/images/${packages[index]['symbol'].toLowerCase()}.png",
-                                      ),
-                                      fit: BoxFit.cover,
-                                    ),
+                                Text(
+                                  "${packages[index]['cycleLeft']} / ${packages[index]['cycles']}",
+                                  style: TextStyle(
+                                    fontSize: 18 * textScale,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                    fontFamily: "dmsans",
                                   ),
                                 ),
-                                SizedBox(width: dimensions.getWidth(12)),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Staking ${packages[index]['amountInToken']} ${packages[index]['symbol']}",
-                                        style: TextStyle(
-                                          fontSize:
-                                          dimensions.getFont(16),
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      SizedBox(
-                                          height:
-                                          dimensions.getHeight(4)),
-                                      Text(
-                                        "~ ${packages[index]['amountInUSDT']} USDT",
-                                        style: TextStyle(
-                                          fontSize:
-                                          dimensions.getFont(14),
-                                          color: Colors.grey[300],
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ],
+                                SizedBox(height: 4 * heightScale),
+                                Text(
+                                  packages[index]['date'] ?? '',
+                                  style: TextStyle(
+                                    fontSize: 12 * textScale,
+                                    color: Colors.white70,
+                                    fontFamily: "dmsans",
                                   ),
-                                ),
-                                Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      "${packages[index]['cycleLeft']}/${packages[index]['cycles']}",
-                                      style: TextStyle(
-                                        fontSize:
-                                        dimensions.getFont(16),
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.blueAccent,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                        height:
-                                        dimensions.getHeight(4)),
-                                    Text(
-                                      packages[index]['date'] ?? '',
-                                      style: TextStyle(
-                                        fontSize:
-                                        dimensions.getFont(10),
-                                        color: Colors.grey[400],
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ],
                                 ),
                               ],
                             ),
                           ],
                         ),
-                      );
-                    },
+                        Padding(
+                          padding: EdgeInsets.symmetric(vertical: 8 * heightScale),
+                          child: Divider(
+                            color: Colors.white24,
+                            height: 1 * heightScale,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "${packages[index]['status'] == false ? "Running" : "Completed"}",
+                              style: TextStyle(
+                                fontSize: 13 * textScale,
+                                color: Colors.white70,
+                                fontFamily: "dmsans",
+                              ),
+                            ),
+                            Text(
+                              "",
+                              style: TextStyle(
+                                fontSize: 13 * textScale,
+                                color: Colors.white70,
+                                fontFamily: "dmsans",
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            );
-          },
-        ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
-
-
 }
