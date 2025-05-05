@@ -1,0 +1,2 @@
+/Users/nguyenhaitran/Desktop/dapp-wallet/android/app/.cxx/Debug/6e4e5igk/arm64-v8a/CMakeFiles/rebuild_cache.dir
+/Users/nguyenhaitran/Desktop/dapp-wallet/android/app/.cxx/Debug/6e4e5igk/arm64-v8a/CMakeFiles/edit_cache.dir
