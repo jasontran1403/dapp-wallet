@@ -232,7 +232,7 @@ class _ProfileState extends State<Profile> {
                                           builder: (BuildContext context) {
                                             return AlertDialog(
                                               title: Text(getTranslated(context, "Active account") ?? "Active account"),
-                                              content: Text(getTranslated(context, "Are you sure you want to active account (0.02BNB fee)?") ?? "Are you sure you want to active account (0.02BNB fee)?"),
+                                              content: Text(getTranslated(context, "Are you sure you want to active account (0.002BNB fee)?") ?? "Are you sure you want to active account (0.002BNB fee)?"),
                                               actions: <Widget>[
                                                 TextButton(
                                                   child: Text(getTranslated(context, "Cancel") ?? "Cancel"),
