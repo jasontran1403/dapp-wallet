@@ -1087,8 +1087,8 @@ class _StakingScreenState extends State<StakingScreen> {
               String result = await claimExecute(walletAddress!, symbol);
               await _loadInternalBalance(walletAddress!);
               Get.snackbar(
-                "Success",
                 result,
+                "",
                 backgroundColor: Colors.white,
                 colorText: Colors.green,
               );

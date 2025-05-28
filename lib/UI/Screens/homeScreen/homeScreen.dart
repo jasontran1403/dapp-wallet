@@ -32,6 +32,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  BuildContext? _bottomSheetContext;
   String? walletAddress;
   String? privateKey;
   String? bnbBalance;
@@ -41,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? xrpWalletAddress;
   String? tonWalletAddress;
   String? accountName;
+  bool isSnackbarVisible = false;
 
   var isVisible = false.obs;
   bool isLoading = true;
@@ -92,6 +94,100 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     } catch (e) {
       setState(() => isLoading = false);
+    }
+  }
+
+  void _showPackagesBottomSheet() {
+    // _loadPackages(); // Gọi _loadPackages() trong FutureBuilder của selectTokenForBuy
+    showModalBottomSheet(
+      context: context, // context của HomeScreen
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent, // Để Container con tự xử lý nền
+      builder: (bottomSheetBuildContext) { // context này là của BottomSheet
+        _bottomSheetContext = bottomSheetBuildContext; // LƯU LẠI CONTEXT NÀY
+        return selectTokenForBuy();
+      },
+    ).then((_) {
+      // Khi bottom sheet đóng (bằng cách vuốt xuống hoặc Navigator.pop),
+      // reset _bottomSheetContext
+      if (mounted) {
+        setState(() {
+          _bottomSheetContext = null;
+        });
+      }
+    });
+  }
+
+  Future<void> _handleClaimCapital(int id) async {
+    // bool success = false; // Cờ để theo dõi thành công của API call
+    try {
+      // Không đặt isLoading = true ở đây nếu bạn muốn UI của BottomSheet vẫn tương tác được
+      // Chỉ đặt isLoading khi thực sự bắt đầu tải lại _loadWalletData
+      // Hoặc bạn có thể có một biến isLoading riêng cho nút Claim
+
+      String response = await ApiService.claimCapital(id);
+
+      if (response == "Claim capital successful.") {
+        // success = true; // Đánh dấu thành công
+
+        // 1. Hiển thị Snackbar (giữ nguyên logic isSnackbarVisible của bạn nếu muốn)
+        if (!Get.isSnackbarOpen && !isSnackbarVisible) {
+          isSnackbarVisible = true;
+          Get.snackbar(
+              "Thành công!", // Title
+              response,       // Message
+              backgroundColor: Colors.greenAccent,
+              colorText: Colors.black, // Đổi màu text cho dễ đọc
+              margin: const EdgeInsets.only(top: 20, left: 16, right: 16),
+              duration: const Duration(seconds: 2),
+              snackPosition: SnackPosition.TOP,
+              onTap: (_) { // Cho phép người dùng nhấn vào snackbar để đóng nó sớm
+                Get.closeCurrentSnackbar();
+              }
+          );
+          // Reset isSnackbarVisible sau khi snackbar đóng
+          Future.delayed(const Duration(seconds: 2), () {
+            isSnackbarVisible = false;
+          });
+        }
+
+        // 2. Đóng BottomSheet sau 1 giây
+        Future.delayed(const Duration(seconds: 1), () {
+          if (_bottomSheetContext != null && Navigator.of(_bottomSheetContext!).canPop()) {
+            print("Closing BottomSheet via _bottomSheetContext after 1s success delay");
+            Navigator.of(_bottomSheetContext!).pop();
+            _bottomSheetContext = null; // Reset context
+          } else if (Get.isBottomSheetOpen ?? false) { // Fallback nếu dùng Get.bottomSheet
+            print("Closing BottomSheet via Get.back() after 1s success delay");
+            Get.back(closeOverlays: true);
+          } else {
+            print("No BottomSheet context available or GetX BottomSheet not detected to close.");
+          }
+        });
+
+        // 3. Tải lại dữ liệu wallet sau 2 giây (sau khi snackbar và bottomsheet có thể đã đóng)
+        Future.delayed(const Duration(seconds: 2), () {
+          if (mounted) {
+            setState(() => isLoading = true); // Bắt đầu loading cho màn hình chính
+            _loadWalletData();
+          }
+        });
+
+      } else { // Claim không thành công từ API
+        // setState(() => isLoading = false); // Dừng loading nếu bạn có set ở đầu hàm này
+        if (!Get.isSnackbarOpen && !isSnackbarVisible) {
+          isSnackbarVisible = true;
+          Get.snackbar("Thất bại", response, backgroundColor: Colors.red /*...*/);
+          Future.delayed(const Duration(seconds: 2), () => isSnackbarVisible = false);
+        }
+      }
+    } catch (e) {
+      // setState(() => isLoading = false); // Dừng loading nếu có set ở đầu hàm này
+      if (!Get.isSnackbarOpen && !isSnackbarVisible) {
+        isSnackbarVisible = true;
+        Get.snackbar("Lỗi", e.toString(), backgroundColor: Colors.red /*...*/);
+        Future.delayed(const Duration(seconds: 2), () => isSnackbarVisible = false);
+      }
     }
   }
 
@@ -169,6 +265,8 @@ class _HomeScreenState extends State<HomeScreen> {
       return "Invalid balance";
     }
   }
+
+
 
   @override
   void dispose() {
@@ -678,10 +776,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return SafeArea(
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.9,
+        height: MediaQuery.of(context).size.height * 0.8, // Maintained at 80%
         decoration: BoxDecoration(
           borderRadius: BorderRadius.vertical(
-            top: Radius.circular(dimensions.getWidth(20)),
+            top: Radius.circular(dimensions.getWidth(30)),
           ),
           image: DecorationImage(
             image: AssetImage("assets/background/bg7.png"),
@@ -745,6 +843,23 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: EdgeInsets.all(dimensions.getWidth(16)),
                     itemCount: packages.length,
                     itemBuilder: (context, index) {
+                      // Determine border color based on conditions
+                      Color borderColor;
+                      if (packages[index]['status'] == true && packages[index]['cycleLeft'] > 0) {
+                        borderColor = Colors.blue;
+                      } else if (packages[index]['status'] == true && packages[index]['cycleLeft'] == 0) {
+                        borderColor = Colors.green;
+                      } else if (packages[index]['status'] == false && packages[index]['cycleLeft'] == 0) {
+                        borderColor = Colors.red;
+                      } else {
+                        borderColor = Colors.transparent; // Default case, no border
+                      }
+
+                      // Calculate card width (screen width minus padding)
+                      double cardWidth = MediaQuery.of(context).size.width - 2 * dimensions.getWidth(16);
+                      // Calculate button width as 90% of card width
+                      double buttonWidth = cardWidth * 0.9;
+
                       return Container(
                         margin: EdgeInsets.only(
                           bottom: dimensions.getHeight(12),
@@ -754,6 +869,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Colors.grey[800]!.withOpacity(0.7),
                           borderRadius: BorderRadius.circular(
                             dimensions.getWidth(15),
+                          ),
+                          border: Border.all(
+                            color: borderColor,
+                            width: 1.0,
                           ),
                         ),
                         child: Column(
@@ -837,6 +956,40 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ],
                             ),
+                            if (packages[index]['cycleLeft'] == 0 &&
+                                packages[index]['status'] == true) ...[
+                              SizedBox(height: dimensions.getHeight(8)),
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: SizedBox(
+                                  width: buttonWidth, // 90% of card width
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      _handleClaimCapital(packages[index]['id']);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.grey[900], // Dark gray background
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(
+                                          dimensions.getWidth(10),
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: dimensions.getWidth(16),
+                                        vertical: dimensions.getHeight(6), // Reduced vertical padding
+                                      ),
+                                    ),
+                                    child: Text(
+                                      "Claim",
+                                      style: TextStyle(
+                                        fontSize: dimensions.getFont(14),
+                                        color: Colors.grey[300], // Light gray text
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ],
                         ),
                       );
@@ -850,6 +1003,5 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
 
 }

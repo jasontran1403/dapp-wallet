@@ -2,7 +2,6 @@ import 'package:http/http.dart' as http;
 
 Future<String> getBalances(String walletAddress, String chain) async {
   Uri url;
-
   if (chain == 'bnb') {
     url = Uri.https('api.bscscan.com', '/api', {
       'module': 'account',

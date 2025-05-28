@@ -6,7 +6,7 @@ import 'package:get/get.dart' as getX;
 
 class ApiService {
   final appController = getX.Get.find<AppController>();
-  // static final base_url = "http://192.168.100.174:9898/api/v1";
+  // static final base_url = "http://192.168.1.143:9898/api/v1";
   static final base_url = "https://wholly-exact-kiwi.ngrok-free.app/api/v1";
 
   static Future<bool> getReferralCodeStatus(String referralCode) async {
@@ -33,6 +33,24 @@ class ApiService {
       // Nếu có lỗi xảy ra trong quá trình gửi yêu cầu, in lỗi và trả về false
       print('Exception: $e');
       return false;
+    }
+  }
+
+  static Future<dynamic> claimCapital(int id) async {
+    var request = http.Request('GET', Uri.parse('${base_url}/auth/claim-capital/${id}'));
+
+    try {
+      http.StreamedResponse response = await request.send();
+
+      if (response.statusCode == 200) {
+        String responseBody = await response.stream.bytesToString();
+
+        return responseBody;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
     }
   }
 
